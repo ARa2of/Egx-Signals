@@ -548,6 +548,7 @@ TICKER_CARD_TEMPLATE = """
         <div class="group-title">VWAP & Volume Profile</div>
         <div class="detail-row"><span class="label">VWAP</span><span class="val">{vwap}</span></div>
         <div class="detail-row"><span class="label">Dist VWAP</span><span class="val {dist_vwap_class}">{dist_vwap}</span></div>
+        <div class="detail-row"><span class="label">RVOL</span><span class="val {rvol_class}">{rvol}</span></div>
         <div class="detail-row"><span class="label">VP POC</span><span class="val">{vp_poc}</span></div>
         <div class="detail-row"><span class="label">Above POC</span><span class="val {above_poc_class}">{above_poc}</span></div>
       </div>
@@ -647,6 +648,30 @@ def _fmt_signed_pct(val):
         return f"{float(val):+.1f}%"
     except (TypeError, ValueError):
         return "N/A"
+
+def _fmt_rvol(val):
+    """Format RVOL (Relative Volume) as a multiplier with 'x' suffix."""
+    if val is None:
+        return "N/A"
+    try:
+        return f"{float(val):.2f}x"
+    except (TypeError, ValueError):
+        return "N/A"
+
+def _rvol_class(val):
+    """Color class for RVOL: green if spike (>=1.5), yellow if elevated (>=1.0), red if low (<1.0)."""
+    if val is None:
+        return ""
+    try:
+        v = float(val)
+        if v >= 1.5:
+            return "green"
+        elif v >= 1.0:
+            return "yellow"
+        else:
+            return "red"
+    except (TypeError, ValueError):
+        return ""
 
 def _price_vs_ma_class(close, ma_val):
     """Green if price is above the moving average, red if below, blank if
@@ -1141,6 +1166,8 @@ def _build_ticker_card(row, fund_df=None):
         vwap=_fmt(row.get("VWAP", row.get("vwap"))),
         dist_vwap=_fmt_signed_pct(row.get("Dist VWAP %", row.get("dist_vwap_pct"))),
         dist_vwap_class=_color_class(row.get("Dist VWAP %", row.get("dist_vwap_pct")), threshold_high=5, threshold_low=-5, invert=True),
+        rvol=_fmt_rvol(row.get("Volume Multiplier (vs 1Y)", row.get("vol_multiplier"))),
+        rvol_class=_rvol_class(row.get("Volume Multiplier (vs 1Y)", row.get("vol_multiplier"))),
         vp_poc=_fmt(row.get("Volume Profile POC", row.get("vp_poc"))),
         above_poc=_fmt(row.get("Above POC", row.get("above_poc"))),
         above_poc_class="green" if row.get("Above POC", row.get("above_poc")) in (True, "True", "Yes") else "red",
