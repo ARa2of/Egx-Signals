@@ -318,6 +318,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <h1>EGX Daily Signals</h1>
 <p class="subtitle">{report_date} — {total_stocks} stocks analyzed</p>
+<p class="subtitle" style="font-size:0.75rem;color:#9ca3af;margin-top:-8px;">TradingView data: {ta_timestamp}</p>
 
 <div class="summary">
   <div class="summary-card"><div class="label">Strong Buy</div><div class="value strong-buy">{strong_buy_count}</div></div>
@@ -1046,6 +1047,18 @@ def _build_ticker_card(row, fund_df=None):
 # ─────────────────────────────────────────────────────────────
 # Main Generator
 # ─────────────────────────────────────────────────────────────
+def _get_ta_timestamp(rows):
+    """Extract the most recent TradingView data timestamp from rows."""
+    timestamps = []
+    for r in rows:
+        ts = r.get("ta_fetch_time") or r.get("TA Data As Of")
+        if ts:
+            timestamps.append(ts)
+    if timestamps:
+        return max(timestamps)
+    return "N/A"
+
+# ─────────────────────────────────────────────────────────────
 def generate_html_report(rows: List[Dict], output_path: str) -> str:
     """Generate styled HTML report. Returns the output path."""
     output_path = Path(output_path)
@@ -1137,6 +1150,7 @@ def generate_html_report(rows: List[Dict], output_path: str) -> str:
 
     html = HTML_TEMPLATE.format(
         report_date=date.today().strftime("%d %B %Y"),
+        ta_timestamp=_get_ta_timestamp(rows),
         total_stocks=len(rows),
         strong_buy_count=len(strong_buy_rows),
         buy_count=len(buy_rows),
