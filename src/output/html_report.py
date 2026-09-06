@@ -994,10 +994,10 @@ def _build_ticker_card(row, fund_df=None):
         above_poc=_fmt(row.get("Above POC", row.get("above_poc"))),
         above_poc_class="green" if row.get("Above POC", row.get("above_poc")) in (True, "True", "Yes") else "red",
 
-        ml_low=f"{(row.get('ml_medium_price', 0) or 0) * 0.92:.2f}" if row.get("ml_medium_price") else "N/A",
-        ml_medium=f"{row.get('ml_medium_price', 0) or 0:.2f}" if row.get("ml_medium_price") else "N/A",
+        ml_low=_fmt(row.get("ML Low Price", row.get("ml_low_price"))),
+        ml_medium=_fmt(row.get("ML Medium Price", row.get("ml_medium_price"))),
         ml_med_class=ml_rec_class,
-        ml_high=f"{(row.get('ml_medium_price', 0) or 0) * 1.05:.2f}" if row.get("ml_medium_price") else "N/A",
+        ml_high=_fmt(row.get("ML High Price", row.get("ml_high_price"))),
         ml_conviction=f"{ml_conv * 100:.0f}/100 {ml_signal}",
         ml_conv_class=ml_rec_class,
         ml_price_source=row.get("ml_last_price_source", "yfinance"),
