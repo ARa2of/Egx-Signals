@@ -40,6 +40,13 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Download ChartScanAI weights
+        run: |
+          mkdir -p weights
+          curl -L -o weights/custom_yolov8.pt \
+            https://github.com/Omar-Karimov/ChartScanAI/raw/main/weights/custom_yolov8.pt
+          echo "Downloaded $(du -h weights/custom_yolov8.pt | cut -f1) weights"
+
       - name: Download FX cache
         uses: actions/cache@v4
         with:
