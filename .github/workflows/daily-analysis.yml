@@ -30,19 +30,6 @@ jobs:
           cache: 'pip'
           cache-dependency-path: requirements.txt
 
-      - name: Install TA-Lib from source
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential wget
-          cd /tmp
-          wget -q http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
-          tar xzf ta-lib-0.4.0-src.tar.gz
-          cd ta-lib
-          ./configure --prefix=/usr
-          make -j$(nproc)
-          sudo make install
-          sudo ldconfig
-
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
