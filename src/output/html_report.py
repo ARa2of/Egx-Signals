@@ -406,6 +406,7 @@ TICKER_CARD_TEMPLATE = """
         <div class="detail-row"><span class="label">Medium</span><span class="val {ml_med_class}">{ml_medium}</span></div>
         <div class="detail-row"><span class="label">High</span><span class="val green">{ml_high}</span></div>
         <div class="detail-row"><span class="label">Conviction</span><span class="val {ml_conv_class}">{ml_conviction}</span></div>
+        <div class="detail-row"><span class="label">Price Source</span><span class="val">{ml_price_source}</span></div>
       </div>
       <div class="detail-group">
         <div class="group-title">Trade Plan</div>
@@ -999,6 +1000,7 @@ def _build_ticker_card(row, fund_df=None):
         ml_high=f"{(row.get('ml_medium_price', 0) or 0) * 1.05:.2f}" if row.get("ml_medium_price") else "N/A",
         ml_conviction=f"{ml_conv * 100:.0f}/100 {ml_signal}",
         ml_conv_class=ml_rec_class,
+        ml_price_source=row.get("ml_last_price_source", "yfinance"),
 
         entry=_fmt(entry),
         entry_high=_fmt(entry_high),

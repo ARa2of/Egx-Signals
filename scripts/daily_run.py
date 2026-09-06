@@ -246,7 +246,16 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 peer_tickers = all_valid
             
             peer_close = pd.DataFrame({t: yf_cache[t].history["Close"] for t in peer_tickers if t in yf_cache and yf_cache[t].ok})
-            ml_result = run_ml_pipeline(df_tech, peer_close, raw, {})
+
+            # Update latest peer close with TradingView real-time data
+            if ta_cache:
+                for t in peer_tickers:
+                    if t in ta_cache and ta_cache[t].ok:
+                        tv_close_peer = ta_cache[t].indicators.get("close")
+                        if tv_close_peer and t in peer_close.columns:
+                            peer_close.iloc[-1, peer_close.columns.get_loc(t)] = float(tv_close_peer)
+
+            ml_result = run_ml_pipeline(df_tech, peer_close, raw, {}, tv_close=close_ta)
 
             if "error" in ml_result:
                 log.warning("%s: ML failed - %s", raw, ml_result["error"])
@@ -440,6 +449,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "ml_last_date": ml_result.get("last_date", "").strftime("%Y-%m-%d") if hasattr(ml_result.get("last_date", ""), "strftime") else str(ml_result.get("last_date", "")),
                 "ml_forecast_end": ml_result.get("forecast_end", "").strftime("%Y-%m-%d") if hasattr(ml_result.get("forecast_end", ""), "strftime") else str(ml_result.get("forecast_end", "")),
                 "ml_cone_pct": conviction.get("cone_pct"),
+                "ml_last_price_source": ml_result.get("last_price_source", "yfinance"),
                 "candle_signal": patterns.get("latest_signal", "neutral"),
                 "candle_score_delta": patterns.get("score_delta", 0),
                 "chartscan_signal": cs_result.get("signal", "N/A") if cs_result else "N/A",

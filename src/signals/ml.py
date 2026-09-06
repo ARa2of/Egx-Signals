@@ -457,7 +457,8 @@ def train_and_forecast(X: pd.DataFrame, y: pd.Series, last_row: pd.DataFrame,
 def run_ml_pipeline(target_df_enriched: pd.DataFrame,
                     peer_close: pd.DataFrame,
                     target: str,
-                    is_commodity_map: Dict = None) -> Dict:
+                    is_commodity_map: Dict = None,
+                    tv_close: float = None) -> Dict:
     try:
         features = build_features(target_df_enriched, peer_close, target, is_commodity_map)
         target_y = build_target(target_df_enriched["Close"])
@@ -517,6 +518,12 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
         raw_close = target_df_enriched["Close"].dropna()
         last_price = float(raw_close.iloc[-1])
         last_date = raw_close.index[-1]
+        last_price_source = "yfinance"
+
+        # Override with TradingView real-time close if available
+        if tv_close is not None and tv_close > 0:
+            last_price = float(tv_close)
+            last_price_source = "TradingView"
 
         features_full = build_features(target_df_enriched, peer_close, target, is_commodity_map)
         feat_mask = features_full.notna().all(axis=1)
@@ -546,6 +553,7 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
             "importances": forecast_result["importances"],
             "pred_returns": forecast_result["pred_returns"],
             "last_price": last_price,
+            "last_price_source": last_price_source,
             "last_date": last_date,
             "forecast_start": forecast_start,
             "forecast_end": forecast_end,
