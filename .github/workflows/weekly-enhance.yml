@@ -27,9 +27,20 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libta-lib-dev
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+
+      - name: Download ChartScanAI weights
+        run: |
+          mkdir -p weights
+          curl -L -o weights/custom_yolov8.pt \
+            https://github.com/Omar-Karimov/ChartScanAI/raw/main/weights/custom_yolov8.pt
 
       - name: Run weekly enhancement
         env:
