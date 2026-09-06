@@ -50,6 +50,9 @@ jobs:
           restore-keys: |
             fx-cache-${{ runner.os }}-
 
+      - name: Update fundamentals cache
+        run: python scripts/update_fundamentals.py --force
+
       - name: Run daily analysis
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

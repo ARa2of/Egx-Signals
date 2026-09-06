@@ -1108,6 +1108,12 @@ def _build_ticker_card(row, fund_df=None):
             pe_class = _color_class(pe, threshold_high=25, threshold_low=10)
             pe_vs_sector_class = "green" if pe_vs is not None and pe_vs < -10 else "red" if pe_vs is not None and pe_vs > 10 else ""
 
+    # Fallback to live data from row if cache was empty
+    if pe is None:
+        pe = row.get("P/E Ratio (TTM)", row.get("pe_ttm"))
+        if pe is not None:
+            pe_class = _color_class(pe, threshold_high=25, threshold_low=10)
+
     # Index membership
     index_membership = row.get("index_membership", "UNINDEX")
     index_sentiment = row.get("index_sentiment", "Unknown")
