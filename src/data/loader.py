@@ -549,7 +549,7 @@ def usd_valuation(
 # Volume Analysis
 # ─────────────────────────────────────────────────────────────
 def volume_analysis(raw_ticker: str, yf_cache: Dict[str, TickerData], ta_cache: Dict[str, TickerTA]) -> dict:
-    result = {"avg_vol_1y": None, "last_day_vol": None, "vol_multiplier": None}
+    result = {"avg_vol_3m": None, "last_day_vol": None, "vol_multiplier": None}
 
     ta_entry = ta_cache.get(raw_ticker)
     if ta_entry and ta_entry.ok:
@@ -567,16 +567,16 @@ def volume_analysis(raw_ticker: str, yf_cache: Dict[str, TickerData], ta_cache: 
     if vol.empty:
         return result
 
-    last_year = vol.tail(252)
-    avg_1y = float(last_year.mean()) if not last_year.empty else None
+    last_3m = vol.tail(63)
+    avg_3m = float(last_3m.mean()) if not last_3m.empty else None
 
-    result["avg_vol_1y"] = avg_1y
+    result["avg_vol_3m"] = avg_3m
 
     if result["last_day_vol"] is None:
         result["last_day_vol"] = float(vol.iloc[-1])
 
-    if avg_1y and avg_1y > 0:
-        result["vol_multiplier"] = round(result["last_day_vol"] / avg_1y, 3)
+    if avg_3m and avg_3m > 0:
+        result["vol_multiplier"] = round(result["last_day_vol"] / avg_3m, 3)
 
     return result
 
