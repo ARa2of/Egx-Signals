@@ -30,6 +30,7 @@ data/*.parquet
 data/*.csv
 *.xlsx
 !config/tickers.xlsx
+!config/EGX_Stock_Groups.xlsx
 
 # Logs
 *.log
