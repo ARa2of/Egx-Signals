@@ -1,0 +1,37 @@
+# Core data & analysis
+yfinance>=0.2.40
+pandas>=2.2.2
+numpy>=1.26.4
+requests>=2.31.0
+tradingview-ta>=3.2.9
+
+# ML
+xgboost>=2.0.0
+lightgbm>=4.0.0
+scikit-learn>=1.3.0
+optuna>=3.5.0
+
+# Visualization (for Streamlit dashboard)
+streamlit>=1.38.0
+plotly>=5.18.0
+mplfinance>=0.12.10b0
+matplotlib>=3.9.0
+pillow>=10.3.0
+
+# YOLOv8 for ChartScanAI
+ultralytics>=8.2.39
+torch>=2.3.1
+
+# Config & utilities
+pyyaml>=6.0.1
+python-dateutil>=2.8.2
+tqdm>=4.66.0
+
+# Optional: EODHD for better EGX coverage
+# eodhd>=1.0.0
+
+# Excel output
+openpyxl>=3.1.2
+
+# Parquet for signal store
+pyarrow>=14.0.0

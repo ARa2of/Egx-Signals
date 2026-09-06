@@ -1,0 +1,105 @@
+name: Monthly Parameter Tuning
+
+on:
+  schedule:
+    # 1st of month 8:00 AM UK = 07:00 UTC (winter) / 08:00 UTC (summer)
+    - cron: '0 7 1 * *'  # 1st of month 07:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  monthly-tune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Update fundamentals cache
+        run: |
+          python scripts/update_fundamentals.py --force
+
+      - name: Run monthly grid search
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python -c "
+import pandas as pd
+from src.store.signal_store import load_store
+from src.enhancement.param_tuner import run_grid_search
+from src.config import load_enhancement_config
+import logging
+logging.basicConfig(level=logging.INFO)
+
+store = load_store()
+if store.empty:
+    print('No signals in store yet')
+    exit(0)
+
+enhance_cfg = load_enhancement_config()
+tuning_cfg = enhance_cfg['param_tuning']
+
+result = run_grid_search(
+    signal_store=store,
+    test_window_days=tuning_cfg.get('test_window_days', 60),
+    min_trades=tuning_cfg.get('min_trades', 30),
+    metric=tuning_cfg.get('metric', 'win_rate'),
+)
+
+if result:
+    print('Grid search result:', result)
+    # Update params.yaml with best params
+    import yaml
+    from pathlib import Path
+    params_path = Path('config/params.yaml')
+    with open(params_path) as f:
+        params = yaml.safe_load(f)
+
+    # Update relevant params
+    for key, value in result['params'].items():
+        if key in params.get('rsi', {}).get('ranging', {}):
+            params['rsi']['ranging'][key] = value
+        elif key in params.get('volume', {}):
+            params['volume'][key] = value
+        elif key in params.get('trade', {}):
+            params['trade'][key] = value
+
+    params['version'] = f\"v{int(params.get('version', 'v1')[1:]) + 1}\"
+    params['updated'] = str(pd.Timestamp.now().date())
+
+    with open(params_path, 'w') as f:
+        yaml.dump(params, f)
+
+    print(f'Updated params to version {params[\"version\"]}')
+else:
+    print('Grid search did not find improvement')
+          "
+
+      - name: Commit updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add config/params.yaml data/fundamentals.xlsx
+          if ! git diff --staged --quiet; then
+            git commit -m "Monthly update: params + fundamentals ${{ github.run_id }}"
+            git push
+          else
+            echo "No changes"
+          fi

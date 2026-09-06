@@ -1,0 +1,57 @@
+name: Weekly Enhancement
+
+on:
+  schedule:
+    # Sunday 10:00 AM UK time = 09:00 UTC (winter) / 10:00 UTC (summer)
+    - cron: '0 9 * * 0'  # Sunday 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  weekly-enhance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run weekly enhancement
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python -c "
+from src.enhancement.param_tuner import run_weekly_enhancement
+import logging
+logging.basicConfig(level=logging.INFO)
+result = run_weekly_enhancement()
+print('Enhancement result:', result)
+          "
+
+      - name: Commit any param updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add config/params.yaml data/signals.parquet
+          if ! git diff --staged --quiet; then
+            git commit -m "🔧 Weekly enhancement: ${{ github.run_id }}"
+            git push
+          else
+            echo "No param changes"
+          fi

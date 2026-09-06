@@ -1,0 +1,66 @@
+# Enhancement Engine Configuration
+# Controls weekly/monthly parameter tuning and quality monitoring
+
+# ─────────────────────────────────────────────────────────────
+# ML RETRAINING
+# ─────────────────────────────────────────────────────────────
+ml_retrain:
+  enabled: true
+  frequency: "weekly"           # weekly, monthly
+  day_of_week: 6                # 0=Mon, 6=Sun
+  min_new_rows: 50              # Minimum new signal rows since last retrain
+  lookback_days: 730            # Rolling window for training (2 years)
+  test_size: 0.30               # Hold-out for validation
+  min_improvement_mae: 0.001    # Minimum MAE improvement to accept new model
+
+# ─────────────────────────────────────────────────────────────
+# PARAMETER TUNING (Fast Grid Search)
+# ─────────────────────────────────────────────────────────────
+param_tuning:
+  enabled: true
+  frequency: "monthly"          # weekly, monthly
+  day_of_month: 1               # 1st of month
+  test_window_days: 60          # Evaluate on last N trading days
+  min_trades: 30                # Minimum Buy signals in test window
+  metric: "win_rate"            # win_rate, expectancy, sharpe
+  min_improvement: 0.02         # 2% absolute improvement threshold
+  
+  # Grid search space (keep small for speed)
+  param_grid:
+    rsi_oversold: [28, 30, 32, 34, 36]
+    rsi_healthy_high: [68, 70, 72, 74]
+    volume_spike: [1.5, 1.8, 2.0, 2.2]
+    near_support_pct: [0.02, 0.025, 0.03, 0.035, 0.04]
+    stop_loss_atr: [1.2, 1.5, 1.8, 2.0]
+
+# ─────────────────────────────────────────────────────────────
+# QUALITY MONITORING
+# ─────────────────────────────────────────────────────────────
+quality_monitoring:
+  enabled: true
+  alert_thresholds:
+    win_rate_below: 0.45              # Alert if TP1 hit rate drops below 45%
+    score_calibration_slope_below: 0.1  # Alert if high-score stocks don't outperform
+    mae_above_pct: 0.05               # Alert if ML MAE > 5%
+    tv_failure_rate_above: 0.20       # Alert if >20% tickers fall back to yfinance
+  
+  metrics_to_track:
+    - "hit_rate_tp1"
+    - "hit_rate_tp2"
+    - "hit_rate_tp3"
+    - "avg_hold_days"
+    - "mae_vs_atr"
+    - "mfe_vs_atr"
+    - "score_calibration"
+    - "regime_performance"
+    - "sector_performance"
+
+# ─────────────────────────────────────────────────────────────
+# OUTCOME SIMULATION (for closed trades)
+# ─────────────────────────────────────────────────────────────
+outcomes:
+  enabled: true
+  horizon_days: 21              # Track trades for N days
+  cost_bps: 10                  # Transaction costs (bps)
+  slippage_bps: 5               # Slippage (bps)
+  allow_overlapping: false      # One position per ticker at a time

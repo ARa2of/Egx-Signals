@@ -1,0 +1,93 @@
+name: Daily EGX Analysis
+
+on:
+  schedule:
+    # 5:00 PM UK time = 16:00 UTC (winter) / 17:00 UTC (summer)
+    - cron: '0 16 * * 1-5'  # Mon-Fri 16:00 UTC
+  workflow_dispatch:  # Manual trigger
+
+permissions:
+  contents: write  # Needed to commit signal store
+  pages: write    # Needed for GitHub Pages
+  id-token: write # Needed for GitHub Pages
+
+jobs:
+  daily-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true  # For signals.parquet
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: requirements.txt
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libta-lib-dev
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download FX cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/yfinance
+          key: fx-cache-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            fx-cache-${{ runner.os }}-
+
+      - name: Run daily analysis
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          EODHD_API_KEY: ${{ secrets.EODHD_API_KEY }}
+        run: |
+          python scripts/daily_run.py config/tickers.xlsx -o output
+
+      - name: Commit signal store updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/signals.parquet data/history.csv output/latest_signals.csv
+          if ! git diff --staged --quiet; then
+            git commit -m "Daily signals: ${{ github.run_id }}"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Deploy HTML report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          commit_message: "Daily report: ${{ github.run_id }}"
+          user_name: 'github-actions[bot]'
+          user_email: '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Upload Excel artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EGX_Signals_${{ github.run_id }}
+          path: output/EGX_Signals_*.xlsx
+          retention-days: 30
+
+      - name: Upload latest signals CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest_signals_${{ github.run_id }}
+          path: output/latest_signals.csv
+          retention-days: 90

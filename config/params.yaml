@@ -1,0 +1,210 @@
+# EGX Signal Generator Parameters
+# Versioned config — update version when params change
+version: "v2.0"
+updated: "2026-09-03"
+description: "Core scoring and trade plan parameters"
+
+# ─────────────────────────────────────────────────────────────
+# SCORING WEIGHTS (sum to 100)
+# ─────────────────────────────────────────────────────────────
+weights:
+  trend: 25.0
+  macd: 12.0
+  rsi: 12.0
+  volume: 12.0
+  adi: 10.0
+  support: 10.0
+  vwap: 10.0
+  volume_profile: 9.0
+
+# ─────────────────────────────────────────────────────────────
+# RECOMMENDATION THRESHOLDS
+# ─────────────────────────────────────────────────────────────
+thresholds:
+  buy: 60.0
+  watch: 50.0
+
+# ─────────────────────────────────────────────────────────────
+# RSI ZONES (regime-aware)
+# ─────────────────────────────────────────────────────────────
+rsi:
+  trending_up:
+    oversold: 35
+    healthy_low: 45
+    healthy_high: 70
+    overbought: 80
+  ranging:
+    oversold: 30
+    healthy_low: 40
+    healthy_high: 65
+    overbought: 75
+  trending_down:
+    oversold: 25
+    healthy_low: 35
+    healthy_high: 55
+    overbought: 70
+
+# ─────────────────────────────────────────────────────────────
+# VOLUME & SUPPORT
+# ─────────────────────────────────────────────────────────────
+volume:
+  spike_multiplier: 1.8
+  near_support_pct: 0.03
+
+# ─────────────────────────────────────────────────────────────
+# TRADE PLAN (ATR-based)
+# ─────────────────────────────────────────────────────────────
+trade:
+  stop_loss_atr: 1.5
+  target_atr: 3.0
+  max_entry_discount: 0.10
+  entry_buffer: 0.005
+  min_rr: 1.2
+  atr_zone_half: 0.30
+  max_wait_atr: 3.5
+  max_stop_atr: 3.0
+  proximity_penalty_per_atr: 6
+
+# ─────────────────────────────────────────────────────────────
+# ML SETTINGS
+# ─────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────
+# FUNDAMENTALS
+# ─────────────────────────────────────────────────────────────
+fundamentals:
+  reference_pe_egx: 12.0
+  graham_multiplier: 22.5
+
+# ─────────────────────────────────────────────────────────────
+# TRADINGVIEW SETTINGS
+# ─────────────────────────────────────────────────────────────
+tradingview:
+  exchange: "EGX"
+  screener: "egypt"
+  symbols_per_request: 40
+  batch_retries: 4
+  batch_retry_delay: 5
+  inter_chunk_delay_min: 5
+  inter_chunk_delay_max: 10
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+  extra_columns:
+    - "price_earnings_ttm"
+    - "earnings_per_share_basic_ttm"
+
+# ─────────────────────────────────────────────────────────────
+# ML SETTINGS
+# ─────────────────────────────────────────────────────────────
+ml:
+  horizon_days: 10
+  lookback_days: 730
+  train_ratio: 0.70
+  min_rows: 120
+  peer_selection: "sector"
+  sector_groups_file: "config/EGX_Stock_Groups.xlsx"
+  max_peers: 4
+  custom_peers: []
+  quantiles:
+    Low: 0.10
+    Medium: 0.50
+    High: 0.90
+  xgb_params:
+    n_estimators: 300
+    max_depth: 4
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    min_child_weight: 5
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+    random_state: 42
+    tree_method: "hist"
+    verbosity: 0
+  lgbm_params:
+    n_estimators: 300
+    max_depth: 4
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    min_child_weight: 5
+    reg_alpha: 0.1
+    reg_lambda: 1.0
+    random_state: 42
+    verbosity: -1
+  ensemble_weights:
+    xgb: 0.5
+    lgbm: 0.5
+  walk_forward:
+    n_splits: 5
+    test_ratio: 0.20
+  optuna:
+    enabled: false
+    n_trials: 30
+    timeout: 120
+
+# ─────────────────────────────────────────────────────────────
+# DATA SETTINGS
+# ─────────────────────────────────────────────────────────────
+data:
+  history_period: "10y"
+  min_trading_days: 30
+  adl_window: 20
+  egx_suffix: ".CA"
+  fx_ticker: "EGP=X"
+  egp_similarity_band: 0.03
+  swing_order: 5
+  sr_lookback_days: 180
+  buy_vol_avg_days: 42
+  rsi_period: 14
+  adx_trend_threshold: 25
+  mfi_overbought: 80
+  mfi_oversold: 20
+  auto_adjust: true
+  freshness_check_period: "5d"
+  stale_data_warning_days: 4
+
+# ─────────────────────────────────────────────────────────────
+# ENHANCED ENTRY/EXIT
+# ─────────────────────────────────────────────────────────────
+enhanced_entry:
+  enabled: true
+  entry_indicators:
+    - "Pivot.M.Fibonacci.S1"
+    - "Pivot.M.Classic.S1"
+    - "BB.lower"
+    - "P.SAR"
+    - "Ichimoku.BLine"
+    - "VWMA"
+    - "SMA50"
+  tp_indicators:
+    - "Pivot.M.Classic.R1"
+    - "Pivot.M.Fibonacci.R1"
+    - "Pivot.M.Classic.R2"
+    - "Pivot.M.Fibonacci.R2"
+    - "BB.upper"
+    - "Pivot.M.Classic.R3"
+    - "Pivot.M.Fibonacci.R3"
+    - "SMA100"
+    - "SMA200"
+  sl_indicators:
+    - "Pivot.M.Fibonacci.S1"
+    - "Pivot.M.Classic.S1"
+    - "BB.lower"
+    - "P.SAR"
+    - "SMA200"
+
+# ─────────────────────────────────────────────────────────────
+# INDEX SYMBOLS
+# ─────────────────────────────────────────────────────────────
+indices:
+  EGX30: "EGX30"
+  EGX70: "EGX70EWI"
+  EGX33: "SHARIAH"
+
+# ─────────────────────────────────────────────────────────────
+# YOLOv8 CHARTSCAN AI
+# ─────────────────────────────────────────────────────────────
+chartscan:
+  enabled: true
+  model_path: "weights/custom_yolov8.pt"
+  confidence_threshold: 0.3
+  lookback_candles: 180

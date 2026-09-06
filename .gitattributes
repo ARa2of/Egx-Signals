@@ -1,0 +1,4 @@
+# Git LFS tracking for signal store
+data/signals.parquet filter=lfs diff=lfs merge=lfs -text
+data/history.csv filter=lfs diff=lfs merge=lfs -text
+weights/custom_yolov8.pt filter=lfs diff=lfs merge=lfs -text

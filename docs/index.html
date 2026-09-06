@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<title>EGX Signals — 06 September 2026</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e1e4ea;
+    --muted: #8b8fa3;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #eab308;
+    --blue: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+    background: var(--bg); color: var(--text);
+    padding: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+  .summary {
+    display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .summary-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 24px; min-width: 140px;
+  }
+  .summary-card .label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; }
+  .summary-card .value { font-size: 1.8rem; font-weight: 700; margin-top: 4px; }
+  .summary-card .value.buy { color: var(--green); }
+  .summary-card .value.avoid { color: var(--red); }
+  .summary-card .value.watch { color: var(--yellow); }
+
+  .market-overview {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px; margin-bottom: 24px;
+  }
+  .market-title { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 10px; }
+  .market-indices { display: flex; gap: 16px; flex-wrap: wrap; }
+  .index-card {
+    flex: 1; min-width: 160px; background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border); border-radius: 6px; padding: 12px;
+  }
+  .index-card .idx-name { font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+  .index-card .idx-sentiment { font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; }
+  .index-card .idx-sentiment.bullish { color: var(--green); }
+  .index-card .idx-sentiment.bearish { color: var(--red); }
+  .index-card .idx-sentiment.neutral { color: var(--yellow); }
+  .index-card .idx-detail { font-size: 0.72rem; color: var(--muted); }
+  .index-card .idx-reason { font-size: 0.7rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  .section-title {
+    font-size: 1rem; font-weight: 600; margin: 24px 0 12px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before { content: "\25B6"; font-size: 0.6rem; transition: transform 0.2s; }
+  .section-title.open::before { transform: rotate(90deg); }
+  .section-title.buy { color: var(--green); }
+  .section-title.strong-buy { color: #00ff88; font-weight: 700; }
+  .section-title.avoid { color: var(--red); }
+  .section-title.watch { color: var(--yellow); }
+  .section-body { display: none; }
+  .section-body.open { display: block; }
+
+  .ticker-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 10px; overflow: hidden;
+  }
+  .ticker-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px; cursor: pointer; user-select: none;
+    transition: background 0.15s;
+  }
+  .ticker-header:hover { background: rgba(255,255,255,0.03); }
+  .ticker-header .arrow { font-size: 0.6rem; color: var(--muted); transition: transform 0.2s; }
+  .ticker-card.open .ticker-header .arrow { transform: rotate(90deg); }
+  .ticker-left { display: flex; align-items: center; gap: 12px; }
+  .ticker-name { font-size: 1rem; font-weight: 700; min-width: 60px; }
+  .ticker-score { font-size: 0.85rem; color: var(--muted); }
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 4px;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  }
+  .badge.buy { background: rgba(34,197,94,0.15); color: var(--green); }
+  .badge.avoid { background: rgba(239,68,68,0.15); color: var(--red); }
+  .badge.watch { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .badge.index { background: rgba(139,143,163,0.12); color: var(--muted); font-size: 0.68rem; padding: 1px 6px; }
+
+  .ticker-body { display: none; padding: 0 16px 16px; }
+  .ticker-card.open .ticker-body { display: block; }
+
+  .details { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 12px; }
+  .detail-group .group-title { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; margin-bottom: 6px; text-align: center; }
+  .detail-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; font-size: 0.8rem; padding: 2px 0; align-items: center; }
+  .detail-row .label { color: var(--muted); text-align: left; }
+  .detail-row .val { font-weight: 600; text-align: right; white-space: nowrap; }
+  .detail-row .val.green { color: var(--green); }
+  .detail-row .val.red { color: var(--red); }
+  .detail-row .val.yellow { color: var(--yellow); }
+  .detail-row .val.blue { color: var(--blue); }
+
+  .explanation {
+    background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 6px; padding: 12px 14px; margin-top: 12px;
+    font-size: 0.82rem; line-height: 1.55; color: var(--text);
+  }
+  .explanation b { color: var(--blue); }
+  .explanation::before { content: "\1F4A1 "; }
+
+  .chart-container {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px; margin-top: 12px;
+  }
+  .chart-container .chart-title { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; margin-bottom: 4px; text-align: center; }
+
+  .basis { color: var(--muted); font-size: 0.75rem; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .exit-strategy {
+    background: rgba(234,179,8,0.06); border: 1px solid rgba(234,179,8,0.15);
+    border-radius: 6px; padding: 10px 14px; margin-top: 10px; font-size: 0.8rem;
+  }
+  .exit-strategy .group-title { color: var(--yellow); }
+  .exit-text { margin: 6px 0; line-height: 1.5; }
+  .exit-triggers { margin-top: 8px; }
+  .exit-triggers ul { margin: 4px 0 0 16px; padding: 0; }
+  .exit-triggers li { margin-bottom: 3px; color: var(--muted); font-size: 0.78rem; }
+
+  .sr-levels { font-size: 0.8rem; }
+  .sr-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: center; }
+  .sr-row:last-child { border-bottom: none; }
+  .sr-label { color: var(--muted); text-align: left; }
+  .sr-price { font-weight: 600; text-align: center; }
+  .sr-strength { font-size: 0.72rem; padding: 1px 5px; border-radius: 3px; text-align: right; }
+  .sr-strength.strong { background: rgba(34,197,94,0.15); color: var(--green); }
+  .sr-strength.medium { background: rgba(234,179,8,0.12); color: var(--yellow); }
+  .sr-strength.weak { background: rgba(139,143,163,0.1); color: var(--muted); }
+  .no-signals { color: var(--muted); font-size: 0.85rem; padding: 16px; }
+  footer { margin-top: 32px; color: var(--muted); font-size: 0.7rem; text-align: center; }
+</style>
+</head>
+<body>
+<h1>EGX Daily Signals</h1>
+<p class="subtitle">06 September 2026 — 1 stocks analyzed</p>
+
+<div class="summary">
+  <div class="summary-card"><div class="label">Strong Buy</div><div class="value strong-buy">0</div></div>
+  <div class="summary-card"><div class="label">Buy</div><div class="value buy">1</div></div>
+  <div class="summary-card"><div class="label">Watch</div><div class="value watch">0</div></div>
+  <div class="summary-card"><div class="label">Avoid</div><div class="value avoid">0</div></div>
+</div>
+
+<div class="market-overview">
+  <div class="market-title">Market Overview</div>
+  <div class="market-indices">
+    
+            <div class="index-card">
+              <div class="idx-name">EGX70</div>
+              <div class="idx-sentiment bullish">Bullish</div>
+              <div class="idx-detail">21,626.4 | RSI 66 | ADX 54</div>
+              <div class="idx-reason">RSI 66 > 55; MACD bearish; Price > EMA20 > EMA50 (uptrend)</div>
+            </div>
+  </div>
+</div>
+
+<div class="section-title strong-buy">STRONG BUY (0)</div>
+<div class="section-body"><div class="no-signals">No strong buy signals today</div></div>
+<div class="section-title buy">BUY (1)</div>
+<div class="section-body">
+<div class="ticker-card" id="card-MASR">
+  <div class="ticker-header">
+    <div class="ticker-left">
+      <span class="ticker-name">MASR</span>
+      <span class="badge index">EGX70 Bullish</span>
+      <span class="ticker-score">64.5</span>
+      <span class="badge buy">Buy</span>
+    </div>
+    <span class="arrow">&#9654;</span>
+  </div>
+  <div class="ticker-body">
+    <div class="details">
+      <div class="detail-group">
+        <div class="group-title">Technical</div>
+        <div class="detail-row"><span class="label">Price</span><span class="val">8.57</span></div>
+        <div class="detail-row"><span class="label">RSI</span><span class="val green">70.8</span></div>
+        <div class="detail-row"><span class="label">MACD</span><span class="val green">Bullish</span></div>
+        <div class="detail-row"><span class="label">Regime</span><span class="val">trending_up</span></div>
+      </div>
+      <div class="detail-group">
+        <div class="group-title">Moving Averages</div>
+        <div class="detail-row"><span class="label">EMA 20</span><span class="val green">7.83</span></div>
+        <div class="detail-row"><span class="label">EMA 50</span><span class="val green">7.67</span></div>
+        <div class="detail-row"><span class="label">EMA 200</span><span class="val green">6.35</span></div>
+        <div class="detail-row"><span class="label">SMA 20</span><span class="val">7.71</span></div>
+        <div class="detail-row"><span class="label">SMA 50</span><span class="val">7.82</span></div>
+        <div class="detail-row"><span class="label">SMA 200</span><span class="val">5.94</span></div>
+      </div>
+      <div class="detail-group">
+        <div class="group-title">VWAP & Volume Profile</div>
+        <div class="detail-row"><span class="label">VWAP</span><span class="val">7.68</span></div>
+        <div class="detail-row"><span class="label">Dist VWAP</span><span class="val ">+3.9%</span></div>
+        <div class="detail-row"><span class="label">VP POC</span><span class="val">7.74</span></div>
+        <div class="detail-row"><span class="label">Above POC</span><span class="val green">Yes</span></div>
+      </div>
+      <div class="detail-group">
+        <div class="group-title">ML Forecast (10-day)</div>
+        <div class="detail-row"><span class="label">Low</span><span class="val red">7.12</span></div>
+        <div class="detail-row"><span class="label">Medium</span><span class="val red">7.74</span></div>
+        <div class="detail-row"><span class="label">High</span><span class="val green">8.12</span></div>
+        <div class="detail-row"><span class="label">Conviction</span><span class="val red">10/100 Avoid</span></div>
+      </div>
+      <div class="detail-group">
+        <div class="group-title">Trade Plan</div>
+        <div class="detail-row"><span class="label">Entry</span><span class="val blue">7.68</span></div>
+        <div class="detail-row"><span class="label">Max Entry</span><span class="val blue">7.73</span></div>
+        <div class="detail-row"><span class="label">Entry Source</span><span class="val">VWAP</span></div>
+        <div class="detail-row"><span class="label">Action</span><span class="val yellow">WAIT FOR PULLBACK</span></div>
+        <div class="detail-row"><span class="label">Stop Loss</span><span class="val red">7.58</span></div>
+        <div class="detail-row"><span class="label">Stop Basis</span><span class="val">Below support floor</span></div>
+        <div class="detail-row"><span class="label">TP1</span><span class="val green">8.04 (+4.7%)</span></div>
+        <div class="detail-row"><span class="label">TP1 R/R</span><span class="val">3.6x</span></div>
+        <div class="detail-row"><span class="label">TP2</span><span class="val green">8.19 (+6.6%)</span></div>
+        <div class="detail-row"><span class="label">TP2 R/R</span><span class="val">5.0x</span></div>
+        <div class="detail-row"><span class="label">TP3</span><span class="val green">8.44 (+9.8%)</span></div>
+        <div class="detail-row"><span class="label">TP3 R/R</span><span class="val">7.5x</span></div>
+        <div class="detail-row"><span class="label">Duration</span><span class="val yellow">1–2 weeks (~5–10 EGX sessions)</span></div>
+      </div>
+      <div class="detail-group">
+        <div class="group-title">Support & Resistance</div>
+        <div class="sr-levels"><div class="sr-row"><span class="sr-label">R (Weak)</span><span class="sr-price">8.51</span><span class="sr-strength weak">-0.7%</span></div><div class="sr-row"><span class="sr-label">R (Strong)</span><span class="sr-price">8.19</span><span class="sr-strength strong">-4.4%</span></div><div class="sr-row"><span class="sr-label">R (Strong)</span><span class="sr-price">8.04</span><span class="sr-strength strong">-6.2%</span></div><div class="sr-row" style="border-top:1px dashed rgba(255,255,255,0.1);padding-top:4px;"><span class="sr-label" style="color:var(--blue);font-weight:600;">Current</span><span class="sr-price" style="color:var(--blue);">8.57</span></div><div class="sr-row"><span class="sr-label">S (Strong)</span><span class="sr-price">7.82</span><span class="sr-strength strong">-8.8%</span></div><div class="sr-row"><span class="sr-label">S (Strong)</span><span class="sr-price">7.64</span><span class="sr-strength strong">-10.8%</span></div><div class="sr-row"><span class="sr-label">S (Strong)</span><span class="sr-price">7.40</span><span class="sr-strength strong">-13.6%</span></div></div>
+      </div>
+      <div class="detail-group">
+        <div class="group-title">ChartScan AI</div>
+        <div class="detail-row"><span class="label">Signal</span><span class="val green">Buy</span></div>
+        <div class="detail-row"><span class="label">Confidence</span><span class="val">46%</span></div>
+        <div class="detail-row"><span class="label">Candle</span><span class="val">bullish</span></div>
+      </div>
+      <div class="detail-group">
+        <div class="group-title">Fundamentals</div>
+        <div class="detail-row"><span class="label">P/E (TTM)</span><span class="val red">3.0</span></div>
+        <div class="detail-row"><span class="label">Sector Avg P/E</span><span class="val">7.4</span></div>
+        <div class="detail-row"><span class="label">vs Sector</span><span class="val green">-59.6%</span></div>
+        <div class="detail-row"><span class="label">P/B</span><span class="val">0.71</span></div>
+        <div class="detail-row"><span class="label">Market Cap</span><span class="val">9.1B</span></div>
+        <div class="detail-row"><span class="label">Dividend</span><span class="val">3.5%</span></div>
+        <div class="detail-row"><span class="label">Fair Value</span><span class="val green">25.62 (Blended (Graham+PE))</span></div>
+        <div class="detail-row"><span class="label">vs Fair Value</span><span class="val green">+199.0%</span></div>
+      </div>
+    </div>
+    <div class="explanation"><b>Consensus (Buy):</b> Base=Buy, ML=Avoid, ChartScan=Buy. 2/3 agree Buy: Base, ChartScan. RSI at 71 — overbought, watch for pullback. MACD bullish crossover — upward momentum building. Price above POC (7.74) — bullish volume structure. ChartScan AI detected <b>Buy</b> pattern (46% confidence). Fair value implies 199% upside — appears undervalued on fundamentals. Trade plan: entry 7.68, stop 7.58, R/R 3.6x. Entry sourced from <b>VWAP</b>. Max entry: do not exceed <b>7.73</b> (entry zone upper bound). Entry is below current price — wait for pullback to execute. TP1 implies +4.7% profit from entry.</div>
+    
+    <div class="chart-container">
+      <div class="chart-title">Price Chart — MASR
+        <button onclick="toggleFS('chart-MASR')" style="float:right;background:var(--border);color:var(--text);border:none;padding:2px 8px;border-radius:4px;cursor:pointer;font-size:0.7rem;">Fullscreen</button>
+      </div>
+      <div id="chart-MASR" style="width:100%;height:450px;"></div>
+    </div>
+    <script>
+    function toggleFS(id) {
+      var el = document.getElementById(id);
+      if (!document.fullscreenElement) {
+        el.requestFullscreen().catch(e=>{});
+        setTimeout(function() { Plotly.Plots.resize(el); }, 300);
+      } else {
+        document.exitFullscreen();
+        setTimeout(function() { Plotly.Plots.resize(el); }, 300);
+      }
+    }
+    (function() {
+      var d = {"dates": ["2026-06-07", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-14", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-21", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-28", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-05", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-12", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-19", "2026-07-20", "2026-07-21", "2026-07-22", "2026-07-26", "2026-07-27", "2026-07-28", "2026-07-29", "2026-07-30", "2026-08-02", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-09", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-16", "2026-08-17", "2026-08-18", "2026-08-19", "2026-08-20", "2026-08-23", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-30", "2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03", "2026-09-06"], "high": [6.98, 6.94, 6.99, 7.33, 6.88, 6.96, 7.25, 7.4, 7.3, 7.3, 7.69, 7.4, 7.36, 7.16, 7.18, 7.04, 7.25, 7.58, 7.42, 7.62, 7.73, 7.84, 7.76, 7.78, 7.95, 8.2, 8.21, 8.35, 8.51, 8.4, 8.45, 8.41, 8.4, 8.34, 8.26, 8.16, 8.13, 7.98, 8.07, 8.12, 8.05, 8.02, 8.05, 8.04, 8.04, 7.77, 7.88, 7.82, 7.62, 7.76, 7.79, 7.77, 7.7, 7.75, 7.77, 7.7, 7.6, 7.55, 7.74, 7.8, 7.76, 7.76, 7.98, 8.57], "low": [6.74, 6.7, 6.86, 6.85, 6.54, 6.76, 7.0, 7.05, 7.3, 7.3, 7.39, 7.4, 7.06, 6.96, 6.9, 6.71, 6.82, 7.3, 7.24, 7.5, 7.57, 7.76, 7.4, 7.59, 7.7, 7.97, 8.02, 8.14, 8.22, 8.21, 8.27, 8.25, 8.26, 8.23, 7.98, 8.0, 7.96, 7.79, 7.9, 8.0, 7.94, 7.95, 7.88, 8.04, 8.04, 7.45, 7.53, 7.55, 7.62, 7.67, 7.57, 7.62, 7.62, 7.68, 7.58, 7.49, 7.5, 7.55, 7.52, 7.6, 7.65, 7.65, 7.73, 7.98], "close": [6.78, 6.9, 6.95, 6.85, 6.62, 6.96, 7.13, 7.3, 7.3, 7.3, 7.4, 7.4, 7.1, 7.1, 7.01, 6.74, 7.2, 7.3, 7.42, 7.56, 7.73, 7.79, 7.64, 7.73, 7.95, 8.2, 8.13, 8.34, 8.36, 8.39, 8.35, 8.36, 8.35, 8.26, 7.99, 8.05, 8.0, 7.98, 8.07, 8.01, 7.97, 7.98, 8.04, 8.04, 8.04, 7.51, 7.75, 7.62, 7.62, 7.75, 7.6, 7.67, 7.65, 7.74, 7.62, 7.58, 7.55, 7.55, 7.74, 7.65, 7.73, 7.71, 7.98, 8.57]};
+      var lv = {"entry": 7.682, "stop": 7.581, "tp1": 8.042, "tp2": 8.19, "tp3": 8.436, "ml_low": 7.589, "ml_med": 7.736, "ml_high": 8.436, "ema20": 7.8278, "ema50": 7.6712, "support": 7.816, "resistance": 8.51, "labels": {"entry": "Entry 7.68", "stop": "Stop 7.58 (-1.3%)", "fcst_high": "Fcst High 8.44 (-1.6%)", "fcst_med": "Fcst Med 7.74 (-9.7%)", "fcst_low": "Fcst Low 7.59 (-11.4%)", "rr": "R:R 1:3.6"}, "reward_tiers": [{"price": 8.042, "fill": "rgba(34,197,94,0.12)", "text_color": "#4ade80", "label": "TP1 8.04 (+4.7%)"}, {"price": 8.19, "fill": "rgba(34,197,94,0.20)", "text_color": "#22c55e", "label": "TP2 8.19 (+6.6%)"}, {"price": 8.436, "fill": "rgba(34,197,94,0.30)", "text_color": "#16a34a", "label": "TP3 8.44 (+9.8%)"}]};
+
+      if (!d.dates || d.dates.length === 0) {
+        document.getElementById('chart-MASR').innerHTML =
+          '<div style="color:var(--muted);font-size:0.8rem;padding:20px;text-align:center;">No chart data available</div>';
+        return;
+      }
+
+      var traces = [];
+      var shapes = [];
+      var annotations = [];
+      var lastDate = d.dates[d.dates.length - 1];
+
+      // Price line
+      traces.push({
+        x: d.dates, y: d.close,
+        type: 'scatter', mode: 'lines', name: 'Price',
+        line: {color: '#e1e4ea', width: 2},
+        showlegend: true
+      });
+
+      // Horizontal line with text label (centered)
+      var placedLabels = [];
+      function hLine(val, name, color, dash, width, labelSide) {
+        if (!val) return;
+        traces.push({
+          x: [d.dates[0], lastDate], y: [val, val],
+          mode: 'lines', name: name,
+          line: {color: color, width: width || 1.5, dash: dash || 'solid'},
+          showlegend: true, hoverinfo: 'skip'
+        });
+        // Text label position: 'left' = first date, 'mid' = middle, 'right' = last date
+        var labelX = labelSide === 'left' ? d.dates[0] : (labelSide === 'right' ? lastDate : d.dates[Math.floor(d.dates.length / 2)]);
+        var xAnchor = labelSide === 'left' ? 'left' : (labelSide === 'right' ? 'right' : 'center');
+        var xShift = labelSide === 'left' ? 4 : (labelSide === 'right' ? -4 : 0);
+        // Detect overlapping labels (within 0.5%) and stack them vertically
+        var yShift = 4;
+        for (var j = 0; j < placedLabels.length; j++) {
+          if (Math.abs(placedLabels[j] - val) / val < 0.005) {
+            yShift += 16;
+          }
+        }
+        placedLabels.push(val);
+        annotations.push({
+          x: labelX, y: val, xref: 'x', yref: 'y',
+          text: '<b>' + name + '</b> ' + val.toFixed(2),
+          showarrow: false, yanchor: 'bottom', yshift: yShift,
+          xanchor: xAnchor, xshift: xShift,
+          font: {size: 10, color: color, family: 'monospace'},
+          bgcolor: 'rgba(26,29,39,0.85)', borderpad: 2
+        });
+      }
+
+      // S/R and Entry — text in middle
+      hLine(lv.support, 'Support', '#7dd3fc', 'dash', 1.5, 'mid');    // light blue
+      hLine(lv.resistance, 'Resistance', '#a16207', 'dot', 1.5, 'mid'); // brown
+      hLine(lv.entry, 'Entry', '#3b82f6', 'solid', 2, 'mid');          // blue
+
+      // Take Profit zones (last 5 trading days = ~1 week) + stop loss red zone
+      var zoneStart = d.dates.length > 5 ? d.dates[d.dates.length - 6] : d.dates[0];
+
+      // Stop Loss zone (red, from stop to entry, last week)
+      if (lv.stop && lv.entry) {
+        shapes.push({
+          type: 'rect', xref: 'x', x0: zoneStart, x1: lastDate, yref: 'y',
+          y0: lv.stop, y1: lv.entry,
+          fillcolor: 'rgba(239,68,68,0.15)', line: {width: 0}
+        });
+        hLine(lv.stop, 'Stop Loss', '#ef4444', 'dashdot', 1.5, 'right');
+      }
+
+      // TP zones (green, stacked from entry upward, last week)
+      var prevPrice = lv.entry;
+      var tpColors = ['rgba(34,197,94,0.10)', 'rgba(34,197,94,0.18)', 'rgba(34,197,94,0.26)'];
+      var tpLineColors = ['#4ade80', '#22c55e', '#16a34a'];
+      [lv.tp1, lv.tp2, lv.tp3].forEach(function(tp, i) {
+        if (tp && prevPrice && tp > prevPrice) {
+          shapes.push({
+            type: 'rect', xref: 'x', x0: zoneStart, x1: lastDate, yref: 'y',
+            y0: prevPrice, y1: tp,
+            fillcolor: tpColors[i], line: {width: 0}
+          });
+          hLine(tp, 'TP' + (i + 1), tpLineColors[i], 'shortdot', 1.2, 'right');
+          prevPrice = tp;
+        }
+      });
+
+      // Forecast lines — text on left side
+      // Offset forecast lines if they overlap with TP lines (within 0.5%)
+      var tpPrices = [lv.tp1, lv.tp2, lv.tp3].filter(function(p) { return p; });
+      function offsetIfOverlap(val, offset) {
+        if (!val) return val;
+        for (var i = 0; i < tpPrices.length; i++) {
+          if (Math.abs(tpPrices[i] - val) / val < 0.005) {
+            return val * (1 + offset);
+          }
+        }
+        return val;
+      }
+      hLine(offsetIfOverlap(lv.ml_high, 0.003), 'Fcst High', '#a855f7', 'dot', 1.5, 'left');  // purple, thicker when overlapping
+      hLine(lv.ml_med, 'Fcst Med', '#f97316', 'dash', 1.5, 'left');     // orange
+      hLine(offsetIfOverlap(lv.ml_low, -0.003), 'Fcst Low', '#9ca3af', 'dot', 1.5, 'left');   // grey
+
+      // Y range
+      var allP = d.close.slice();
+      [lv.entry, lv.stop, lv.tp1, lv.tp2, lv.tp3, lv.support, lv.resistance,
+       lv.ml_low, lv.ml_med, lv.ml_high].forEach(function(v) { if (v) allP.push(v); });
+      if (allP.length === 0) allP = [0, 1];
+      var yMin = Math.min.apply(null, allP) * 0.95;
+      var yMax = Math.max.apply(null, allP) * 1.05;
+
+      var layout = {
+        paper_bgcolor: '#1a1d27',
+        plot_bgcolor: '#1a1d27',
+        font: {color: '#e1e4ea', size: 11},
+        margin: {l: 55, r: 55, t: 10, b: 50},
+        xaxis: {
+          gridcolor: 'rgba(255,255,255,0.05)',
+          zeroline: false,
+          type: 'category',
+          tickangle: -45,
+          tickfont: {size: 9},
+          nticks: 15,
+          automargin: true,
+        },
+        yaxis: {
+          title: 'Price (EGP)',
+          gridcolor: 'rgba(255,255,255,0.05)',
+          zeroline: false,
+          side: 'right',
+          range: [yMin, yMax],
+          automargin: true,
+        },
+        shapes: shapes,
+        legend: {
+          orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center',
+          bgcolor: 'rgba(0,0,0,0)', font: {size: 9},
+          tracegroupgap: 5,
+        },
+        annotations: annotations,
+        dragmode: 'zoom',
+        hovermode: 'x unified',
+      };
+
+      Plotly.newPlot('chart-MASR', traces, layout, {
+        responsive: true,
+        displayModeBar: true,
+        displaylogo: false
+      });
+    })();
+    </script>
+    
+    <div class="exit-strategy"><div class="group-title">Exit Strategy</div><div class="exit-text">Strong setup (score 5/7). Scale out approach: Sell 30% at TP1 (8.04, +4.7%) — move stop to breakeven. Sell 30% at TP2 (8.19, +6.6%) — trail stop to TP1. Trail final 40% toward TP3 (8.44, +9.8%). Stop-loss: Exit immediately on intraday touch — do not wait for close. Reduce 50% position on first touch, exit remainder on close below.</div><div class="exit-triggers"><b>Exit Triggers:</b><ul><li>STOP-LOSS at 7.58 (1.3% below entry) — Exit immediately on intraday touch — do not wait for close.</li><li>Stop urgency: TIGHT — Reduce 50% position on first touch, exit remainder on close below.</li><li>Price closes below EMA20 for two consecutive sessions — tighten or exit.</li><li>ML Medium reached (7.74) — reassess or take partial profit.</li><li>High volume bearish day near entry/resistance — cut or reduce position.</li></ul></div></div>
+    <div class="basis">Score: Trend: 25.0 | Macd: 12.0 | Rsi: 3.0 | Volume: 12.0 | Adi: 0.0 | Support: 0.0 | Vwap: 8.0 | Volume Profile: 4.5</div>
+  </div>
+</div></div>
+<div class="section-title watch">WATCH (0)</div>
+<div class="section-body"><div class="no-signals">No watch signals</div></div>
+<div class="section-title avoid">AVOID (0)</div>
+<div class="section-body"><div class="no-signals">No avoid signals</div></div>
+
+<footer>Generated by EGX Signal Generator — 06 September 2026 - A.A.Raouf</footer>
+
+<script>
+// Toggle sections
+document.querySelectorAll('.section-title').forEach(el => {
+  el.addEventListener('click', () => {
+    el.classList.toggle('open');
+    el.nextElementSibling.classList.toggle('open');
+  });
+});
+// Open buy sections by default
+document.querySelectorAll('.section-title.strong-buy, .section-title.buy').forEach(el => {
+  el.classList.add('open'); el.nextElementSibling.classList.add('open');
+});
+
+// Toggle ticker cards
+document.querySelectorAll('.ticker-header').forEach(el => {
+  el.addEventListener('click', () => {
+    el.closest('.ticker-card').classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
