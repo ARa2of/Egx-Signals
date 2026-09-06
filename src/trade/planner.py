@@ -388,19 +388,18 @@ def compute_take_profits(entry: float, stop: float, forecast: Dict, sr: Dict, fi
     risk = entry - stop
     targets = []
 
-    # ML forecast
+    # ML forecast (always include if above entry — model-based, most reliable)
     for name, f in forecast.items():
         price = f["price"]
         if price > entry:
             rr = (price - entry) / risk if risk > 0 else 0
-            if rr >= 1.0:
-                targets.append({
-                    "source": f"ML {name}",
-                    "price": round(price, 3),
-                    "pct_from_entry": round((price - entry) / entry * 100, 2),
-                    "rr_ratio": round(rr, 2),
-                    "above_last_close": (last_price is None or price > last_price),
-                })
+            targets.append({
+                "source": f"ML {name}",
+                "price": round(price, 3),
+                "pct_from_entry": round((price - entry) / entry * 100, 2),
+                "rr_ratio": round(rr, 2),
+                "above_last_close": (last_price is None or price > last_price),
+            })
 
     # Resistance levels
     for r in sr.get("resistance", []):
@@ -456,6 +455,27 @@ def compute_take_profits(entry: float, stop: float, forecast: Dict, sr: Dict, fi
                     "rr_ratio": round(multiplier, 2),
                     "above_last_close": True,
                 })
+
+    # Supplement: add ATR targets if fewer than 3 targets
+    if len(merged) < 3 and entry and stop:
+        risk = entry - stop
+        if risk > 0:
+            existing_prices = {round(t["price"], 1) for t in merged}
+            for multiplier, label in [(1.5, "ATR 1.5R"), (2.5, "ATR 2.5R"), (4.0, "ATR 4.0R")]:
+                price = entry + risk * multiplier
+                if round(price, 1) not in existing_prices:
+                    merged.append({
+                        "source": label,
+                        "price": round(price, 3),
+                        "pct_from_entry": round((price - entry) / entry * 100, 2),
+                        "rr_ratio": round(multiplier, 2),
+                        "above_last_close": True,
+                    })
+                if len(merged) >= 3:
+                    break
+
+    # Final sort by price ascending
+    merged.sort(key=lambda t: t["price"])
 
     return merged
 
