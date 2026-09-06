@@ -41,14 +41,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          python -c "
-from src.enhancement.param_tuner import run_weekly_enhancement
-import logging
-logging.basicConfig(level=logging.INFO)
-result = run_weekly_enhancement()
-print('Enhancement result:', result)
-          "
+        run: python scripts/run_weekly_enhancement.py
 
       - name: Commit any param updates
         run: |
