@@ -443,6 +443,20 @@ def compute_take_profits(entry: float, stop: float, forecast: Dict, sr: Dict, fi
         else:
             merged.append(t)
 
+    # Fallback: if no targets found, use ATR-based targets from entry
+    if not merged and entry and stop:
+        risk = entry - stop
+        if risk > 0:
+            for multiplier, label in [(1.5, "ATR 1.5R"), (2.5, "ATR 2.5R"), (4.0, "ATR 4.0R")]:
+                price = entry + risk * multiplier
+                merged.append({
+                    "source": label,
+                    "price": round(price, 3),
+                    "pct_from_entry": round((price - entry) / entry * 100, 2),
+                    "rr_ratio": round(multiplier, 2),
+                    "above_last_close": True,
+                })
+
     return merged
 
 # ─────────────────────────────────────────────────────────────
