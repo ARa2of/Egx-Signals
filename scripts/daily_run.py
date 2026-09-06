@@ -323,7 +323,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 forecast=ml_result.get("forecast", {}),
                 capital=100000, risk_pct=1.0,
                 regime=regime, patterns=patterns, mae_pct=mae_pct,
-                vol_profile=vol_profile,
+                vol_profile=vol_profile, current_price=current_price,
             )
 
             # Build output row

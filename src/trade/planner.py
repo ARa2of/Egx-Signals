@@ -706,9 +706,14 @@ def compute_holding_recommendation(forecast: Dict, trade: Dict, regime: Dict, pa
 def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
                      capital: float = 10000.0, risk_pct: float = 1.0,
                      regime: Dict = None, patterns: Dict = None, mae_pct: float = None,
-                     vol_profile: Dict = None) -> Dict:
+                     vol_profile: Dict = None, current_price: float = None) -> Dict:
     indic = _get_indicators(df_tech)
     last_price = indic["close"]
+
+    # Override with TradingView real-time price if available
+    if current_price is not None and current_price > 0:
+        last_price = float(current_price)
+        indic["close"] = last_price
 
     regime = regime or {"regime": "unknown", "adx": 0.0, "direction": "neutral"}
     patterns = patterns or {"patterns": [], "latest_signal": "neutral", "score_delta": 0}
