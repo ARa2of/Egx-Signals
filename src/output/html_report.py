@@ -355,15 +355,58 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .details {{ grid-template-columns: 1fr !important; }}
     .chart-container div[style*="height:450px"],
     .chart-container div[style*="height: 450px"] {{ height: 300px !important; }}
+    .dash-summary {{ flex-wrap: wrap; }}
+    .dash-card {{ min-width: 70px; }}
   }}
 
+  /* Dashboard */
+  .dash-summary {{ display: flex; gap: 12px; margin-bottom: 16px; }}
+  .dash-card {{
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; text-align: center; flex: 1; min-width: 90px;
+  }}
+  .dash-card .dash-label {{ font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }}
+  .dash-card .dash-value {{ font-size: 1.4rem; font-weight: 700; margin-top: 4px; }}
+  .dash-card .dash-value.green {{ color: var(--green); }}
+  .dash-card .dash-value.red {{ color: var(--red); }}
+  .dash-card .dash-value.yellow {{ color: var(--yellow); }}
+  .dash-card .dash-value.blue {{ color: var(--blue); }}
+  .dash-chart {{ background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }}
+  .dash-table-wrap {{ background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; overflow-x: auto; }}
+  .dash-table-title {{ font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; color: var(--text); }}
+  .dash-table {{ width: 100%; border-collapse: collapse; font-size: 0.75rem; }}
+  .dash-table th {{ text-align: left; padding: 6px 8px; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 500; }}
+  .dash-table td {{ padding: 6px 8px; border-bottom: 1px solid var(--border); }}
+  .dash-table tr:last-child td {{ border-bottom: none; }}
+  .outcome-badge {{
+    display: inline-block; padding: 2px 6px; border-radius: 4px;
+    font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+  }}
+  .outcome-badge.tp1 {{ background: rgba(34,197,94,0.15); color: #22c55e; }}
+  .outcome-badge.tp2 {{ background: rgba(34,197,94,0.25); color: #22c55e; }}
+  .outcome-badge.tp3 {{ background: rgba(34,197,94,0.35); color: #16a34a; }}
+  .outcome-badge.sl {{ background: rgba(239,68,68,0.15); color: #ef4444; }}
+  .outcome-badge.expired {{ background: rgba(139,143,163,0.15); color: #8b8fa3; }}
+  .outcome-badge.pending {{ background: rgba(234,179,8,0.15); color: #eab308; }}
+  .dash-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
+  @media (max-width: 768px) {{ .dash-grid {{ grid-template-columns: 1fr; }} }}
+
   footer {{ margin-top: 32px; color: var(--muted); font-size: 0.7rem; text-align: center; }}
+
+  .header {{ display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }}
+  .header-left h1 {{ margin-bottom: 4px; }}
+  .header-logo {{ width: 64px; height: 64px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }}
 </style>
 </head>
 <body>
-<h1>EGX Daily Signals</h1>
-<p class="subtitle">{report_date} — {total_stocks} stocks analyzed</p>
-<p class="subtitle" style="font-size:0.75rem;color:#9ca3af;margin-top:-8px;">TradingView data: {ta_timestamp}</p>
+<div class="header">
+  <div class="header-left">
+    <h1>EGX Daily Signals</h1>
+    <p class="subtitle">{report_date} — {total_stocks} stocks analyzed</p>
+    <p class="subtitle" style="font-size:0.75rem;color:#9ca3af;margin-top:-8px;">TradingView data: {ta_timestamp}</p>
+  </div>
+  <img class="header-logo" src="https://raw.githubusercontent.com/ARa2of/Egx-Signals/main/config/Coat_of_Arms.png" alt="Logo">
+</div>
 
 <div class="summary">
   <div class="summary-card"><div class="label">Strong Buy</div><div class="value strong-buy">{strong_buy_count}</div></div>
@@ -383,6 +426,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <input type="text" id="searchInput" placeholder="Search by ticker name..." oninput="filterTickers()">
   <div class="search-count" id="searchCount"></div>
 </div>
+
+{dashboard_html}
 
 {strong_buy_section}
 {buy_section}
@@ -1167,7 +1212,223 @@ def _get_ta_timestamp(rows):
     return "N/A"
 
 # ─────────────────────────────────────────────────────────────
-def generate_html_report(rows: List[Dict], output_path: str) -> str:
+# Weekly Performance Dashboard
+# ─────────────────────────────────────────────────────────────
+def _build_dashboard_html(signal_store) -> str:
+    """Build the weekly performance dashboard section."""
+    import pandas as pd
+    import numpy as np
+
+    if signal_store is None or signal_store.empty:
+        return ""
+
+    # Filter to signals with real outcomes
+    has_outcome = signal_store["outcome"].notna() & ~signal_store["outcome"].isin(
+        ["pending", "error", "no_data", "invalid"])
+    evaluated = signal_store[has_outcome].copy()
+
+    if evaluated.empty:
+        return ""
+
+    # ── Summary Cards ──
+    total = len(evaluated)
+    tp1_rate = (evaluated["outcome"] == "tp1_hit").mean()
+    tp2_rate = (evaluated["outcome"] == "tp2_hit").mean()
+    tp3_rate = (evaluated["outcome"] == "tp3_hit").mean()
+    sl_rate = (evaluated["outcome"] == "stop_loss").mean()
+    avg_r = evaluated["r_multiple"].mean()
+    avg_hold = evaluated["hold_days"].mean()
+    avg_pnl = evaluated["pnl_pct"].mean()
+
+    wr_class = "green" if tp1_rate >= 0.5 else "red"
+    r_class = "green" if avg_r > 0 else "red"
+    sl_class = "red" if sl_rate > 0.3 else "green"
+
+    summary_html = f"""
+    <div class="dash-summary">
+      <div class="dash-card"><div class="dash-label">Win Rate (TP1)</div><div class="dash-value {wr_class}">{tp1_rate:.1%}</div></div>
+      <div class="dash-card"><div class="dash-label">Avg R-Multiple</div><div class="dash-value {r_class}">{avg_r:+.2f}R</div></div>
+      <div class="dash-card"><div class="dash-label">Stop Loss Rate</div><div class="dash-value {sl_class}">{sl_rate:.1%}</div></div>
+      <div class="dash-card"><div class="dash-label">Avg Hold</div><div class="dash-value yellow">{avg_hold:.0f}d</div></div>
+      <div class="dash-card"><div class="dash-label">Trades Evaluated</div><div class="dash-value blue">{total}</div></div>
+    </div>"""
+
+    # ── Weekly Performance Chart (Plotly) ──
+    evaluated["run_date"] = pd.to_datetime(evaluated["run_date"])
+    evaluated["week"] = evaluated["run_date"].dt.isocalendar().week.astype(int)
+    evaluated["year_week"] = evaluated["run_date"].dt.strftime("%Y-W%U")
+
+    weekly = evaluated.groupby("year_week").agg(
+        count=("ticker", "count"),
+        win_rate=("outcome", lambda x: (x == "tp1_hit").mean()),
+        avg_r=("r_multiple", "mean"),
+        total_r=("r_multiple", "sum"),
+    ).reset_index()
+
+    weekly = weekly.sort_values("year_week").tail(12)
+
+    if len(weekly) > 1:
+        labels = weekly["year_week"].tolist()
+        win_rates = [round(v * 100, 1) for v in weekly["win_rate"].tolist()]
+        cum_r = weekly["total_r"].cumsum().round(2).tolist()
+        counts = weekly["count"].tolist()
+
+        chart_html = f"""
+    <div class="dash-chart">
+      <div class="dash-table-title">Weekly Performance Trend</div>
+      <div id="dashChart" style="width:100%;height:280px;"></div>
+      <script>
+      (function() {{
+        var trace1 = {{
+          x: {labels}, y: {win_rates}, name: 'Win Rate %',
+          type: 'scatter', mode: 'lines+markers',
+          line: {{color: '#22c55e', width: 2}},
+          marker: {{size: 6}}
+        }};
+        var trace2 = {{
+          x: {labels}, y: {cum_r}, name: 'Cumulative R',
+          type: 'bar', marker: {{color: 'rgba(59,130,246,0.5)'}},
+          yaxis: 'y2'
+        }};
+        var layout = {{
+          margin: {{t: 10, b: 40, l: 50, r: 50}},
+          paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
+          font: {{color: '#8b8fa3', size: 10}},
+          xaxis: {{gridcolor: '#2a2d3a', tickangle: -45}},
+          yaxis: {{title: 'Win Rate %', gridcolor: '#2a2d3a', range: [0, 100]}},
+          yaxis2: {{title: 'Cumulative R', overlaying: 'y', side: 'right', gridcolor: 'transparent'}},
+          legend: {{x: 0, y: 1.15, orientation: 'h', font: {{size: 10}}}},
+          hovermode: 'x unified'
+        }};
+        Plotly.newPlot('dashChart', [trace1, trace2], layout, {{responsive: true}});
+      }})();
+      </script>
+    </div>"""
+    else:
+        chart_html = ""
+
+    # ── Recent Trades Table ──
+    recent = evaluated.sort_values("run_date", ascending=False).head(10)
+    rows_html = ""
+    for _, r in recent.iterrows():
+        outcome = r.get("outcome", "pending")
+        if outcome == "tp1_hit":
+            badge_cls = "tp1"
+        elif outcome == "tp2_hit":
+            badge_cls = "tp2"
+        elif outcome == "tp3_hit":
+            badge_cls = "tp3"
+        elif outcome == "stop_loss":
+            badge_cls = "sl"
+        else:
+            badge_cls = "expired"
+        run_dt = r["run_date"]
+        if hasattr(run_dt, "strftime"):
+            date_str = run_dt.strftime("%d %b")
+        else:
+            date_str = str(run_dt)
+        rows_html += f"""<tr>
+          <td>{date_str}</td>
+          <td><b>{r['ticker']}</b></td>
+          <td>{r.get('recommendation','')}</td>
+          <td>{r.get('entry_price',0):.2f}</td>
+          <td><span class="outcome-badge {badge_cls}">{outcome}</span></td>
+          <td>{r.get('r_multiple',0):+.2f}R</td>
+          <td>{r.get('hold_days',0)}</td>
+          <td>{r.get('pnl_pct',0):+.1f}%</td>
+        </tr>"""
+
+    trades_table = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Recent Trades (Last 10)</div>
+      <table class="dash-table">
+        <thead><tr>
+          <th>Date</th><th>Ticker</th><th>Rec</th><th>Entry</th>
+          <th>Outcome</th><th>R-Multiple</th><th>Hold</th><th>PnL</th>
+        </tr></thead>
+        <tbody>{rows_html}</tbody>
+      </table>
+    </div>"""
+
+    # ── Performance by Regime ──
+    regime_perf = evaluated.groupby("regime").agg(
+        count=("ticker", "count"),
+        win_rate=("outcome", lambda x: (x == "tp1_hit").mean()),
+        avg_r=("r_multiple", "mean"),
+    ).reset_index()
+
+    regime_rows = ""
+    for _, r in regime_perf.iterrows():
+        wr_cls = "green" if r["win_rate"] >= 0.5 else "red"
+        regime_rows += f"""<tr>
+          <td>{r['regime']}</td>
+          <td>{r['count']}</td>
+          <td class="{wr_cls}">{r['win_rate']:.1%}</td>
+          <td>{r['avg_r']:+.2f}R</td>
+        </tr>"""
+
+    regime_table = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Performance by Regime</div>
+      <table class="dash-table">
+        <thead><tr><th>Regime</th><th>Trades</th><th>Win Rate</th><th>Avg R</th></tr></thead>
+        <tbody>{regime_rows}</tbody>
+      </table>
+    </div>"""
+
+    # ── Score Calibration ──
+    bins = pd.cut(evaluated["score"], bins=[0, 40, 50, 60, 70, 80, 100])
+    cal = evaluated.groupby(bins, observed=True).agg(
+        count=("ticker", "count"),
+        win_rate=("outcome", lambda x: (x == "tp1_hit").mean()),
+        avg_r=("r_multiple", "mean"),
+    ).reset_index()
+
+    cal_rows = ""
+    for _, r in cal.iterrows():
+        if r["count"] == 0:
+            continue
+        wr_cls = "green" if r["win_rate"] >= 0.5 else "red"
+        label = str(r["score"])
+        cal_rows += f"""<tr>
+          <td>{label}</td>
+          <td>{r['count']}</td>
+          <td class="{wr_cls}">{r['win_rate']:.1%}</td>
+          <td>{r['avg_r']:+.2f}R</td>
+        </tr>"""
+
+    cal_table = ""
+    if cal_rows:
+        cal_table = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Score Calibration (Higher = Better?)</div>
+      <table class="dash-table">
+        <thead><tr><th>Score Range</th><th>Trades</th><th>Win Rate</th><th>Avg R</th></tr></thead>
+        <tbody>{cal_rows}</tbody>
+      </table>
+    </div>"""
+
+    # ── Assemble Dashboard ──
+    dashboard = f"""
+<div class="section-title open">PERFORMANCE DASHBOARD</div>
+<div class="section-body open" style="padding:16px;">
+  {summary_html}
+  {chart_html}
+  <div class="dash-grid">
+    {trades_table}
+    <div>
+      {regime_table}
+      {cal_table}
+    </div>
+  </div>
+</div>"""
+
+    return dashboard
+
+
+# ─────────────────────────────────────────────────────────────
+def generate_html_report(rows: List[Dict], output_path: str,
+                         signal_store=None) -> str:
     """Generate styled HTML report. Returns the output path."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1256,6 +1517,9 @@ def generate_html_report(rows: List[Dict], output_path: str) -> str:
         avoid_section += '<div class="no-signals">No avoid signals</div>'
     avoid_section += '</div>'
 
+    # Build dashboard from signal store
+    dashboard_html = _build_dashboard_html(signal_store)
+
     html = HTML_TEMPLATE.format(
         report_date=date.today().strftime("%d %B %Y"),
         ta_timestamp=_get_ta_timestamp(rows),
@@ -1265,6 +1529,7 @@ def generate_html_report(rows: List[Dict], output_path: str) -> str:
         watch_count=len(watch_rows),
         avoid_count=len(avoid_rows),
         index_cards=index_cards_html,
+        dashboard_html=dashboard_html,
         strong_buy_section=strong_buy_section,
         buy_section=buy_section,
         watch_section=watch_section,

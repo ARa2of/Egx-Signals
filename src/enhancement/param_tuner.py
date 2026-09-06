@@ -24,16 +24,23 @@ quality_cfg = enhance_cfg["quality_monitoring"]
 # ─────────────────────────────────────────────────────────────
 def run_grid_search(signal_store: pd.DataFrame, test_window_days: int = 60,
                     min_trades: int = 30, metric: str = "win_rate") -> Optional[Dict]:
-    """Run fast grid search over parameter space."""
+    """Run fast grid search over parameter space.
+
+    Only evaluates signals that have actual outcome data (not pending).
+    """
     if signal_store.empty:
         return None
 
-    # Get recent signals
+    # Get recent signals with actual outcomes
     cutoff = signal_store["run_date"].max() - timedelta(days=test_window_days)
     recent = signal_store[signal_store["run_date"] >= cutoff].copy()
 
+    # Filter to signals with real outcomes (not pending/error/no_data)
+    has_outcome = recent["outcome"].notna() & ~recent["outcome"].isin(["pending", "error", "no_data", "invalid"])
+    recent = recent[has_outcome].copy()
+
     if len(recent) < min_trades:
-        log.warning("Insufficient recent signals (%d < %d)", len(recent), min_trades)
+        log.warning("Insufficient recent signals with outcomes (%d < %d)", len(recent), min_trades)
         return None
 
     param_grid = tuning_cfg["param_grid"]
@@ -45,7 +52,7 @@ def run_grid_search(signal_store: pd.DataFrame, test_window_days: int = 60,
     best_n_trades = 0
 
     total_combos = np.prod([len(v) for v in param_values])
-    log.info("Grid search: %d combinations over %d days, %d signals",
+    log.info("Grid search: %d combinations over %d days, %d signals with outcomes",
              total_combos, test_window_days, len(recent))
 
     for i, combo in enumerate(itertools.product(*param_values)):
@@ -59,13 +66,13 @@ def run_grid_search(signal_store: pd.DataFrame, test_window_days: int = 60,
         if len(buys) < min_trades:
             continue
 
-        # Compute metric
+        # Compute metric from real outcomes
         if metric == "win_rate":
-            score = (buys["outcome"] == "tp1_hit").mean() if "outcome" in buys.columns else 0
+            score = (buys["outcome"] == "tp1_hit").mean()
         elif metric == "expectancy":
-            score = buys["r_multiple"].mean() if "r_multiple" in buys.columns else 0
+            score = buys["r_multiple"].mean()
         elif metric == "sharpe":
-            returns = buys["r_multiple"] if "r_multiple" in buys.columns else pd.Series([0])
+            returns = buys["r_multiple"]
             score = returns.mean() / returns.std() if returns.std() > 0 else 0
         else:
             score = 0
@@ -92,25 +99,123 @@ def run_grid_search(signal_store: pd.DataFrame, test_window_days: int = 60,
     return None
 
 def rescore_signals(signals: pd.DataFrame, test_params: Dict) -> pd.DataFrame:
-    """Re-score signals with test parameters (simplified - only RSI/volume thresholds)."""
-    # This is a simplified re-scoring for speed
-    # In practice, you'd re-run the full scoring with test params
-    # For now, we approximate by adjusting the score based on parameter changes
+    """Re-score signals with test parameters using stored indicator values.
 
+    The grid search only tests: rsi_oversold, rsi_healthy_high, volume_spike,
+    near_support_pct, stop_loss_atr. We re-run the RSI and volume scoring
+    functions with the new thresholds, then recompute total score.
+    """
+    from src.signals.scoring import score_rsi, score_volume, compute_base_score
+    from src.config import load_params
     scored = signals.copy()
+    base_params = load_params()
+    weights = base_params["weights"]
 
-    # For each signal, check if it would still be Buy with new thresholds
-    # This is a placeholder - real implementation would need the raw indicator values
-    # For now, we just return the signals as-is
-    # TODO: Implement proper re-scoring when raw indicators are stored
+    # Extract test parameters with fallbacks
+    new_oversold = test_params.get("rsi_oversold",
+                                   base_params["rsi"]["ranging"]["oversold"])
+    new_healthy_high = test_params.get("rsi_healthy_high",
+                                       base_params["rsi"]["ranging"]["healthy_high"])
+    new_spike = test_params.get("volume_spike",
+                                base_params["volume"]["spike_multiplier"])
+
+    # Get current parameter values for comparison
+    old_oversold = base_params["rsi"]["ranging"]["oversold"]
+    old_healthy_high = base_params["rsi"]["ranging"]["healthy_high"]
+    old_spike = base_params["volume"]["spike_multiplier"]
+
+    for idx, row in scored.iterrows():
+        rsi_val = row.get("rsi")
+        regime = row.get("regime", "ranging")
+        adx_val = row.get("adx")
+
+        # Re-score RSI with new thresholds
+        new_rsi_score, _ = score_rsi_custom(rsi_val, adx_val, regime,
+                                            new_oversold, new_healthy_high)
+        # score_rsi is stored as weighted value (0-12), divide by weight to get raw
+        old_rsi_raw = row.get("score_rsi", 0) / weights["rsi"] if weights["rsi"] else 0
+
+        # Re-score volume with new spike multiplier
+        old_vol_score = row.get("score_volume", 0)
+        # Approximate vol_multiplier from score (inverse of score_volume logic)
+        approx_vol_mult = 1.0 + (old_vol_score / weights["volume"]) * 3.0
+        new_vol_score, _ = score_volume_custom(approx_vol_mult, new_spike)
+        # Scale to weight
+        new_vol_pts = new_vol_score * weights["volume"]
+
+        # Compute new total score using raw values * weight
+        delta = (new_rsi_score - old_rsi_raw) * weights["rsi"] + \
+                (new_vol_pts - old_vol_score)
+
+        new_score = row.get("score", 0) + delta
+        new_score = max(0.0, min(100.0, new_score))
+
+        scored.at[idx, "score"] = new_score
+        scored.at[idx, "score_rsi"] = new_rsi_score * weights["rsi"]
+        scored.at[idx, "score_volume"] = new_vol_pts
+
+        # Update recommendation based on new score
+        buy_threshold = base_params["thresholds"]["buy"]
+        watch_threshold = base_params["thresholds"]["watch"]
+        death_cross = row.get("death_cross", False)
+        if death_cross:
+            scored.at[idx, "recommendation"] = "Avoid"
+        elif new_score >= buy_threshold:
+            scored.at[idx, "recommendation"] = "Buy"
+        elif new_score >= watch_threshold:
+            scored.at[idx, "recommendation"] = "Watch"
+        else:
+            scored.at[idx, "recommendation"] = "Avoid"
 
     return scored
+
+
+def score_rsi_custom(rsi, adx, regime, oversold, healthy_high):
+    """RSI scoring with custom thresholds."""
+    if rsi is None:
+        return 0.0, []
+
+    adx_threshold = params.get("data", {}).get("adx_trend_threshold", 25)
+
+    if rsi <= oversold:
+        score = 0.8
+    elif rsi <= 35:
+        score = 0.6
+    elif rsi <= healthy_high:
+        score = 1.0
+    elif rsi <= 75:
+        strong = adx is not None and adx >= adx_threshold
+        score = 0.5 if strong else 0.25
+    else:
+        strong = adx is not None and adx >= adx_threshold
+        score = 0.35 if strong else 0.1
+
+    return score, []
+
+
+def score_volume_custom(vol_mult, spike_mult):
+    """Volume scoring with custom spike multiplier."""
+    if vol_mult is None:
+        return 0.0, []
+
+    if vol_mult >= 3.0:
+        score = 1.0
+    elif vol_mult >= 2.0:
+        score = 0.6 + 0.4 * (vol_mult - 2.0)
+    elif vol_mult >= spike_mult:
+        score = 0.3 + 0.3 * (vol_mult - spike_mult) / (2.0 - spike_mult)
+    elif vol_mult >= 1.0:
+        score = 0.1 * (vol_mult - 1.0) / (spike_mult - 1.0)
+    else:
+        score = 0.0
+
+    return score, []
 
 # ─────────────────────────────────────────────────────────────
 # Quality Monitoring
 # ─────────────────────────────────────────────────────────────
 def generate_quality_report(signal_store: pd.DataFrame) -> Dict[str, Any]:
-    """Generate quality metrics report."""
+    """Generate quality metrics report with real outcome data."""
     if signal_store.empty:
         return {"error": "No signals in store"}
 
@@ -125,6 +230,50 @@ def generate_quality_report(signal_store: pd.DataFrame) -> Dict[str, Any]:
 
     # Recommendation distribution
     report["recommendations"] = signal_store["recommendation"].value_counts().to_dict()
+
+    # Outcome statistics (only for signals with real outcomes)
+    has_outcome = signal_store["outcome"].notna() & ~signal_store["outcome"].isin(
+        ["pending", "error", "no_data", "invalid"])
+    evaluated = signal_store[has_outcome]
+
+    if len(evaluated) > 0:
+        report["outcomes"] = {
+            "total_evaluated": len(evaluated),
+            "outcome_distribution": evaluated["outcome"].value_counts().to_dict(),
+            "win_rate_tp1": float((evaluated["outcome"] == "tp1_hit").mean()),
+            "win_rate_tp2": float((evaluated["outcome"] == "tp2_hit").mean()),
+            "win_rate_tp3": float((evaluated["outcome"] == "tp3_hit").mean()),
+            "stop_loss_rate": float((evaluated["outcome"] == "stop_loss").mean()),
+            "avg_r_multiple": float(evaluated["r_multiple"].mean()),
+            "avg_hold_days": float(evaluated["hold_days"].mean()),
+            "avg_mfe_pct": float(evaluated["mfe_pct"].mean()),
+            "avg_mae_pct": float(evaluated["mae_pct"].mean()),
+            "avg_pnl_pct": float(evaluated["pnl_pct"].mean()),
+        }
+
+        # Win rate by recommendation
+        buy_outcomes = evaluated[evaluated["recommendation"] == "Buy"]
+        if len(buy_outcomes) > 0:
+            report["outcomes"]["buy_win_rate"] = float((buy_outcomes["outcome"] == "tp1_hit").mean())
+            report["outcomes"]["buy_avg_r"] = float(buy_outcomes["r_multiple"].mean())
+
+        # Win rate by regime
+        regime_outcomes = evaluated.groupby("regime").agg(
+            n=("ticker", "count"),
+            win_rate=("outcome", lambda x: (x == "tp1_hit").mean()),
+            avg_r=("r_multiple", "mean"),
+        ).to_dict("index")
+        report["outcomes"]["by_regime"] = regime_outcomes
+
+        # Win rate by params_version
+        version_outcomes = evaluated.groupby("params_version").agg(
+            n=("ticker", "count"),
+            win_rate=("outcome", lambda x: (x == "tp1_hit").mean()),
+            avg_r=("r_multiple", "mean"),
+        ).to_dict("index")
+        report["outcomes"]["by_params_version"] = version_outcomes
+    else:
+        report["outcomes"] = {"total_evaluated": 0, "note": "No signals with outcomes yet"}
 
     # Score calibration
     if "score" in signal_store.columns:
@@ -156,14 +305,24 @@ def generate_quality_report(signal_store: pd.DataFrame) -> Dict[str, Any]:
     # Alerts
     alerts = []
     if quality_cfg.get("enabled", True):
+        thresholds = quality_cfg.get("alert_thresholds", {})
+
+        if "outcomes" in report and report["outcomes"].get("total_evaluated", 0) > 0:
+            wr = report["outcomes"].get("win_rate_tp1", 0)
+            if wr < thresholds.get("win_rate_below", 0.45):
+                alerts.append(f"Win rate low: {wr:.1%} (threshold: {thresholds['win_rate_below']:.0%})")
+
+            avg_r = report["outcomes"].get("avg_r_multiple", 0)
+            if avg_r < 0:
+                alerts.append(f"Negative expectancy: avg R-multiple = {avg_r:.2f}")
+
         if "score_calibration" in report:
-            # Check if high-score stocks actually win more
             high_score_buys = calibration.get("(70, 80]", 0) if "calibration" in locals() else 0
             low_score_buys = calibration.get("(40, 50]", 0) if "calibration" in locals() else 0
-            if high_score_buys - low_score_buys < quality_cfg.get("score_calibration_slope_below", 0.1):
+            if high_score_buys - low_score_buys < thresholds.get("score_calibration_slope_below", 0.1):
                 alerts.append(f"Score calibration weak: high-score win rate only {high_score_buys:.1%} vs low-score {low_score_buys:.1%}")
 
-        if report.get("tv_fetch_rate", 1) < 1 - quality_cfg.get("tv_failure_rate_above", 0.2):
+        if report.get("tv_fetch_rate", 1) < 1 - thresholds.get("tv_failure_rate_above", 0.2):
             alerts.append(f"TV fetch rate low: {report['tv_fetch_rate']:.1%}")
 
     report["alerts"] = alerts

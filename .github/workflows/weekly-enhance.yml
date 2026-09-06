@@ -37,6 +37,9 @@ jobs:
           curl -L -o weights/custom_yolov8.pt \
             https://github.com/Omar-Karimov/ChartScanAI/raw/main/weights/custom_yolov8.pt
 
+      - name: Update trade outcomes
+        run: python scripts/update_outcomes.py
+
       - name: Run weekly enhancement
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

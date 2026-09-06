@@ -572,8 +572,10 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
 
     # Generate HTML report for GitHub Pages
     from src.output.html_report import generate_html_report
+    from src.store.signal_store import load_store as _load_store_for_report
     html_path = Path(output_dir).parent / "docs" / "index.html"
-    generate_html_report(rows, str(html_path))
+    _store_df = _load_store_for_report()
+    generate_html_report(rows, str(html_path), signal_store=_store_df)
 
     # 8. Append to signal store (transform to schema format)
     signal_records = []

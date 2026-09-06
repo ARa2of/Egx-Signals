@@ -7,7 +7,7 @@ import pyarrow.parquet as pq
 import pyarrow as pa
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import logging
 
 log = logging.getLogger(__name__)
@@ -98,6 +98,17 @@ SIGNAL_SCHEMA = pa.schema([
     ("ta_source", pa.string()),
     ("ta_fetch_time", pa.string()),
     ("params_version", pa.string()),
+
+    # Outcome tracking
+    ("outcome", pa.string()),
+    ("outcome_date", pa.date32()),
+    ("r_multiple", pa.float64()),
+    ("hold_days", pa.int32()),
+    ("mfe_pct", pa.float64()),
+    ("mae_pct", pa.float64()),
+    ("max_price", pa.float64()),
+    ("min_price", pa.float64()),
+    ("pnl_pct", pa.float64()),
 ])
 
 # ─────────────────────────────────────────────────────────────
@@ -162,7 +173,15 @@ def load_store() -> pd.DataFrame:
     """Load entire signal store as DataFrame."""
     _ensure_store_exists()
     try:
-        return pq.read_table(SIGNAL_STORE_PATH).to_pandas()
+        table = pq.read_table(SIGNAL_STORE_PATH)
+        # Schema migration: add missing columns
+        missing = [f for f in SIGNAL_SCHEMA if f.name not in table.column_names]
+        if missing:
+            for field in missing:
+                default = pa.nulls(len(table), type=field.type)
+                table = table.append_column(field.name, default)
+            table = table.cast(SIGNAL_SCHEMA)
+        return table.to_pandas()
     except Exception as e:
         log.warning("Signal store corrupted (%s), recreating...", e)
         SIGNAL_STORE_PATH.unlink(missing_ok=True)
@@ -227,16 +246,131 @@ def get_signal_stats() -> Dict[str, Any]:
 
 def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
                       cost_bps: float = 10.0, slippage_bps: float = 5.0) -> pd.DataFrame:
-    """
-    Simulate outcomes for closed trades using historical price data.
-    This would need price data - placeholder for now.
-    """
-    # TODO: Implement when we have historical price data accessible
-    # For now, return trades with placeholder outcome columns
+    """Simulate outcomes for closed trades using historical price data."""
+    if trades.empty:
+        return trades
+
+    import yfinance as yf
+
     trades = trades.copy()
-    trades["outcome"] = "pending"
-    trades["r_multiple"] = None
-    trades["hold_days"] = None
-    trades["mfe_pct"] = None
-    trades["mae_pct"] = None
+    cost_pct = (cost_bps + slippage_bps) / 10000.0
+
+    for idx, row in trades.iterrows():
+        ticker = row["ticker"]
+        entry = row.get("entry_price")
+        sl = row.get("stop_loss")
+        tps = [row.get(f"tp{i}") for i in (1, 2, 3)]
+        run_dt = row["run_date"]
+        if hasattr(run_dt, "date"):
+            run_dt = run_dt.date()
+
+        if not all([entry, sl]) or entry == sl:
+            trades.at[idx, "outcome"] = "invalid"
+            continue
+
+        try:
+            start = run_dt + timedelta(days=1)
+            end = run_dt + timedelta(days=horizon_days + 10)
+            df = yf.download(ticker, start=str(start), end=str(end),
+                             progress=False, auto_adjust=True)
+            if df.empty:
+                trades.at[idx, "outcome"] = "no_data"
+                continue
+
+            # Flatten MultiIndex columns if present
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = df.columns.get_level_values(0)
+
+            outcome = "expired"
+            exit_price = entry
+            hold = len(df)
+            max_p = float(df["High"].max())
+            min_p = float(df["Low"].min())
+
+            for _, bar in df.iterrows():
+                low = float(bar["Low"])
+                high = float(bar["High"])
+                close = float(bar["Close"])
+
+                # Check stop loss first (worst case)
+                if low <= sl:
+                    outcome = "stop_loss"
+                    exit_price = sl
+                    break
+
+                # Check take profits (best first)
+                for i, tp in enumerate(tps):
+                    if tp and high >= tp:
+                        outcome = f"tp{i+1}_hit"
+                        exit_price = tp
+                        break
+
+                if outcome != "expired":
+                    break
+
+            if outcome == "expired":
+                exit_price = float(df["Close"].iloc[-1])
+
+            r_mult = (exit_price - entry) / abs(entry - sl) if entry != sl else 0
+            r_mult -= cost_pct
+            pnl = (exit_price - entry) / entry * 100 if entry else 0
+
+            trades.at[idx, "outcome"] = outcome
+            trades.at[idx, "outcome_date"] = run_dt + timedelta(days=horizon_days)
+            trades.at[idx, "r_multiple"] = round(r_mult, 3)
+            trades.at[idx, "hold_days"] = hold
+            trades.at[idx, "mfe_pct"] = round((max_p - entry) / entry * 100, 2) if entry else 0
+            trades.at[idx, "mae_pct"] = round((min_p - entry) / entry * 100, 2) if entry else 0
+            trades.at[idx, "max_price"] = max_p
+            trades.at[idx, "min_price"] = min_p
+            trades.at[idx, "pnl_pct"] = round(pnl, 2)
+
+        except Exception as e:
+            log.warning("Outcome eval failed for %s: %s", ticker, e)
+            trades.at[idx, "outcome"] = "error"
+
     return trades
+
+
+def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
+                    slippage_bps: float = 5.0) -> int:
+    """Update pending signals with actual outcomes. Returns number of rows updated."""
+    _ensure_store_exists()
+    df = load_store()
+    if df.empty:
+        return 0
+
+    today = date.today()
+    pending_mask = df["outcome"].isna() | (df["outcome"] == "pending")
+    pending = df[pending_mask].copy()
+
+    if pending.empty:
+        log.info("No pending outcomes to evaluate")
+        return 0
+
+    # Only evaluate signals old enough to have outcomes
+    eval_cutoff = today - timedelta(days=horizon_days + 5)
+    pending = pd.to_datetime(pending["run_date"]).dt.date
+    evaluable = df[pending_mask & (pd.to_datetime(df["run_date"]).dt.date <= eval_cutoff)].copy()
+
+    if evaluable.empty:
+        log.info("No signals old enough for outcome evaluation (need %d+ days)", horizon_days)
+        return 0
+
+    log.info("Evaluating outcomes for %d signals...", len(evaluable))
+    updated = simulate_outcomes(evaluable, horizon_days, cost_bps, slippage_bps)
+
+    # Merge outcomes back into main DataFrame
+    outcome_cols = ["outcome", "outcome_date", "r_multiple", "hold_days",
+                    "mfe_pct", "mae_pct", "max_price", "min_price", "pnl_pct"]
+    for col in outcome_cols:
+        if col in updated.columns:
+            df.loc[updated.index, col] = updated[col]
+
+    # Write back
+    table = pa.Table.from_pandas(df, schema=SIGNAL_SCHEMA)
+    pq.write_table(table, SIGNAL_STORE_PATH)
+
+    n = updated["outcome"].notna().sum()
+    log.info("Updated %d outcomes: %s", n, updated["outcome"].value_counts().to_dict())
+    return int(n)

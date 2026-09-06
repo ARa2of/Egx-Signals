@@ -3,7 +3,7 @@ name: Daily EGX Analysis
 on:
   schedule:
     # 5:00 PM UK time = 16:00 UTC (winter) / 17:00 UTC (summer)
-    - cron: '0 16 * * 1-5'  # Mon-Fri 16:00 UTC
+    - cron: '0 16 * * *'  # Daily 16:00 UTC
   workflow_dispatch:  # Manual trigger
 
 permissions:
@@ -57,6 +57,9 @@ jobs:
           EODHD_API_KEY: ${{ secrets.EODHD_API_KEY }}
         run: |
           python scripts/daily_run.py config/tickers.xlsx -o output
+
+      - name: Update trade outcomes
+        run: python scripts/update_outcomes.py
 
       - name: Commit signal store & report updates
         run: |
