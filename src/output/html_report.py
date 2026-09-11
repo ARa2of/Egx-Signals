@@ -147,7 +147,9 @@ def _generate_explanation(row):
         parts.append(f"Entry sourced from <b>{entry_source}</b>.")
     if entry_high and entry and entry_high > entry:
         parts.append(f"Max entry: do not exceed <b>{entry_high:.2f}</b> (entry zone upper bound).")
-    if entry_action and "BUY NOW" in str(entry_action).upper():
+    if entry_action and "STALE" in str(entry_action).upper():
+        parts.append(f"Entry is stale — {entry:.2f} is above current price. Needs recalculation.")
+    elif entry_action and "BUY NOW" in str(entry_action).upper():
         parts.append("Entry is within reach — ready to execute.")
     elif entry_action and "BUY ON BREAKOUT" in str(entry_action).upper():
         parts.append(f"Entry is at resistance ({entry:.2f}) — buy if price closes above with volume confirmation.")
@@ -1190,7 +1192,7 @@ def _build_ticker_card(row, fund_df=None):
         entry_high=_fmt(entry_high),
         entry_source=entry_source,
         entry_action=entry_action,
-        entry_action_class="green" if "BUY" in str(entry_action).upper() else ("red" if "AVOID" in str(entry_action).upper() else "yellow"),
+        entry_action_class="green" if "BUY" in str(entry_action).upper() else ("red" if ("AVOID" in str(entry_action).upper() or "STALE" in str(entry_action).upper()) else "yellow"),
         stop=_fmt(stop),
         stop_basis=stop_basis,
         tp1=_fmt(tp1),
@@ -1255,12 +1257,72 @@ def _build_dashboard_html(signal_store) -> str:
     if signal_store is None or signal_store.empty:
         return ""
 
-    # Filter to signals with real outcomes
+    # ── Pending Signals Summary (always show) ──
     has_outcome = signal_store["outcome"].notna() & ~signal_store["outcome"].isin(
         ["pending", "error", "no_data", "invalid"])
+    pending = signal_store[~has_outcome].copy()
+
+    # Get latest run's pending signals
+    if not pending.empty:
+        latest_date = pending["run_date"].max()
+        latest_pending = pending[pending["run_date"] == latest_date].copy()
+        stale_count = latest_pending["stale"].sum() if "stale" in latest_pending.columns else 0
+        buy_count = latest_pending["recommendation"].isin(["Buy", "Strong Buy"]).sum()
+        watch_count = (latest_pending["recommendation"] == "Watch").sum()
+        avoid_count = (latest_pending["recommendation"] == "Avoid").sum()
+
+        pending_html = f"""
+    <div class="dash-summary">
+      <div class="dash-card"><div class="dash-label">Latest Signals ({str(latest_date)[:10]})</div><div class="dash-value blue">{len(latest_pending)}</div></div>
+      <div class="dash-card"><div class="dash-label">Buy</div><div class="dash-value green">{buy_count}</div></div>
+      <div class="dash-card"><div class="dash-label">Watch</div><div class="dash-value yellow">{watch_count}</div></div>
+      <div class="dash-card"><div class="dash-label">Avoid</div><div class="dash-value red">{avoid_count}</div></div>
+      <div class="dash-card"><div class="dash-label">Stale Entries</div><div class="dash-value {"red" if stale_count > 0 else "green"}">{stale_count}</div></div>
+      <div class="dash-card"><div class="dash-label">Pending Total</div><div class="dash-value blue">{len(pending)}</div></div>
+    </div>"""
+
+        # Show stale entries if any
+        stale_entries = ""
+        if stale_count > 0:
+            stale_rows = latest_pending[latest_pending["stale"] == True]
+            stale_tr = ""
+            for _, r in stale_rows.iterrows():
+                run_dt = r["run_date"]
+                date_str = run_dt.strftime("%d %b") if hasattr(run_dt, "strftime") else str(run_dt)
+                entry = r.get("entry_price", 0)
+                close = r.get("close", 0)
+                stale_pct = ((entry - close) / close * 100) if close and entry and entry > close else 0
+                stale_tr += f"""<tr>
+                  <td>{date_str}</td>
+                  <td><b>{r['ticker']}</b></td>
+                  <td>{r.get('recommendation','')}</td>
+                  <td>{entry:.2f}</td>
+                  <td>{close:.2f}</td>
+                  <td class="red">+{stale_pct:.1f}%</td>
+                </tr>"""
+            stale_entries = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Stale Entries (Entry Above Current Price)</div>
+      <table class="dash-table">
+        <thead><tr><th>Date</th><th>Ticker</th><th>Rec</th><th>Entry</th><th>Current</th><th>Gap</th></tr></thead>
+        <tbody>{stale_tr}</tbody>
+      </table>
+    </div>"""
+    else:
+        pending_html = ""
+        stale_entries = ""
+
+    # Filter to signals with real outcomes
     evaluated = signal_store[has_outcome].copy()
 
     if evaluated.empty:
+        if pending_html:
+            return f"""<div class="section-title open">PERFORMANCE DASHBOARD</div>
+<div class="section-body open" style="padding:16px;">
+  {pending_html}
+  {stale_entries}
+  <div style="color:#8b8fa3;font-size:12px;padding:8px 0;">Outcomes will be evaluated after 14 days. First results expected around Sep 20.</div>
+</div>"""
         return ""
 
     # ── Summary Cards ──
@@ -1445,6 +1507,8 @@ def _build_dashboard_html(signal_store) -> str:
     dashboard = f"""
 <div class="section-title open">PERFORMANCE DASHBOARD</div>
 <div class="section-body open" style="padding:16px;">
+  {pending_html}
+  {stale_entries}
   {summary_html}
   {chart_html}
   <div class="dash-grid">

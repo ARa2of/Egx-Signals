@@ -60,7 +60,7 @@ quality_monitoring:
 # ─────────────────────────────────────────────────────────────
 outcomes:
   enabled: true
-  horizon_days: 21              # Track trades for N days
+  horizon_days: 14              # Track trades for N days
   cost_bps: 10                  # Transaction costs (bps)
   slippage_bps: 5               # Slippage (bps)
   allow_overlapping: false      # One position per ticker at a time

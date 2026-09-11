@@ -98,6 +98,7 @@ SIGNAL_SCHEMA = pa.schema([
     ("ta_source", pa.string()),
     ("ta_fetch_time", pa.string()),
     ("params_version", pa.string()),
+    ("stale", pa.bool_()),
 
     # Outcome tracking
     ("outcome", pa.string()),
@@ -144,7 +145,7 @@ def append_signals(signals: List[Dict]) -> int:
             df[col] = pd.to_datetime(df[col]).dt.date
 
     # Convert bool columns
-    for col in ["macd_bullish", "golden_cross", "death_cross", "diamond_cross", "bb_squeeze", "undervalued"]:
+    for col in ["macd_bullish", "golden_cross", "death_cross", "diamond_cross", "bb_squeeze", "undervalued", "stale"]:
         if col in df.columns:
             df[col] = df[col].astype(bool)
 
@@ -180,6 +181,8 @@ def load_store() -> pd.DataFrame:
             for field in missing:
                 default = pa.nulls(len(table), type=field.type)
                 table = table.append_column(field.name, default)
+            # Reorder columns to match schema before casting
+            table = table.select([f.name for f in SIGNAL_SCHEMA])
             table = table.cast(SIGNAL_SCHEMA)
         return table.to_pandas()
     except Exception as e:

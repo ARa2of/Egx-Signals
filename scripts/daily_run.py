@@ -532,6 +532,26 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 consensus_rec = "Avoid"
                 consensus_basis = f"Base={base_rec}, ML={ml_rec}, ChartScan={cs_rec}"
 
+            # ── RSI Overbought Hard Cap ──
+            # If RSI is above overbought threshold, never allow Buy/Strong Buy
+            rsi_cfg = params.get("rsi", {})
+            regime_key = regime.get("regime", "ranging")
+            regime_rsi = rsi_cfg.get(regime_key, rsi_cfg.get("ranging", {}))
+            overbought_threshold = regime_rsi.get("overbought", 80)
+            if rsi and rsi > overbought_threshold and consensus_rec in ("Buy", "Strong Buy"):
+                old_rec = consensus_rec
+                consensus_rec = "Watch"
+                consensus_basis = f"RSI overbought ({rsi:.1f} > {overbought_threshold}) downgrades {old_rec} to Watch"
+
+            # ── Stale Entry Detection ──
+            # If entry price is above current price, flag as stale
+            entry_price = trade["entry"]["entry_ideal"]
+            if entry_price and current_price and entry_price > current_price * 1.02:
+                stale_pct = (entry_price - current_price) / current_price * 100
+                log.info("%s: Stale entry %.1f%% above current price (%.3f vs %.3f)", raw, stale_pct, entry_price, current_price)
+                trade["entry"]["entry_action"] = f"STALE ENTRY — {stale_pct:.1f}% above current"
+                trade["entry"]["stale"] = True
+
             row["Recommendation"] = consensus_rec
             row["Recommendation Basis"] = consensus_basis
             row["Base Rec"] = base_rec
@@ -641,6 +661,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             "ta_source": row.get("ta_source"),
             "ta_fetch_time": row.get("TA Data As Of"),
             "params_version": row.get("params_version"),
+            "stale": trade["entry"].get("stale", False),
             # Chart data
             "chart_dates": row.get("chart_dates"),
             "chart_open": row.get("chart_open"),
