@@ -429,12 +429,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <div class="search-count" id="searchCount"></div>
 </div>
 
-{dashboard_html}
-
 {strong_buy_section}
 {buy_section}
 {watch_section}
 {avoid_section}
+
+{dashboard_html}
 
 <div class="chart-overlay" id="chartOverlay">
   <div class="chart-overlay-header">
