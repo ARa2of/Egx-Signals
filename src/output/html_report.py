@@ -1312,6 +1312,76 @@ def _build_dashboard_html(signal_store) -> str:
         pending_html = ""
         stale_entries = ""
 
+    # ── Buy Signal Performance (cumulative P&L) ──
+    buys = signal_store[signal_store["recommendation"].isin(["Buy", "Strong Buy"])].copy()
+    buy_perf_html = ""
+    if not buys.empty:
+        # For each Buy signal, compute P&L from entry to latest close for that ticker
+        perf_rows = []
+        latest_date = signal_store["run_date"].max()
+        for ticker in buys["ticker"].unique():
+            t_buys = buys[buys["ticker"] == ticker].sort_values("run_date")
+            t_all = signal_store[signal_store["ticker"] == ticker].sort_values("run_date")
+            first_buy = t_buys.iloc[0]
+            latest = t_all.iloc[-1]
+            entry = first_buy.get("entry_price") or 0
+            current = latest.get("close") or 0
+            n_buys = len(t_buys)
+            if entry > 0 and current > 0:
+                pnl_pct = (current - entry) / entry * 100
+                perf_rows.append({
+                    "ticker": ticker,
+                    "n_buys": n_buys,
+                    "entry": entry,
+                    "current": current,
+                    "pnl_pct": pnl_pct,
+                    "first_date": first_buy["run_date"],
+                })
+
+        if perf_rows:
+            perf_df = pd.DataFrame(perf_rows).sort_values("pnl_pct", ascending=False)
+            total_pnl = perf_df["pnl_pct"].mean()
+            winners = (perf_df["pnl_pct"] > 0).sum()
+            losers = (perf_df["pnl_pct"] < 0).sum()
+            total_tickers = len(perf_df)
+
+            pnl_class = "green" if total_pnl > 0 else "red"
+            wr_class = "green" if winners > losers else "red"
+
+            buy_perf_summary = f"""
+    <div class="dash-summary">
+      <div class="dash-card"><div class="dash-label">Avg P&L (Entry→Now)</div><div class="dash-value {pnl_class}">{total_pnl:+.1f}%</div></div>
+      <div class="dash-card"><div class="dash-label">Winners</div><div class="dash-value green">{winners}</div></div>
+      <div class="dash-card"><div class="dash-label">Losers</div><div class="dash-value red">{losers}</div></div>
+      <div class="dash-card"><div class="dash-label">Tickers Tracked</div><div class="dash-value blue">{total_tickers}</div></div>
+    </div>"""
+
+            # Top winners and losers
+            top5 = perf_df.head(5)
+            bottom5 = perf_df.tail(5).iloc[::-1]
+
+            perf_rows_html = ""
+            for _, r in perf_df.iterrows():
+                cls = "green" if r["pnl_pct"] > 0 else "red"
+                perf_rows_html += f"""<tr>
+                  <td><b>{r['ticker']}</b></td>
+                  <td>{r['n_buys']}</td>
+                  <td>{r['entry']:.2f}</td>
+                  <td>{r['current']:.2f}</td>
+                  <td class="{cls}">{r['pnl_pct']:+.1f}%</td>
+                </tr>"""
+
+            buy_perf_table = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Buy Signal Performance (First Entry → Current Price)</div>
+      <table class="dash-table">
+        <thead><tr><th>Ticker</th><th># Buys</th><th>First Entry</th><th>Current</th><th>P&L</th></tr></thead>
+        <tbody>{perf_rows_html}</tbody>
+      </table>
+    </div>"""
+
+            buy_perf_html = f"{buy_perf_summary}{buy_perf_table}"
+
     # Filter to signals with real outcomes
     evaluated = signal_store[has_outcome].copy()
 
@@ -1321,6 +1391,7 @@ def _build_dashboard_html(signal_store) -> str:
 <div class="section-body open" style="padding:16px;">
   {pending_html}
   {stale_entries}
+  {buy_perf_html}
   <div style="color:#8b8fa3;font-size:12px;padding:8px 0;">Outcomes will be evaluated after 14 days. First results expected around Sep 20.</div>
 </div>"""
         return ""
@@ -1509,6 +1580,7 @@ def _build_dashboard_html(signal_store) -> str:
 <div class="section-body open" style="padding:16px;">
   {pending_html}
   {stale_entries}
+  {buy_perf_html}
   {summary_html}
   {chart_html}
   <div class="dash-grid">

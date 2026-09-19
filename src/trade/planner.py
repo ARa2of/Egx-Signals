@@ -22,6 +22,7 @@ MAX_WAIT_ATR = trade_cfg["max_wait_atr"]
 MIN_RR = trade_cfg["min_rr"]
 PROXIMITY_PENALTY_PER_ATR = trade_cfg["proximity_penalty_per_atr"]
 TARGET_ATR = trade_cfg["target_atr"]
+MAX_ENTRY_DISTANCE_PCT = trade_cfg.get("max_entry_distance_pct", 0.08)
 
 # Enhanced entry indicators
 ENTRY_INDICATORS = enhanced_cfg["entry_indicators"]
@@ -271,6 +272,10 @@ def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
 
     # Current price
     raw_candidates.append((last_price, "Current Price"))
+
+    # Filter: reject entries too far below current price
+    max_discount = last_price * (1 - MAX_ENTRY_DISTANCE_PCT)
+    raw_candidates = [(p, l) for p, l in raw_candidates if p >= max_discount]
 
     # Score all candidates
     scored = []

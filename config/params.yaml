@@ -23,6 +23,8 @@ weights:
 thresholds:
   buy: 60.0
   watch: 50.0
+  momentum_penalty_drop_pct: 0.05
+  momentum_penalty_score_add: 10
 
 # ─────────────────────────────────────────────────────────────
 # RSI ZONES (regime-aware)
@@ -32,17 +34,17 @@ rsi:
     oversold: 35
     healthy_low: 45
     healthy_high: 70
-    overbought: 80
+    overbought: 75
   ranging:
     oversold: 30
     healthy_low: 40
     healthy_high: 65
-    overbought: 75
+    overbought: 70
   trending_down:
     oversold: 25
     healthy_low: 35
     healthy_high: 55
-    overbought: 70
+    overbought: 65
 
 # ─────────────────────────────────────────────────────────────
 # VOLUME & SUPPORT
@@ -58,6 +60,7 @@ trade:
   stop_loss_atr: 1.5
   target_atr: 3.0
   max_entry_discount: 0.10
+  max_entry_distance_pct: 0.08
   entry_buffer: 0.005
   min_rr: 1.2
   atr_zone_half: 0.30

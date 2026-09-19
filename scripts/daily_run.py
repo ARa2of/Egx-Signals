@@ -552,6 +552,31 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 trade["entry"]["entry_action"] = f"STALE ENTRY — {stale_pct:.1f}% above current"
                 trade["entry"]["stale"] = True
 
+            # ── Price Momentum Filter ──
+            # If price dropped >5% since first Buy signal, require higher score to maintain Buy
+            thresholds_cfg = params.get("thresholds", {})
+            momentum_drop = thresholds_cfg.get("momentum_penalty_drop_pct", 0.05)
+            momentum_score_add = thresholds_cfg.get("momentum_penalty_score_add", 10)
+            if consensus_rec in ("Buy", "Strong Buy") and current_price:
+                try:
+                    from src.store.signal_store import load_store as _load_momentum_store
+                    _mom_store = _load_momentum_store()
+                    _prev_buys = _mom_store[
+                        (_mom_store["ticker"] == raw) &
+                        (_mom_store["recommendation"].isin(["Buy", "Strong Buy"]))
+                    ]
+                    if not _prev_buys.empty:
+                        _first_buy_close = _prev_buys.sort_values("run_date").iloc[0].get("close")
+                        if _first_buy_close and _first_buy_close > 0:
+                            _price_drop = (current_price - _first_buy_close) / _first_buy_close
+                            if _price_drop < -momentum_drop:
+                                old_rec = consensus_rec
+                                consensus_rec = "Watch"
+                                consensus_basis = f"Price dropped {_price_drop:.1%} since first Buy ({_first_buy_close:.2f}) — momentum filter downgrades {old_rec} to Watch"
+                                log.info("%s: Momentum filter triggered (%.1f%% drop since first Buy)", raw, _price_drop * 100)
+                except Exception as e:
+                    log.debug("%s: Momentum filter skipped (%s)", raw, e)
+
             row["Recommendation"] = consensus_rec
             row["Recommendation Basis"] = consensus_basis
             row["Base Rec"] = base_rec
