@@ -577,6 +577,14 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 except Exception as e:
                     log.debug("%s: Momentum filter skipped (%s)", raw, e)
 
+            # ── Entry Action Override ──
+            # If trade planner says AVOID (no clean setup), downgrade recommendation
+            entry_action = trade["entry"].get("entry_action", "")
+            if "AVOID" in str(entry_action).upper() and consensus_rec in ("Buy", "Strong Buy"):
+                old_rec = consensus_rec
+                consensus_rec = "Watch"
+                consensus_basis = f"Trade planner: {entry_action} — downgrades {old_rec} to Watch"
+
             row["Recommendation"] = consensus_rec
             row["Recommendation Basis"] = consensus_basis
             row["Base Rec"] = base_rec
