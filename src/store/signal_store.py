@@ -280,7 +280,9 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 14,
         try:
             start = run_dt + timedelta(days=1)
             end = run_dt + timedelta(days=horizon_days + 10)
-            df = yf.download(ticker, start=str(start), end=str(end),
+            # Ensure ticker has .CA suffix for EGX stocks
+            yf_ticker = ticker if ticker.endswith(".CA") else f"{ticker}.CA"
+            df = yf.download(yf_ticker, start=str(start), end=str(end),
                              progress=False, auto_adjust=True)
             if df.empty:
                 trades.at[idx, "outcome"] = "no_data"
@@ -307,15 +309,15 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 14,
                     exit_price = sl
                     break
 
-                # Check take profits (best first)
-                for i, tp in enumerate(tps):
-                    if tp and high >= tp:
+            # If no stop loss, determine highest TP hit from max price
+            if outcome == "expired":
+                # Check TPs in reverse order (highest first)
+                for i in range(len(tps) - 1, -1, -1):
+                    tp = tps[i]
+                    if tp and max_p >= tp:
                         outcome = f"tp{i+1}_hit"
                         exit_price = tp
                         break
-
-                if outcome != "expired":
-                    break
 
             if outcome == "expired":
                 exit_price = float(df["Close"].iloc[-1])
