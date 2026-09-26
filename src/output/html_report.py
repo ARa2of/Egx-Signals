@@ -1312,75 +1312,201 @@ def _build_dashboard_html(signal_store) -> str:
         pending_html = ""
         stale_entries = ""
 
-    # ── Buy Signal Performance (cumulative P&L) ──
+    # ── Buy Signal Performance (trade outcome tracking) ──
+    from datetime import timedelta
     buys = signal_store[signal_store["recommendation"].isin(["Buy", "Strong Buy"])].copy()
     buy_perf_html = ""
+    HOLDING_DAYS = 14  # Max holding period before time exit
+
     if not buys.empty:
-        # For each Buy signal, compute P&L from entry to latest close for that ticker
         perf_rows = []
-        latest_date = signal_store["run_date"].max()
-        for ticker in buys["ticker"].unique():
-            t_buys = buys[buys["ticker"] == ticker].sort_values("run_date")
-            t_all = signal_store[signal_store["ticker"] == ticker].sort_values("run_date")
-            first_buy = t_buys.iloc[0]
-            latest = t_all.iloc[-1]
-            entry = first_buy.get("entry_price") or 0
-            current = latest.get("close") or 0
-            n_buys = len(t_buys)
-            if entry > 0 and current > 0:
-                pnl_pct = (current - entry) / entry * 100
-                perf_rows.append({
-                    "ticker": ticker,
-                    "n_buys": n_buys,
-                    "entry": entry,
-                    "current": current,
-                    "pnl_pct": pnl_pct,
-                    "first_date": first_buy["run_date"],
-                })
+        for _, sig in buys.iterrows():
+            ticker = sig["ticker"]
+            run_date = sig["run_date"]
+            if hasattr(run_date, "date"):
+                run_date = run_date.date()
+            entry = sig.get("entry_price") or 0
+            tp1 = sig.get("tp1") or 0
+            sl = sig.get("stop_loss") or 0
+            score = sig.get("score") or 0
+
+            if entry <= 0:
+                continue
+
+            # Get all signals for this ticker on or after the signal date
+            t_all = signal_store[
+                (signal_store["ticker"] == ticker) &
+                (signal_store["run_date"] >= run_date)
+            ].sort_values("run_date")
+
+            if len(t_all) < 1:
+                continue
+
+            # Simulate trade outcome
+            exit_price = entry
+            exit_reason = "open"
+            hold_days = 0
+
+            for _, future in t_all.iterrows():
+                future_date = future["run_date"]
+                if hasattr(future_date, "date"):
+                    future_date = future_date.date()
+                future_close = future.get("close") or 0
+                if future_close <= 0:
+                    continue
+
+                hold_days = (future_date - run_date).days
+
+                # Check TP1 hit
+                if tp1 > 0 and future_close >= tp1:
+                    exit_price = tp1
+                    exit_reason = "tp1"
+                    break
+
+                # Check stop loss hit
+                if sl > 0 and future_close <= sl:
+                    exit_price = sl
+                    exit_reason = "stop_loss"
+                    break
+
+                # Check time exit
+                if hold_days >= HOLDING_DAYS:
+                    exit_price = future_close
+                    exit_reason = "time_exit"
+                    break
+
+            # If still open after all data, use last available price
+            if exit_reason == "open":
+                last_close = t_all.iloc[-1].get("close") or entry
+                exit_price = last_close
+                last_date = t_all.iloc[-1]["run_date"]
+                if hasattr(last_date, "date"):
+                    last_date = last_date.date()
+                hold_days = (last_date - run_date).days
+                if hold_days >= HOLDING_DAYS:
+                    exit_reason = "time_exit"
+                else:
+                    exit_reason = "open"
+
+            pnl_pct = (exit_price - entry) / entry * 100
+            risk_pct = (entry - sl) / entry * 100 if sl > 0 and entry > sl else 0
+            r_multiple = pnl_pct / risk_pct if risk_pct > 0 else 0
+
+            perf_rows.append({
+                "ticker": ticker,
+                "run_date": run_date,
+                "entry": entry,
+                "exit_price": exit_price,
+                "exit_reason": exit_reason,
+                "pnl_pct": pnl_pct,
+                "r_multiple": r_multiple,
+                "hold_days": hold_days,
+                "score": score,
+                "tp1": tp1,
+                "sl": sl,
+            })
 
         if perf_rows:
-            perf_df = pd.DataFrame(perf_rows).sort_values("pnl_pct", ascending=False)
-            total_pnl = perf_df["pnl_pct"].mean()
-            winners = (perf_df["pnl_pct"] > 0).sum()
-            losers = (perf_df["pnl_pct"] < 0).sum()
-            total_tickers = len(perf_df)
+            perf_df = pd.DataFrame(perf_rows)
 
-            pnl_class = "green" if total_pnl > 0 else "red"
-            wr_class = "green" if winners > losers else "red"
+            # Summary stats
+            total = len(perf_df)
+            tp_hits = (perf_df["exit_reason"] == "tp1").sum()
+            sl_hits = (perf_df["exit_reason"] == "stop_loss").sum()
+            time_exits = (perf_df["exit_reason"] == "time_exit").sum()
+            open_trades = (perf_df["exit_reason"] == "open").sum()
+            win_rate = tp_hits / total if total > 0 else 0
+            avg_pnl = perf_df["pnl_pct"].mean()
+            avg_r = perf_df["r_multiple"].mean()
+            avg_hold = perf_df["hold_days"].mean()
+
+            pnl_class = "green" if avg_pnl > 0 else "red"
+            wr_class = "green" if win_rate >= 0.5 else "red"
 
             buy_perf_summary = f"""
     <div class="dash-summary">
-      <div class="dash-card"><div class="dash-label">Avg P&L (Entry→Now)</div><div class="dash-value {pnl_class}">{total_pnl:+.1f}%</div></div>
-      <div class="dash-card"><div class="dash-label">Winners</div><div class="dash-value green">{winners}</div></div>
-      <div class="dash-card"><div class="dash-label">Losers</div><div class="dash-value red">{losers}</div></div>
-      <div class="dash-card"><div class="dash-label">Tickers Tracked</div><div class="dash-value blue">{total_tickers}</div></div>
+      <div class="dash-card"><div class="dash-label">Win Rate (TP1)</div><div class="dash-value {wr_class}">{win_rate:.0%}</div></div>
+      <div class="dash-card"><div class="dash-label">Avg P&L</div><div class="dash-value {pnl_class}">{avg_pnl:+.1f}%</div></div>
+      <div class="dash-card"><div class="dash-label">Avg R-Multiple</div><div class="dash-value {pnl_class}">{avg_r:+.2f}R</div></div>
+      <div class="dash-card"><div class="dash-label">TP Hits</div><div class="dash-value green">{tp_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">Stop Losses</div><div class="dash-value red">{sl_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">Time Exits</div><div class="dash-value yellow">{time_exits}</div></div>
+      <div class="dash-card"><div class="dash-label">Open</div><div class="dash-value blue">{open_trades}</div></div>
+      <div class="dash-card"><div class="dash-label">Total Trades</div><div class="dash-value">{total}</div></div>
     </div>"""
 
-            # Top winners and losers
-            top5 = perf_df.head(5)
-            bottom5 = perf_df.tail(5).iloc[::-1]
-
+            # Trade details table
+            perf_sorted = perf_df.sort_values("pnl_pct", ascending=False)
             perf_rows_html = ""
-            for _, r in perf_df.iterrows():
-                cls = "green" if r["pnl_pct"] > 0 else "red"
+            for _, r in perf_sorted.iterrows():
+                if r["exit_reason"] == "tp1":
+                    badge = '<span class="outcome-badge tp1">TP1</span>'
+                    cls = "green"
+                elif r["exit_reason"] == "stop_loss":
+                    badge = '<span class="outcome-badge sl">SL</span>'
+                    cls = "red"
+                elif r["exit_reason"] == "time_exit":
+                    badge = '<span class="outcome-badge expired">TIME</span>'
+                    cls = "yellow" if r["pnl_pct"] < 0 else "green"
+                else:
+                    badge = '<span class="outcome-badge" style="background:#3b82f6">OPEN</span>'
+                    cls = "blue"
+
+                date_str = r["run_date"].strftime("%d %b") if hasattr(r["run_date"], "strftime") else str(r["run_date"])
+
                 perf_rows_html += f"""<tr>
+                  <td>{date_str}</td>
                   <td><b>{r['ticker']}</b></td>
-                  <td>{r['n_buys']}</td>
                   <td>{r['entry']:.2f}</td>
-                  <td>{r['current']:.2f}</td>
+                  <td>{r['exit_price']:.2f}</td>
+                  <td>{badge}</td>
                   <td class="{cls}">{r['pnl_pct']:+.1f}%</td>
+                  <td>{r['r_multiple']:+.2f}R</td>
+                  <td>{r['hold_days']}d</td>
+                  <td>{r['score']:.0f}</td>
                 </tr>"""
 
             buy_perf_table = f"""
     <div class="dash-table-wrap">
-      <div class="dash-table-title">Buy Signal Performance (First Entry → Current Price)</div>
+      <div class="dash-table-title">Trade Outcomes (Entry → TP/SL/Time Exit, max {HOLDING_DAYS}d hold)</div>
       <table class="dash-table">
-        <thead><tr><th>Ticker</th><th># Buys</th><th>First Entry</th><th>Current</th><th>P&L</th></tr></thead>
+        <thead><tr><th>Date</th><th>Ticker</th><th>Entry</th><th>Exit</th><th>Result</th><th>P&L</th><th>R</th><th>Hold</th><th>Score</th></tr></thead>
         <tbody>{perf_rows_html}</tbody>
       </table>
     </div>"""
 
-            buy_perf_html = f"{buy_perf_summary}{buy_perf_table}"
+            # Performance by score range
+            score_bins = [(0, 50, "Low (<50)"), (50, 60, "Mid (50-60)"), (60, 70, "High (60-70)"), (70, 100, "Very High (70+)")]
+            score_rows_html = ""
+            for lo, hi, label in score_bins:
+                subset = perf_df[(perf_df["score"] >= lo) & (perf_df["score"] < hi)]
+                if len(subset) == 0:
+                    continue
+                wr = (subset["exit_reason"] == "tp1").mean()
+                avg = subset["pnl_pct"].mean()
+                avg_r = subset["r_multiple"].mean()
+                wr_cls = "green" if wr >= 0.5 else "red"
+                pnl_cls = "green" if avg > 0 else "red"
+                score_rows_html += f"""<tr>
+                  <td>{label}</td>
+                  <td>{len(subset)}</td>
+                  <td class="{wr_cls}">{wr:.0%}</td>
+                  <td class="{pnl_cls}">{avg:+.1f}%</td>
+                  <td class="{pnl_cls}">{avg_r:+.2f}R</td>
+                </tr>"""
+
+            score_cal_table = ""
+            if score_rows_html:
+                score_cal_table = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Performance by Score Range</div>
+      <table class="dash-table">
+        <thead><tr><th>Score Range</th><th>Trades</th><th>Win Rate</th><th>Avg P&L</th><th>Avg R</th></tr></thead>
+        <tbody>{score_rows_html}</tbody>
+      </table>
+    </div>"""
+
+            buy_perf_html = f"{buy_perf_summary}{buy_perf_table}{score_cal_table}"
 
     # Filter to signals with real outcomes
     evaluated = signal_store[has_outcome].copy()

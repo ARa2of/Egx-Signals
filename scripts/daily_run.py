@@ -28,6 +28,7 @@ from src.signals.technical import enrich
 from src.signals.ml import run_ml_pipeline, compute_ml_conviction
 from src.signals.scoring import compute_base_score
 from src.signals.chartscan import init_chartscan, chartscan_analyze, is_enabled as chartscan_enabled
+from src.data.intraday import get_intraday_summary
 from src.trade.planner import build_trade_plan
 from src.store.signal_store import append_signals, export_latest_csv
 from src.output.excel import export_analysis, append_daily_history
@@ -317,6 +318,12 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 base_score["recommendation"] = "Avoid"
                 base_score["recommendation_basis"] += "; Death Cross overrides to Avoid"
 
+            # Intraday data (tvDatafeed) for enhanced analysis
+            intraday = get_intraday_summary(raw)
+            intraday_rsi = intraday.get("hourly_rsi")
+            intraday_vwap = intraday.get("hourly_vwap")
+            intraday_volatility = intraday.get("volatility_pct")
+
             # Trade Plan
             trade = build_trade_plan(
                 df_tech=df_tech, sr=sr_tech, fib=fib,
@@ -472,6 +479,11 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "hold_label": trade.get("holding", {}).get("duration_label", ""),
                 "hold_exit_strategy": trade.get("holding", {}).get("exit_strategy", ""),
                 "hold_exit_triggers": trade.get("holding", {}).get("exit_triggers", []),
+                # Intraday data (tvDatafeed)
+                "intraday_rsi": intraday_rsi,
+                "intraday_vwap": intraday_vwap,
+                "intraday_volatility_pct": intraday_volatility,
+                "intraday_data_quality": intraday.get("data_quality", "none"),
             }
 
             # ── OHLCV history for chart (last 3 months) ──
@@ -695,6 +707,11 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             "ta_fetch_time": row.get("TA Data As Of"),
             "params_version": row.get("params_version"),
             "stale": trade["entry"].get("stale", False),
+            # Intraday data
+            "intraday_rsi": row.get("intraday_rsi"),
+            "intraday_vwap": row.get("intraday_vwap"),
+            "intraday_volatility_pct": row.get("intraday_volatility_pct"),
+            "intraday_data_quality": row.get("intraday_data_quality", "none"),
             # Chart data
             "chart_dates": row.get("chart_dates"),
             "chart_open": row.get("chart_open"),

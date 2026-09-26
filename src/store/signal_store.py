@@ -100,6 +100,12 @@ SIGNAL_SCHEMA = pa.schema([
     ("params_version", pa.string()),
     ("stale", pa.bool_()),
 
+    # Intraday data (tvDatafeed)
+    ("intraday_rsi", pa.float64()),
+    ("intraday_vwap", pa.float64()),
+    ("intraday_volatility_pct", pa.float64()),
+    ("intraday_data_quality", pa.string()),
+
     # Outcome tracking
     ("outcome", pa.string()),
     ("outcome_date", pa.date32()),
@@ -247,7 +253,7 @@ def get_signal_stats() -> Dict[str, Any]:
         "params_versions": df["params_version"].value_counts().to_dict(),
     }
 
-def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
+def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 14,
                       cost_bps: float = 10.0, slippage_bps: float = 5.0) -> pd.DataFrame:
     """Simulate outcomes for closed trades using historical price data."""
     if trades.empty:
@@ -335,7 +341,7 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
     return trades
 
 
-def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
+def update_outcomes(horizon_days: int = 14, cost_bps: float = 10.0,
                     slippage_bps: float = 5.0) -> int:
     """Update pending signals with actual outcomes. Returns number of rows updated."""
     _ensure_store_exists()
