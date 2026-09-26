@@ -28,7 +28,6 @@ from src.signals.technical import enrich
 from src.signals.ml import run_ml_pipeline, compute_ml_conviction
 from src.signals.scoring import compute_base_score
 from src.signals.chartscan import init_chartscan, chartscan_analyze, is_enabled as chartscan_enabled
-from src.data.intraday import get_intraday_summary
 from src.trade.planner import build_trade_plan
 from src.store.signal_store import append_signals, export_latest_csv
 from src.output.excel import export_analysis, append_daily_history
@@ -319,10 +318,17 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 base_score["recommendation_basis"] += "; Death Cross overrides to Avoid"
 
             # Intraday data (tvDatafeed) for enhanced analysis
-            intraday = get_intraday_summary(raw)
-            intraday_rsi = intraday.get("hourly_rsi")
-            intraday_vwap = intraday.get("hourly_vwap")
-            intraday_volatility = intraday.get("volatility_pct")
+            try:
+                from src.data.intraday import get_intraday_summary
+                intraday = get_intraday_summary(raw)
+                intraday_rsi = intraday.get("hourly_rsi")
+                intraday_vwap = intraday.get("hourly_vwap")
+                intraday_volatility = intraday.get("volatility_pct")
+            except Exception as e:
+                log.debug("tvDatafeed unavailable for %s: %s", raw, e)
+                intraday_rsi = None
+                intraday_vwap = None
+                intraday_volatility = None
 
             # Trade Plan
             trade = build_trade_plan(
