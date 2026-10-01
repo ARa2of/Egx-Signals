@@ -57,16 +57,19 @@ volume:
 # TRADE PLAN (ATR-based)
 # ─────────────────────────────────────────────────────────────
 trade:
-  stop_loss_atr: 1.2
+  stop_loss_atr: 1.8
   target_atr: 3.0
   max_entry_discount: 0.10
   max_entry_distance_pct: 0.08
   entry_buffer: 0.005
-  min_rr: 1.2
+  min_rr: 3.0
   atr_zone_half: 0.30
   max_wait_atr: 3.5
   max_stop_atr: 3.0
   proximity_penalty_per_atr: 6
+  tp1_pct: 1.0
+  tp2_pct: 2.0
+  tp3_pct: 6.0
 
 # ─────────────────────────────────────────────────────────────
 # ML SETTINGS

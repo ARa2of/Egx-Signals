@@ -253,7 +253,7 @@ def get_signal_stats() -> Dict[str, Any]:
         "params_versions": df["params_version"].value_counts().to_dict(),
     }
 
-def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 14,
+def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
                       cost_bps: float = 10.0, slippage_bps: float = 5.0) -> pd.DataFrame:
     """Simulate outcomes for closed trades using historical price data."""
     if trades.empty:
@@ -343,7 +343,7 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 14,
     return trades
 
 
-def update_outcomes(horizon_days: int = 14, cost_bps: float = 10.0,
+def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
                     slippage_bps: float = 5.0) -> int:
     """Update pending signals with actual outcomes. Returns number of rows updated."""
     _ensure_store_exists()

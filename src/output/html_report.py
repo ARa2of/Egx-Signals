@@ -1316,7 +1316,7 @@ def _build_dashboard_html(signal_store) -> str:
     from datetime import timedelta
     buys = signal_store[signal_store["recommendation"].isin(["Buy", "Strong Buy"])].copy()
     buy_perf_html = ""
-    HOLDING_DAYS = 14  # Max holding period before time exit
+    HOLDING_DAYS = 21  # Max holding period before time exit (backtest optimal)
 
     if not buys.empty:
         perf_rows = []

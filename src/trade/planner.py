@@ -390,28 +390,61 @@ def compute_stop_loss(entry_price: float, stop_price: float, atr: float, sr: Dic
 # Take Profit Targets
 # ─────────────────────────────────────────────────────────────
 def compute_take_profits(entry: float, stop: float, forecast: Dict, sr: Dict, fib: Dict, last_price: float = None) -> List[Dict]:
+    """Compute take profit levels.
+
+    Optimal strategy from backtest (233 trades):
+    - TP1: +1.0% from entry (quick partial profit)
+    - TP2: +2.0% from entry (second target)
+    - TP3: +6.0% from entry (swing target)
+    - Minimum R/R ratio: 3.0
+    """
     risk = entry - stop
     targets = []
 
-    # ML forecast (always include if above entry — model-based, most reliable)
+    # Optimal percentage-based TPs from backtest
+    tp1_pct = 1.0
+    tp2_pct = 2.0
+    tp3_pct = 6.0
+    min_rr = 3.0
+
+    # Calculate TP prices
+    tp1_price = entry * (1 + tp1_pct / 100)
+    tp2_price = entry * (1 + tp2_pct / 100)
+    tp3_price = entry * (1 + tp3_pct / 100)
+
+    # Add percentage-based TPs (always present)
+    for price, label, pct in [(tp1_price, "TP1 (1%)", tp1_pct),
+                               (tp2_price, "TP2 (2%)", tp2_pct),
+                               (tp3_price, "TP3 (6%)", tp3_pct)]:
+        rr = (price - entry) / risk if risk > 0 else 0
+        targets.append({
+            "source": label,
+            "price": round(price, 3),
+            "pct_from_entry": round(pct, 2),
+            "rr_ratio": round(rr, 2),
+            "above_last_close": (last_price is None or price > last_price),
+        })
+
+    # ML forecast targets (if they fit within reasonable range)
     for name, f in forecast.items():
         price = f["price"]
-        if price > entry:
+        if price > entry and price <= tp3_price * 1.2:  # Within 20% of TP3
             rr = (price - entry) / risk if risk > 0 else 0
-            targets.append({
-                "source": f"ML {name}",
-                "price": round(price, 3),
-                "pct_from_entry": round((price - entry) / entry * 100, 2),
-                "rr_ratio": round(rr, 2),
-                "above_last_close": (last_price is None or price > last_price),
-            })
+            if rr >= min_rr:
+                targets.append({
+                    "source": f"ML {name}",
+                    "price": round(price, 3),
+                    "pct_from_entry": round((price - entry) / entry * 100, 2),
+                    "rr_ratio": round(rr, 2),
+                    "above_last_close": (last_price is None or price > last_price),
+                })
 
-    # Resistance levels
+    # Resistance levels (if they fit within reasonable range)
     for r in sr.get("resistance", []):
         price = r["price"]
-        if price > entry:
+        if price > entry and price <= tp3_price * 1.2:
             rr = (price - entry) / risk if risk > 0 else 0
-            if rr >= 1.0:
+            if rr >= min_rr:
                 targets.append({
                     "source": f"Resistance ({r['strength']})",
                     "price": round(price, 3),
@@ -420,69 +453,22 @@ def compute_take_profits(entry: float, stop: float, forecast: Dict, sr: Dict, fi
                     "above_last_close": (last_price is None or price > last_price),
                 })
 
-    # Fibonacci levels
-    for lvl in fib.get("levels", []):
-        price = lvl["price"]
-        if price > entry:
-            rr = (price - entry) / risk if risk > 0 else 0
-            if rr >= 1.0:
-                targets.append({
-                    "source": lvl["label"],
-                    "price": round(price, 3),
-                    "pct_from_entry": round((price - entry) / entry * 100, 2),
-                    "rr_ratio": round(rr, 2),
-                    "above_last_close": (last_price is None or price > last_price),
-                })
-
-    # Deduplicate
+    # Deduplicate (keep highest priority: percentage-based > ML > Resistance)
     targets.sort(key=lambda t: t["price"])
     merged = []
     for t in targets:
         if merged and abs(t["price"] - merged[-1]["price"]) / merged[-1]["price"] < 0.005:
-            priority = {"ML": 0, "Resistance": 1, "Fib": 2}
-            existing_p = next((k for k in priority if merged[-1]["source"].startswith(k)), 2)
-            new_p = next((k for k in priority if t["source"].startswith(k)), 2)
+            priority = {"TP": 0, "ML": 1, "Resistance": 2}
+            existing_p = next((k for k in priority if merged[-1]["source"].startswith(k)), 3)
+            new_p = next((k for k in priority if t["source"].startswith(k)), 3)
             if new_p < existing_p:
                 merged[-1] = t
         else:
             merged.append(t)
 
-    # Fallback: if no targets found, use ATR-based targets from entry
-    if not merged and entry and stop:
-        risk = entry - stop
-        if risk > 0:
-            for multiplier, label in [(1.5, "ATR 1.5R"), (2.5, "ATR 2.5R"), (4.0, "ATR 4.0R")]:
-                price = entry + risk * multiplier
-                merged.append({
-                    "source": label,
-                    "price": round(price, 3),
-                    "pct_from_entry": round((price - entry) / entry * 100, 2),
-                    "rr_ratio": round(multiplier, 2),
-                    "above_last_close": True,
-                })
-
-    # Supplement: add ATR targets if fewer than 3 targets
-    if len(merged) < 3 and entry and stop:
-        risk = entry - stop
-        if risk > 0:
-            existing_prices = {round(t["price"], 1) for t in merged}
-            for multiplier, label in [(1.5, "ATR 1.5R"), (2.5, "ATR 2.5R"), (4.0, "ATR 4.0R")]:
-                price = entry + risk * multiplier
-                if round(price, 1) not in existing_prices:
-                    merged.append({
-                        "source": label,
-                        "price": round(price, 3),
-                        "pct_from_entry": round((price - entry) / entry * 100, 2),
-                        "rr_ratio": round(multiplier, 2),
-                        "above_last_close": True,
-                    })
-                if len(merged) >= 3:
-                    break
-
-    # Final sort by price ascending
+    # Sort by price and return top 3
     merged.sort(key=lambda t: t["price"])
-
-    return merged
+    return merged[:3]
 
 # ─────────────────────────────────────────────────────────────
 # Position Sizing
