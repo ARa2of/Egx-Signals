@@ -1,7 +1,7 @@
 # EGX Signal Generator Parameters
 # Versioned config — update version when params change
-version: "v2.0"
-updated: "2026-09-03"
+version: "v2.1"
+updated: "2026-10-01"
 description: "Core scoring and trade plan parameters"
 
 # ─────────────────────────────────────────────────────────────
@@ -36,9 +36,9 @@ rsi:
     healthy_high: 70
     overbought: 75
   ranging:
-    oversold: 30
+    oversold: 28
     healthy_low: 40
-    healthy_high: 65
+    healthy_high: 68
     overbought: 70
   trending_down:
     oversold: 25
@@ -50,14 +50,14 @@ rsi:
 # VOLUME & SUPPORT
 # ─────────────────────────────────────────────────────────────
 volume:
-  spike_multiplier: 1.8
-  near_support_pct: 0.03
+  spike_multiplier: 1.5
+  near_support_pct: 0.02
 
 # ─────────────────────────────────────────────────────────────
 # TRADE PLAN (ATR-based)
 # ─────────────────────────────────────────────────────────────
 trade:
-  stop_loss_atr: 1.5
+  stop_loss_atr: 1.2
   target_atr: 3.0
   max_entry_discount: 0.10
   max_entry_distance_pct: 0.08
