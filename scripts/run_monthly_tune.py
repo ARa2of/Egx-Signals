@@ -38,6 +38,7 @@ result = run_grid_search(
     test_window_days=tuning_cfg.get("test_window_days", 60),
     min_trades=tuning_cfg.get("min_trades", 30),
     metric=tuning_cfg.get("metric", "win_rate"),
+    time_limit_seconds=tuning_cfg.get("time_limit_seconds", 600),
 )
 
 if result:
@@ -57,7 +58,13 @@ if result:
         elif key in params.get("trade", {}):
             params["trade"][key] = value
 
-    params["version"] = f"v{int(params.get('version', 'v1')[1:]) + 1}"
+    # Parse current version (e.g., "v2.0" -> 2.0)
+    current_version = params.get("version", "v1")
+    try:
+        version_num = float(current_version.lstrip("v"))
+    except ValueError:
+        version_num = 1.0
+    params["version"] = f"v{version_num + 0.1:.1f}"
     params["updated"] = str(pd.Timestamp.now().date())
 
     with open(params_path, "w") as f:

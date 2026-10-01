@@ -24,6 +24,7 @@ param_tuning:
   min_trades: 30                # Minimum Buy signals in test window
   metric: "win_rate"            # win_rate, expectancy, sharpe
   min_improvement: 0.02         # 2% absolute improvement threshold
+  time_limit_seconds: 600       # Max time for grid search (10 min)
   
   # Grid search space (keep small for speed)
   param_grid:

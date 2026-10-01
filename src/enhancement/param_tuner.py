@@ -23,13 +23,17 @@ quality_cfg = enhance_cfg["quality_monitoring"]
 # Parameter Grid Search
 # ─────────────────────────────────────────────────────────────
 def run_grid_search(signal_store: pd.DataFrame, test_window_days: int = 60,
-                    min_trades: int = 30, metric: str = "win_rate") -> Optional[Dict]:
+                    min_trades: int = 30, metric: str = "win_rate",
+                    time_limit_seconds: int = 600) -> Optional[Dict]:
     """Run fast grid search over parameter space.
 
     Only evaluates signals that have actual outcome data (not pending).
     """
     if signal_store.empty:
         return None
+
+    import time
+    start_time = time.time()
 
     # Get recent signals with actual outcomes
     cutoff = signal_store["run_date"].max() - timedelta(days=test_window_days)
@@ -56,6 +60,12 @@ def run_grid_search(signal_store: pd.DataFrame, test_window_days: int = 60,
              total_combos, test_window_days, len(recent))
 
     for i, combo in enumerate(itertools.product(*param_values)):
+        # Check time limit
+        if time.time() - start_time > time_limit_seconds:
+            log.warning("Grid search timed out after %ds at combo %d/%d",
+                       time_limit_seconds, i, total_combos)
+            break
+
         test_params = dict(zip(param_names, combo))
 
         # Re-score recent signals with test parameters
@@ -105,11 +115,11 @@ def rescore_signals(signals: pd.DataFrame, test_params: Dict) -> pd.DataFrame:
     near_support_pct, stop_loss_atr. We re-run the RSI and volume scoring
     functions with the new thresholds, then recompute total score.
     """
-    from src.signals.scoring import score_rsi, score_volume, compute_base_score
     from src.config import load_params
     scored = signals.copy()
     base_params = load_params()
     weights = base_params["weights"]
+    rsi_cfg = base_params["rsi"]
 
     # Extract test parameters with fallbacks
     new_oversold = test_params.get("rsi_oversold",
@@ -119,53 +129,66 @@ def rescore_signals(signals: pd.DataFrame, test_params: Dict) -> pd.DataFrame:
     new_spike = test_params.get("volume_spike",
                                 base_params["volume"]["spike_multiplier"])
 
-    # Get current parameter values for comparison
-    old_oversold = base_params["rsi"]["ranging"]["oversold"]
-    old_healthy_high = base_params["rsi"]["ranging"]["healthy_high"]
-    old_spike = base_params["volume"]["spike_multiplier"]
+    # Vectorized RSI re-scoring
+    rsi_vals = scored["rsi"].fillna(50).values
+    adx_vals = scored["adx"].fillna(0).values
+    regimes = scored["regime"].fillna("ranging").values
 
-    for idx, row in scored.iterrows():
-        rsi_val = row.get("rsi")
-        regime = row.get("regime", "ranging")
-        adx_val = row.get("adx")
+    # RSI score calculation (vectorized)
+    new_rsi_scores = np.zeros(len(scored))
+    for i in range(len(scored)):
+        rsi = rsi_vals[i]
+        regime = regimes[i]
+        regime_rsi = rsi_cfg.get(regime, rsi_cfg.get("ranging", {}))
+        reg_oversold = regime_rsi.get("oversold", new_oversold)
+        reg_healthy_high = regime_rsi.get("healthy_high", new_healthy_high)
+        reg_overbought = regime_rsi.get("overbought", 80)
 
-        # Re-score RSI with new thresholds
-        new_rsi_score, _ = score_rsi_custom(rsi_val, adx_val, regime,
-                                            new_oversold, new_healthy_high)
-        # score_rsi is stored as weighted value (0-12), divide by weight to get raw
-        old_rsi_raw = row.get("score_rsi", 0) / weights["rsi"] if weights["rsi"] else 0
-
-        # Re-score volume with new spike multiplier
-        old_vol_score = row.get("score_volume", 0)
-        # Approximate vol_multiplier from score (inverse of score_volume logic)
-        approx_vol_mult = 1.0 + (old_vol_score / weights["volume"]) * 3.0
-        new_vol_score, _ = score_volume_custom(approx_vol_mult, new_spike)
-        # Scale to weight
-        new_vol_pts = new_vol_score * weights["volume"]
-
-        # Compute new total score using raw values * weight
-        delta = (new_rsi_score - old_rsi_raw) * weights["rsi"] + \
-                (new_vol_pts - old_vol_score)
-
-        new_score = row.get("score", 0) + delta
-        new_score = max(0.0, min(100.0, new_score))
-
-        scored.at[idx, "score"] = new_score
-        scored.at[idx, "score_rsi"] = new_rsi_score * weights["rsi"]
-        scored.at[idx, "score_volume"] = new_vol_pts
-
-        # Update recommendation based on new score
-        buy_threshold = base_params["thresholds"]["buy"]
-        watch_threshold = base_params["thresholds"]["watch"]
-        death_cross = row.get("death_cross", False)
-        if death_cross:
-            scored.at[idx, "recommendation"] = "Avoid"
-        elif new_score >= buy_threshold:
-            scored.at[idx, "recommendation"] = "Buy"
-        elif new_score >= watch_threshold:
-            scored.at[idx, "recommendation"] = "Watch"
+        if reg_healthy_high <= rsi <= reg_overbought:
+            new_rsi_scores[i] = 1.0
+        elif 35 <= rsi < reg_healthy_high:
+            new_rsi_scores[i] = 0.6
+        elif rsi < 35:
+            new_rsi_scores[i] = 0.8 if rsi <= reg_oversold else 0.4
+        elif rsi <= reg_overbought:
+            new_rsi_scores[i] = 0.5
         else:
-            scored.at[idx, "recommendation"] = "Avoid"
+            new_rsi_scores[i] = 0.35
+
+    # Volume score approximation (vectorized)
+    old_vol_scores = scored["score_volume"].fillna(0).values
+    approx_vol_mult = 1.0 + (old_vol_scores / weights["volume"]) * 3.0
+    new_vol_scores = np.where(
+        approx_vol_mult >= 3.0, 1.0,
+        np.where(approx_vol_mult >= 2.0, 0.6 + 0.4 * (approx_vol_mult - 2.0),
+                 np.where(approx_vol_mult >= new_spike,
+                          0.3 + 0.3 * (approx_vol_mult - new_spike) / (2.0 - new_spike),
+                          np.where(approx_vol_mult >= 1.0,
+                                   0.1 * (approx_vol_mult - 1.0) / (new_spike - 1.0), 0.0)))
+    )
+    new_vol_pts = new_vol_scores * weights["volume"]
+
+    # Compute new scores
+    old_rsi_raw = scored["score_rsi"].fillna(0).values / weights["rsi"]
+    old_scores = scored["score"].fillna(0).values
+    delta = (new_rsi_scores - old_rsi_raw) * weights["rsi"] + (new_vol_pts - old_vol_scores)
+    new_scores = np.clip(old_scores + delta, 0, 100)
+
+    scored["score"] = new_scores
+    scored["score_rsi"] = new_rsi_scores * weights["rsi"]
+    scored["score_volume"] = new_vol_pts
+
+    # Update recommendations (vectorized)
+    buy_threshold = base_params["thresholds"]["buy"]
+    watch_threshold = base_params["thresholds"]["watch"]
+    death_cross = scored["death_cross"].fillna(False).values
+
+    new_recs = np.where(
+        death_cross, "Avoid",
+        np.where(new_scores >= buy_threshold, "Buy",
+                 np.where(new_scores >= watch_threshold, "Watch", "Avoid"))
+    )
+    scored["recommendation"] = new_recs
 
     return scored
 
