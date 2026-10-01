@@ -1346,6 +1346,11 @@ def _build_dashboard_html(signal_store) -> str:
             exit_price = entry
             exit_reason = "open"
             hold_days = 0
+            exit_date = run_date  # Default to recommendation date
+
+            # Get TP2 and TP3 if available
+            tp2 = sig.get("tp2") or 0
+            tp3 = sig.get("tp3") or 0
 
             for _, future in t_all.iterrows():
                 future_date = future["run_date"]
@@ -1357,22 +1362,35 @@ def _build_dashboard_html(signal_store) -> str:
 
                 hold_days = (future_date - run_date).days
 
-                # Check TP1 hit
+                # Check TP3 first (highest)
+                if tp3 > 0 and future_close >= tp3:
+                    exit_price = tp3
+                    exit_reason = "tp3"
+                    exit_date = future_date
+                    break
+                # Check TP2
+                if tp2 > 0 and future_close >= tp2:
+                    exit_price = tp2
+                    exit_reason = "tp2"
+                    exit_date = future_date
+                    break
+                # Check TP1
                 if tp1 > 0 and future_close >= tp1:
                     exit_price = tp1
                     exit_reason = "tp1"
+                    exit_date = future_date
                     break
-
                 # Check stop loss hit
                 if sl > 0 and future_close <= sl:
                     exit_price = sl
                     exit_reason = "stop_loss"
+                    exit_date = future_date
                     break
-
                 # Check time exit
                 if hold_days >= HOLDING_DAYS:
                     exit_price = future_close
                     exit_reason = "time_exit"
+                    exit_date = future_date
                     break
 
             # If still open after all data, use last available price
@@ -1383,6 +1401,7 @@ def _build_dashboard_html(signal_store) -> str:
                 if hasattr(last_date, "date"):
                     last_date = last_date.date()
                 hold_days = (last_date - run_date).days
+                exit_date = last_date
                 if hold_days >= HOLDING_DAYS:
                     exit_reason = "time_exit"
                 else:
@@ -1394,7 +1413,9 @@ def _build_dashboard_html(signal_store) -> str:
 
             perf_rows.append({
                 "ticker": ticker,
-                "run_date": run_date,
+                "rec_date": run_date,
+                "entry_date": run_date,  # Entry is same day as recommendation
+                "exit_date": exit_date,
                 "entry": entry,
                 "exit_price": exit_price,
                 "exit_reason": exit_reason,
@@ -1411,7 +1432,10 @@ def _build_dashboard_html(signal_store) -> str:
 
             # Summary stats
             total = len(perf_df)
-            tp_hits = (perf_df["exit_reason"] == "tp1").sum()
+            tp1_hits = (perf_df["exit_reason"] == "tp1").sum()
+            tp2_hits = (perf_df["exit_reason"] == "tp2").sum()
+            tp3_hits = (perf_df["exit_reason"] == "tp3").sum()
+            tp_hits = tp1_hits + tp2_hits + tp3_hits
             sl_hits = (perf_df["exit_reason"] == "stop_loss").sum()
             time_exits = (perf_df["exit_reason"] == "time_exit").sum()
             open_trades = (perf_df["exit_reason"] == "open").sum()
@@ -1425,10 +1449,12 @@ def _build_dashboard_html(signal_store) -> str:
 
             buy_perf_summary = f"""
     <div class="dash-summary">
-      <div class="dash-card"><div class="dash-label">Win Rate (TP1)</div><div class="dash-value {wr_class}">{win_rate:.0%}</div></div>
+      <div class="dash-card"><div class="dash-label">Win Rate (TP1+)</div><div class="dash-value {wr_class}">{win_rate:.0%}</div></div>
       <div class="dash-card"><div class="dash-label">Avg P&L</div><div class="dash-value {pnl_class}">{avg_pnl:+.1f}%</div></div>
       <div class="dash-card"><div class="dash-label">Avg R-Multiple</div><div class="dash-value {pnl_class}">{avg_r:+.2f}R</div></div>
-      <div class="dash-card"><div class="dash-label">TP Hits</div><div class="dash-value green">{tp_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">TP1 Hits</div><div class="dash-value green">{tp1_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">TP2 Hits</div><div class="dash-value green">{tp2_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">TP3 Hits</div><div class="dash-value green">{tp3_hits}</div></div>
       <div class="dash-card"><div class="dash-label">Stop Losses</div><div class="dash-value red">{sl_hits}</div></div>
       <div class="dash-card"><div class="dash-label">Time Exits</div><div class="dash-value yellow">{time_exits}</div></div>
       <div class="dash-card"><div class="dash-label">Open</div><div class="dash-value blue">{open_trades}</div></div>
@@ -1439,7 +1465,13 @@ def _build_dashboard_html(signal_store) -> str:
             perf_sorted = perf_df.sort_values("pnl_pct", ascending=False)
             perf_rows_html = ""
             for _, r in perf_sorted.iterrows():
-                if r["exit_reason"] == "tp1":
+                if r["exit_reason"] == "tp3":
+                    badge = '<span class="outcome-badge tp3">TP3</span>'
+                    cls = "green"
+                elif r["exit_reason"] == "tp2":
+                    badge = '<span class="outcome-badge tp2">TP2</span>'
+                    cls = "green"
+                elif r["exit_reason"] == "tp1":
                     badge = '<span class="outcome-badge tp1">TP1</span>'
                     cls = "green"
                 elif r["exit_reason"] == "stop_loss":
@@ -1452,10 +1484,17 @@ def _build_dashboard_html(signal_store) -> str:
                     badge = '<span class="outcome-badge" style="background:#3b82f6">OPEN</span>'
                     cls = "blue"
 
-                date_str = r["run_date"].strftime("%d %b") if hasattr(r["run_date"], "strftime") else str(r["run_date"])
+                def fmt_date(d):
+                    return d.strftime("%d %b") if hasattr(d, "strftime") else str(d)
+
+                rec_date_str = fmt_date(r["rec_date"])
+                entry_date_str = fmt_date(r["entry_date"])
+                exit_date_str = fmt_date(r["exit_date"])
 
                 perf_rows_html += f"""<tr>
-                  <td>{date_str}</td>
+                  <td>{rec_date_str}</td>
+                  <td>{entry_date_str}</td>
+                  <td>{exit_date_str}</td>
                   <td><b>{r['ticker']}</b></td>
                   <td>{r['entry']:.2f}</td>
                   <td>{r['exit_price']:.2f}</td>
@@ -1470,7 +1509,7 @@ def _build_dashboard_html(signal_store) -> str:
     <div class="dash-table-wrap">
       <div class="dash-table-title">Trade Outcomes (Entry → TP/SL/Time Exit, max {HOLDING_DAYS}d hold)</div>
       <table class="dash-table">
-        <thead><tr><th>Date</th><th>Ticker</th><th>Entry</th><th>Exit</th><th>Result</th><th>P&L</th><th>R</th><th>Hold</th><th>Score</th></tr></thead>
+        <thead><tr><th>Rec Date</th><th>Entry Date</th><th>Exit Date</th><th>Ticker</th><th>Entry</th><th>Exit</th><th>Result</th><th>P&L</th><th>R</th><th>Hold</th><th>Score</th></tr></thead>
         <tbody>{perf_rows_html}</tbody>
       </table>
     </div>"""
