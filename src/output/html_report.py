@@ -1560,7 +1560,7 @@ def _build_dashboard_html(signal_store) -> str:
       </table>
     </div>"""
 
-            # ── Monthly Performance vs Benchmark ──
+            # ── Monthly Performance vs EGX100 Benchmark ──
             monthly_perf_html = ""
             try:
                 # Calculate monthly strategy performance
@@ -1572,26 +1572,41 @@ def _build_dashboard_html(signal_store) -> str:
                     total_pnl=("pnl_pct", "sum"),
                 ).reset_index()
 
-                # Calculate benchmark (equal-weighted return of all tracked stocks)
+                # Fetch EGX100 monthly returns from TradingView
                 benchmark_monthly = {}
-                all_stocks = signal_store.copy()
-                all_stocks["month"] = pd.to_datetime(all_stocks["run_date"]).dt.strftime("%Y-%m")
+                try:
+                    from tvDatafeed import TvDatafeed, Interval
+                    tv = TvDatafeed()
+                    egx100 = tv.get_hist(symbol="EGX100EWI", exchange="EGX",
+                                           interval=Interval.in_daily, n_bars=100)
+                    if egx100 is not None and not egx100.empty:
+                        egx100_monthly = egx100["close"].resample("ME").last()
+                        for i in range(1, len(egx100_monthly)):
+                            month_key = egx100_monthly.index[i].strftime("%Y-%m")
+                            prev = egx100_monthly.iloc[i-1]
+                            curr = egx100_monthly.iloc[i]
+                            if prev > 0:
+                                benchmark_monthly[month_key] = (curr - prev) / prev * 100
+                except Exception as e:
+                    log.warning("EGX100 fetch failed: %s", e)
 
-                for month in sorted(strategy_monthly["month"].unique()):
-                    month_data = all_stocks[all_stocks["month"] == month]
-                    if len(month_data) > 0:
-                        # Simple benchmark: average return of all stocks that month
-                        # Use close prices from first and last day of month
-                        monthly_returns = []
-                        for ticker in month_data["ticker"].unique():
-                            t_data = month_data[month_data["ticker"] == ticker].sort_values("run_date")
-                            if len(t_data) >= 2:
-                                first_close = t_data.iloc[0]["close"] or 0
-                                last_close = t_data.iloc[-1]["close"] or 0
-                                if first_close > 0:
-                                    ret = (last_close - first_close) / first_close * 100
-                                    monthly_returns.append(ret)
-                        benchmark_monthly[month] = np.mean(monthly_returns) if monthly_returns else 0
+                # Fallback to equal-weighted if EGX100 not available
+                if not benchmark_monthly:
+                    all_stocks = signal_store.copy()
+                    all_stocks["month"] = pd.to_datetime(all_stocks["run_date"]).dt.strftime("%Y-%m")
+                    for month in sorted(strategy_monthly["month"].unique()):
+                        month_data = all_stocks[all_stocks["month"] == month]
+                        if len(month_data) > 0:
+                            monthly_returns = []
+                            for ticker in month_data["ticker"].unique():
+                                t_data = month_data[month_data["ticker"] == ticker].sort_values("run_date")
+                                if len(t_data) >= 2:
+                                    first_close = t_data.iloc[0]["close"] or 0
+                                    last_close = t_data.iloc[-1]["close"] or 0
+                                    if first_close > 0:
+                                        ret = (last_close - first_close) / first_close * 100
+                                        monthly_returns.append(ret)
+                            benchmark_monthly[month] = np.mean(monthly_returns) if monthly_returns else 0
 
                 # Build comparison table
                 monthly_rows_html = ""
@@ -1625,11 +1640,11 @@ def _build_dashboard_html(signal_store) -> str:
 
                     monthly_perf_html = f"""
     <div class="dash-table-wrap">
-      <div class="dash-table-title">Monthly Performance vs Equal-Weighted Benchmark</div>
+      <div class="dash-table-title">Monthly Performance vs EGX100 Index</div>
       <table class="dash-table">
         <thead><tr>
           <th>Month</th><th>Trades</th><th>Win Rate</th>
-          <th>Strategy P&L</th><th>Benchmark P&L</th><th>Excess Return</th>
+          <th>Strategy P&L</th><th>EGX100 P&L</th><th>Excess Return</th>
         </tr></thead>
         <tbody>{monthly_rows_html}
           <tr style="border-top:2px solid #444;font-weight:bold">
@@ -1643,7 +1658,7 @@ def _build_dashboard_html(signal_store) -> str:
         </tbody>
       </table>
       <div style="color:#8b8fa3;font-size:11px;padding:6px 0;">
-        Benchmark = equal-weighted average return of all tracked stocks. Positive excess return means strategy outperformed.
+        Benchmark: EGX100EWI index (TradingView). Positive excess return means strategy outperformed the index.
       </div>
     </div>"""
             except Exception as e:
