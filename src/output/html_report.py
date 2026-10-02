@@ -367,7 +367,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     background: var(--card); border: 1px solid var(--border);
     border-radius: 8px; padding: 12px 16px; text-align: center; flex: 1; min-width: 90px;
   }}
-  .dash-card .dash-label {{ font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }}
+  .dash-card .dash-label {{ font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }}
   .dash-card .dash-value {{ font-size: 1.4rem; font-weight: 700; margin-top: 4px; }}
   .dash-card .dash-value.green {{ color: var(--green); }}
   .dash-card .dash-value.red {{ color: var(--red); }}
@@ -1464,20 +1464,20 @@ def _build_dashboard_html(signal_store) -> str:
 
             buy_perf_summary = f"""
     <div class="dash-summary">
-      <div class="dash-card"><div class="dash-label">Win Rate (TP1+)</div><div class="dash-value {wr_class}">{win_rate:.0%}</div></div>
+      <div class="dash-card"><div class="dash-label">Win Rate</div><div class="dash-value {wr_class}">{win_rate:.0%}</div></div>
       <div class="dash-card"><div class="dash-label">Avg P&L</div><div class="dash-value {pnl_class}">{avg_pnl:+.1f}%</div></div>
-      <div class="dash-card"><div class="dash-label">Avg R-Multiple</div><div class="dash-value {pnl_class}">{avg_r:+.2f}R</div></div>
-      <div class="dash-card"><div class="dash-label">TP1 Hits</div><div class="dash-value green">{tp1_hits}</div></div>
-      <div class="dash-card"><div class="dash-label">TP2 Hits</div><div class="dash-value green">{tp2_hits}</div></div>
-      <div class="dash-card"><div class="dash-label">TP3 Hits</div><div class="dash-value green">{tp3_hits}</div></div>
-      <div class="dash-card"><div class="dash-label">Stop Losses</div><div class="dash-value red">{sl_hits}</div></div>
-      <div class="dash-card"><div class="dash-label">Time Exits</div><div class="dash-value yellow">{time_exits}</div></div>
+      <div class="dash-card"><div class="dash-label">Avg R</div><div class="dash-value {pnl_class}">{avg_r:+.2f}R</div></div>
+      <div class="dash-card"><div class="dash-label">TP1</div><div class="dash-value green">{tp1_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">TP2</div><div class="dash-value green">{tp2_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">TP3</div><div class="dash-value green">{tp3_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">Stop Loss</div><div class="dash-value red">{sl_hits}</div></div>
+      <div class="dash-card"><div class="dash-label">Time Exit</div><div class="dash-value yellow">{time_exits}</div></div>
       <div class="dash-card"><div class="dash-label">Open</div><div class="dash-value blue">{open_trades}</div></div>
-      <div class="dash-card"><div class="dash-label">Total Trades</div><div class="dash-value">{total}</div></div>
+      <div class="dash-card"><div class="dash-label">Total</div><div class="dash-value">{total}</div></div>
     </div>"""
 
-            # Trade details table
-            perf_sorted = perf_df.sort_values("pnl_pct", ascending=False)
+            # Trade details table (sorted by rec date, then ticker)
+            perf_sorted = perf_df.sort_values(["rec_date", "ticker"])
             perf_rows_html = ""
             for _, r in perf_sorted.iterrows():
                 if r["exit_reason"] == "tp3":
@@ -1696,11 +1696,11 @@ def _build_dashboard_html(signal_store) -> str:
 
     summary_html = f"""
     <div class="dash-summary">
-      <div class="dash-card"><div class="dash-label">Win Rate (TP1)</div><div class="dash-value {wr_class}">{tp1_rate:.1%}</div></div>
-      <div class="dash-card"><div class="dash-label">Avg R-Multiple</div><div class="dash-value {r_class}">{avg_r:+.2f}R</div></div>
-      <div class="dash-card"><div class="dash-label">Stop Loss Rate</div><div class="dash-value {sl_class}">{sl_rate:.1%}</div></div>
+      <div class="dash-card"><div class="dash-label">Win Rate</div><div class="dash-value {wr_class}">{tp1_rate:.1%}</div></div>
+      <div class="dash-card"><div class="dash-label">Avg R</div><div class="dash-value {r_class}">{avg_r:+.2f}R</div></div>
+      <div class="dash-card"><div class="dash-label">SL Rate</div><div class="dash-value {sl_class}">{sl_rate:.1%}</div></div>
       <div class="dash-card"><div class="dash-label">Avg Hold</div><div class="dash-value yellow">{avg_hold:.0f}d</div></div>
-      <div class="dash-card"><div class="dash-label">Trades Evaluated</div><div class="dash-value blue">{total}</div></div>
+      <div class="dash-card"><div class="dash-label">Evaluated</div><div class="dash-value blue">{total}</div></div>
     </div>"""
 
     # ── Weekly Performance Chart (Plotly) ──
