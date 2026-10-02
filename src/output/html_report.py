@@ -1429,7 +1429,7 @@ def _build_dashboard_html(signal_store) -> str:
             perf_rows.append({
                 "ticker": ticker,
                 "rec_date": run_date,
-                "entry_date": run_date,  # Entry is same day as recommendation
+                "entry_date": entry_date,
                 "exit_date": exit_date,
                 "entry": entry,
                 "exit_price": exit_price,
