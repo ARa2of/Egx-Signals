@@ -1560,7 +1560,96 @@ def _build_dashboard_html(signal_store) -> str:
       </table>
     </div>"""
 
-            buy_perf_html = f"{buy_perf_summary}{buy_perf_table}{score_cal_table}"
+            # ── Monthly Performance vs Benchmark ──
+            monthly_perf_html = ""
+            try:
+                # Calculate monthly strategy performance
+                perf_df["month"] = pd.to_datetime(perf_df["exit_date"]).dt.strftime("%Y-%m")
+                strategy_monthly = perf_df.groupby("month").agg(
+                    trades=("ticker", "count"),
+                    win_rate=("exit_reason", lambda x: (x.isin(["tp1", "tp2", "tp3"])).mean()),
+                    avg_pnl=("pnl_pct", "mean"),
+                    total_pnl=("pnl_pct", "sum"),
+                ).reset_index()
+
+                # Calculate benchmark (equal-weighted return of all tracked stocks)
+                benchmark_monthly = {}
+                all_stocks = signal_store.copy()
+                all_stocks["month"] = pd.to_datetime(all_stocks["run_date"]).dt.strftime("%Y-%m")
+
+                for month in sorted(strategy_monthly["month"].unique()):
+                    month_data = all_stocks[all_stocks["month"] == month]
+                    if len(month_data) > 0:
+                        # Simple benchmark: average return of all stocks that month
+                        # Use close prices from first and last day of month
+                        monthly_returns = []
+                        for ticker in month_data["ticker"].unique():
+                            t_data = month_data[month_data["ticker"] == ticker].sort_values("run_date")
+                            if len(t_data) >= 2:
+                                first_close = t_data.iloc[0]["close"] or 0
+                                last_close = t_data.iloc[-1]["close"] or 0
+                                if first_close > 0:
+                                    ret = (last_close - first_close) / first_close * 100
+                                    monthly_returns.append(ret)
+                        benchmark_monthly[month] = np.mean(monthly_returns) if monthly_returns else 0
+
+                # Build comparison table
+                monthly_rows_html = ""
+                for _, row in strategy_monthly.iterrows():
+                    month = row["month"]
+                    strat_pnl = row["avg_pnl"]
+                    bench_pnl = benchmark_monthly.get(month, 0)
+                    excess = strat_pnl - bench_pnl
+
+                    strat_cls = "green" if strat_pnl > 0 else "red"
+                    bench_cls = "green" if bench_pnl > 0 else "red"
+                    excess_cls = "green" if excess > 0 else "red"
+
+                    # Format month name
+                    month_name = pd.to_datetime(month).strftime("%b %Y")
+
+                    monthly_rows_html += f"""<tr>
+                      <td>{month_name}</td>
+                      <td>{int(row['trades'])}</td>
+                      <td>{row['win_rate']:.0%}</td>
+                      <td class="{strat_cls}">{strat_pnl:+.2f}%</td>
+                      <td class="{bench_cls}">{bench_pnl:+.2f}%</td>
+                      <td class="{excess_cls}">{excess:+.2f}%</td>
+                    </tr>"""
+
+                if monthly_rows_html:
+                    # Calculate totals
+                    total_strat = strategy_monthly["avg_pnl"].mean()
+                    total_bench = np.mean(list(benchmark_monthly.values())) if benchmark_monthly else 0
+                    total_excess = total_strat - total_bench
+
+                    monthly_perf_html = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Monthly Performance vs Equal-Weighted Benchmark</div>
+      <table class="dash-table">
+        <thead><tr>
+          <th>Month</th><th>Trades</th><th>Win Rate</th>
+          <th>Strategy P&L</th><th>Benchmark P&L</th><th>Excess Return</th>
+        </tr></thead>
+        <tbody>{monthly_rows_html}
+          <tr style="border-top:2px solid #444;font-weight:bold">
+            <td>Average</td>
+            <td>{strategy_monthly['trades'].mean():.0f}</td>
+            <td>{strategy_monthly['win_rate'].mean():.0%}</td>
+            <td class="{'green' if total_strat > 0 else 'red'}">{total_strat:+.2f}%</td>
+            <td class="{'green' if total_bench > 0 else 'red'}">{total_bench:+.2f}%</td>
+            <td class="{'green' if total_excess > 0 else 'red'}">{total_excess:+.2f}%</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="color:#8b8fa3;font-size:11px;padding:6px 0;">
+        Benchmark = equal-weighted average return of all tracked stocks. Positive excess return means strategy outperformed.
+      </div>
+    </div>"""
+            except Exception as e:
+                monthly_perf_html = f"<div style='color:#8b8fa3;font-size:12px;'>Monthly comparison unavailable: {str(e)}</div>"
+
+            buy_perf_html = f"{buy_perf_summary}{buy_perf_table}{score_cal_table}{monthly_perf_html}"
 
     # Filter to signals with real outcomes
     evaluated = signal_store[has_outcome].copy()
