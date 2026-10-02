@@ -109,6 +109,8 @@ SIGNAL_SCHEMA = pa.schema([
     # Outcome tracking
     ("outcome", pa.string()),
     ("outcome_date", pa.date32()),
+    ("entry_date", pa.date32()),
+    ("entry_price_actual", pa.float64()),
     ("r_multiple", pa.float64()),
     ("hold_days", pa.int32()),
     ("mfe_pct", pa.float64()),
@@ -278,6 +280,7 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
             continue
 
         try:
+            # Entry happens next trading day (not same day as recommendation)
             start = run_dt + timedelta(days=1)
             end = run_dt + timedelta(days=horizon_days + 10)
             # Ensure ticker has .CA suffix for EGX stocks
@@ -292,8 +295,17 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = df.columns.get_level_values(0)
 
+            # Use next day's OPEN as entry price (more realistic)
+            # Fall back to recommended entry if open not available
+            if "Open" in df.columns and not df["Open"].isna().iloc[0]:
+                actual_entry = float(df["Open"].iloc[0])
+                entry_date = df.index[0].date()
+            else:
+                actual_entry = entry
+                entry_date = start
+
             outcome = "expired"
-            exit_price = entry
+            exit_price = actual_entry
             hold = len(df)
             max_p = float(df["High"].max())
             min_p = float(df["Low"].min())
@@ -322,16 +334,20 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
             if outcome == "expired":
                 exit_price = float(df["Close"].iloc[-1])
 
-            r_mult = (exit_price - entry) / abs(entry - sl) if entry != sl else 0
+            # Use actual entry price for PnL calculations
+            risk = abs(actual_entry - sl) if sl > 0 else actual_entry * 0.02
+            r_mult = (exit_price - actual_entry) / risk if risk > 0 else 0
             r_mult -= cost_pct
-            pnl = (exit_price - entry) / entry * 100 if entry else 0
+            pnl = (exit_price - actual_entry) / actual_entry * 100 if actual_entry else 0
 
             trades.at[idx, "outcome"] = outcome
-            trades.at[idx, "outcome_date"] = run_dt + timedelta(days=horizon_days)
+            trades.at[idx, "outcome_date"] = df.index[-1].date() if len(df) > 0 else run_dt + timedelta(days=horizon_days)
+            trades.at[idx, "entry_date"] = entry_date
+            trades.at[idx, "entry_price_actual"] = round(actual_entry, 3)
             trades.at[idx, "r_multiple"] = round(r_mult, 3)
             trades.at[idx, "hold_days"] = hold
-            trades.at[idx, "mfe_pct"] = round((max_p - entry) / entry * 100, 2) if entry else 0
-            trades.at[idx, "mae_pct"] = round((min_p - entry) / entry * 100, 2) if entry else 0
+            trades.at[idx, "mfe_pct"] = round((max_p - actual_entry) / actual_entry * 100, 2) if actual_entry else 0
+            trades.at[idx, "mae_pct"] = round((min_p - actual_entry) / actual_entry * 100, 2) if actual_entry else 0
             trades.at[idx, "max_price"] = max_p
             trades.at[idx, "min_price"] = min_p
             trades.at[idx, "pnl_pct"] = round(pnl, 2)

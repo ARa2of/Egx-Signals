@@ -1319,6 +1319,7 @@ def _build_dashboard_html(signal_store) -> str:
     HOLDING_DAYS = 21  # Max holding period before time exit (backtest optimal)
 
     if not buys.empty:
+        from datetime import timedelta
         perf_rows = []
         for _, sig in buys.iterrows():
             ticker = sig["ticker"]
@@ -1333,10 +1334,24 @@ def _build_dashboard_html(signal_store) -> str:
             if entry <= 0:
                 continue
 
-            # Get all signals for this ticker on or after the signal date
+            # Entry is next trading day (recommendation is EOD)
+            entry_date = run_date + timedelta(days=1)
+
+            # Use actual entry date/price if available from outcome evaluation
+            actual_entry = sig.get("entry_price_actual") or 0
+            stored_entry_date = sig.get("entry_date")
+            if stored_entry_date is not None and not pd.isna(stored_entry_date):
+                if hasattr(stored_entry_date, "date"):
+                    entry_date = stored_entry_date.date()
+                else:
+                    entry_date = stored_entry_date
+            if actual_entry > 0:
+                entry = actual_entry
+
+            # Get all signals for this ticker on or after entry date
             t_all = signal_store[
                 (signal_store["ticker"] == ticker) &
-                (signal_store["run_date"] >= run_date)
+                (signal_store["run_date"] >= entry_date)
             ].sort_values("run_date")
 
             if len(t_all) < 1:
@@ -1346,7 +1361,7 @@ def _build_dashboard_html(signal_store) -> str:
             exit_price = entry
             exit_reason = "open"
             hold_days = 0
-            exit_date = run_date  # Default to recommendation date
+            exit_date = entry_date  # Default to entry date
 
             # Get TP2 and TP3 if available
             tp2 = sig.get("tp2") or 0
@@ -1360,7 +1375,7 @@ def _build_dashboard_html(signal_store) -> str:
                 if future_close <= 0:
                     continue
 
-                hold_days = (future_date - run_date).days
+                hold_days = (future_date - entry_date).days
 
                 # Check TP3 first (highest)
                 if tp3 > 0 and future_close >= tp3:
@@ -1400,7 +1415,7 @@ def _build_dashboard_html(signal_store) -> str:
                 last_date = t_all.iloc[-1]["run_date"]
                 if hasattr(last_date, "date"):
                     last_date = last_date.date()
-                hold_days = (last_date - run_date).days
+                hold_days = (last_date - entry_date).days
                 exit_date = last_date
                 if hold_days >= HOLDING_DAYS:
                     exit_reason = "time_exit"
