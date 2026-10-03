@@ -42,6 +42,8 @@ weights/*.pth
 # Cache
 ~/.cache/
 .cache/
+data/cache/
+data/model_cache/
 
 # Environment
 .env

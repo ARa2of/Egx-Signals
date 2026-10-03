@@ -6,8 +6,10 @@ Richer features, rolling walk-forward, optional Optuna tuning
 import warnings
 import logging
 import random
+import pickle
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
 from sklearn.preprocessing import RobustScaler
@@ -23,6 +25,58 @@ random.seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 
 log = logging.getLogger(__name__)
+
+# ── Model Caching ──
+MODEL_CACHE_DIR = Path(__file__).parent.parent.parent / "data" / "model_cache"
+MODEL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+def _model_cache_path(ticker: str) -> Path:
+    """Get model cache file path for a ticker."""
+    return MODEL_CACHE_DIR / f"{ticker}_models.pkl"
+
+def save_models_cache(ticker: str, models: Dict, scaler=None, meta: Dict = None) -> None:
+    """Save trained models to cache."""
+    try:
+        cache_data = {
+            "models": models,
+            "scaler": scaler,
+            "meta": meta or {},
+        }
+        with open(_model_cache_path(ticker), "wb") as f:
+            pickle.dump(cache_data, f)
+        log.debug("Saved ML models for %s", ticker)
+    except Exception as e:
+        log.debug("Failed to cache models for %s: %s", ticker, e)
+
+def load_models_cache(ticker: str, max_age_days: int = 7) -> Optional[Dict]:
+    """Load cached models if fresh enough."""
+    path = _model_cache_path(ticker)
+    if not path.exists():
+        return None
+    try:
+        import os
+        mtime = os.path.getmtime(path)
+        from datetime import datetime
+        age_days = (datetime.now() - datetime.fromtimestamp(mtime)).days
+        if age_days > max_age_days:
+            return None
+        with open(path, "rb") as f:
+            cache_data = pickle.load(f)
+        log.debug("Loaded ML models for %s from cache", ticker)
+        return cache_data
+    except Exception:
+        return None
+
+def clear_model_cache() -> int:
+    """Clear all cached models. Returns count of files removed."""
+    count = 0
+    try:
+        for f in MODEL_CACHE_DIR.glob("*.pkl"):
+            f.unlink()
+            count += 1
+    except Exception as e:
+        log.warning("Failed to clear model cache: %s", e)
+    return count
 
 params = load_params()
 ml_cfg = params["ml"]
@@ -460,6 +514,78 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
                     is_commodity_map: Dict = None,
                     tv_close: float = None) -> Dict:
     try:
+        # Try to load cached models first
+        cached = load_models_cache(target, max_age_days=7)
+        if cached and "models" in cached:
+            log.info("%s: Using cached ML models", target)
+            try:
+                features = build_features(target_df_enriched, peer_close, target, is_commodity_map)
+                raw_close = target_df_enriched["Close"].dropna()
+                last_price = float(raw_close.iloc[-1])
+                last_price_source = "yfinance"
+                if tv_close is not None and tv_close > 0:
+                    last_price = float(tv_close)
+                    last_price_source = "TradingView"
+
+                features_full = build_features(target_df_enriched, peer_close, target, is_commodity_map)
+                feat_mask = features_full.notna().all(axis=1)
+                features_full_clean = features_full[feat_mask]
+
+                if features_full_clean.empty:
+                    return {"error": "Could not build a complete feature row for forecasting."}
+
+                scaler = cached.get("scaler")
+                models = cached.get("models")
+                meta = cached.get("meta", {})
+
+                last_feat_row = pd.DataFrame(
+                    scaler.transform(features_full_clean.iloc[[-1]]),
+                    columns=features_full_clean.columns,
+                )
+
+                # Predict using cached models
+                forecast = {}
+                pred_data = {}
+                w_xgb = ENSEMBLE_W.get("xgb", 0.5)
+                w_lgbm = ENSEMBLE_W.get("lgbm", 0.5)
+
+                for name in QUANTILES:
+                    xgb_m = models.get("xgb", {}).get(name)
+                    lgbm_m = models.get("lgbm", {}).get(name)
+                    if xgb_m and lgbm_m:
+                        xgb_pred = float(xgb_m.predict(last_feat_row)[0])
+                        lgbm_pred = float(lgbm_m.predict(last_feat_row)[0])
+                        ensemble_pred = w_xgb * xgb_pred + w_lgbm * lgbm_pred
+                        forecast[name] = {
+                            "price": round(last_price * (1 + ensemble_pred), 3),
+                            "return_pct": round(ensemble_pred * 100, 2),
+                        }
+                        pred_data[name] = {
+                            "xgb_return": xgb_pred * 100,
+                            "lgbm_return": lgbm_pred * 100,
+                        }
+
+                if not forecast:
+                    return {"error": "Cached models missing quantile models"}
+
+                return {
+                    "forecast": forecast,
+                    "last_date": raw_close.index[-1],
+                    "forecast_end": raw_close.index[-1] + pd.Timedelta(days=HORIZON),
+                    "last_price": last_price,
+                    "last_price_source": last_price_source,
+                    "feature_names": list(features.columns),
+                    "feature_importance": meta.get("feature_importance", {}),
+                    "eval": meta.get("eval", {}),
+                    "direction_accuracy": meta.get("direction_accuracy", {}),
+                    "ensemble_weights": ENSEMBLE_W,
+                    "pred_returns": pred_data,
+                    "cached": True,
+                }
+            except Exception as e:
+                log.warning("%s: Cached model prediction failed, retraining: %s", target, e)
+
+        # Train new models
         features = build_features(target_df_enriched, peer_close, target, is_commodity_map)
         target_y = build_target(target_df_enriched["Close"])
         target_dir = build_direction(target_df_enriched["Close"])
@@ -541,6 +667,14 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
             X_scaled, y, last_feat_row, last_price,
             xgb_params_tuned, lgbm_params_tuned
         )
+
+        # Save models to cache
+        if "models" in forecast_result:
+            save_models_cache(target, forecast_result["models"], scaler, meta={
+                "eval": eval_result,
+                "direction_accuracy": dir_acc,
+                "feature_importance": forecast_result.get("importances", {}).to_dict() if hasattr(forecast_result.get("importances"), "to_dict") else {},
+            })
 
         next_bdays = pd.bdate_range(start=last_date + pd.Timedelta(days=1), periods=HORIZON)
         forecast_start = next_bdays[0]

@@ -1476,8 +1476,8 @@ def _build_dashboard_html(signal_store) -> str:
       <div class="dash-card"><div class="dash-label">Total</div><div class="dash-value">{total}</div></div>
     </div>"""
 
-            # Trade details table (sorted by rec date, then ticker)
-            perf_sorted = perf_df.sort_values(["rec_date", "ticker"])
+            # Trade details table (sorted by rec date descending - most recent first)
+            perf_sorted = perf_df.sort_values(["rec_date", "ticker"], ascending=[False, True])
             perf_rows_html = ""
             for _, r in perf_sorted.iterrows():
                 if r["exit_reason"] == "tp3":
@@ -1504,7 +1504,13 @@ def _build_dashboard_html(signal_store) -> str:
 
                 rec_date_str = fmt_date(r["rec_date"])
                 entry_date_str = fmt_date(r["entry_date"])
-                exit_date_str = fmt_date(r["exit_date"])
+                # Show exit date only if trade is closed
+                if r["exit_reason"] == "open":
+                    exit_date_str = "—"
+                    exit_price_str = "—"
+                else:
+                    exit_date_str = fmt_date(r["exit_date"])
+                    exit_price_str = f"{r['exit_price']:.2f}"
 
                 perf_rows_html += f"""<tr>
                   <td>{rec_date_str}</td>
@@ -1512,7 +1518,7 @@ def _build_dashboard_html(signal_store) -> str:
                   <td>{exit_date_str}</td>
                   <td><b>{r['ticker']}</b></td>
                   <td>{r['entry']:.2f}</td>
-                  <td>{r['exit_price']:.2f}</td>
+                  <td>{exit_price_str}</td>
                   <td>{badge}</td>
                   <td class="{cls}">{r['pnl_pct']:+.1f}%</td>
                   <td>{r['r_multiple']:+.2f}R</td>

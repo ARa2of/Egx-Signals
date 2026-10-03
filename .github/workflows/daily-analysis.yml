@@ -50,6 +50,24 @@ jobs:
           restore-keys: |
             fx-cache-${{ runner.os }}-
 
+      - name: Cache stock data
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: stock-data-${{ github.run_id }}
+          restore-keys: |
+            stock-data-${{ github.run_date }}-
+            stock-data-
+
+      - name: Cache ML models
+        uses: actions/cache@v4
+        with:
+          path: data/model_cache
+          key: ml-models-${{ github.run_id }}
+          restore-keys: |
+            ml-models-${{ github.run_date }}-
+            ml-models-
+
       - name: Update fundamentals cache
         run: python scripts/update_fundamentals.py --force
 

@@ -53,6 +53,41 @@ TA_USER_AGENT = tv_cfg["user_agent"]
 REFERENCE_PE_EGX = params["fundamentals"]["reference_pe_egx"]
 
 # ─────────────────────────────────────────────────────────────
+# Data Caching
+# ─────────────────────────────────────────────────────────────
+CACHE_DIR = Path(__file__).parent.parent.parent / "data" / "cache"
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+def _cache_path(ticker: str) -> Path:
+    """Get cache file path for a ticker."""
+    return CACHE_DIR / f"{ticker}_history.parquet"
+
+def load_from_cache(ticker: str, max_age_days: int = 1) -> Optional[pd.DataFrame]:
+    """Load cached history data if fresh enough."""
+    path = _cache_path(ticker)
+    if not path.exists():
+        return None
+    try:
+        mtime = datetime.fromtimestamp(path.stat().st_mtime)
+        age_days = (datetime.now() - mtime).days
+        if age_days > max_age_days:
+            return None
+        df = pd.read_parquet(path)
+        if df.empty or len(df) < MIN_TRADING_DAYS:
+            return None
+        return df
+    except Exception:
+        return None
+
+def save_to_cache(ticker: str, df: pd.DataFrame) -> None:
+    """Save history data to cache."""
+    try:
+        path = _cache_path(ticker)
+        df.to_parquet(path)
+    except Exception as e:
+        log.debug("Failed to cache %s: %s", ticker, e)
+
+# ─────────────────────────────────────────────────────────────
 # Data Classes
 # ─────────────────────────────────────────────────────────────
 @dataclass
@@ -130,12 +165,23 @@ def to_yf_ticker(raw: str) -> str:
 # ─────────────────────────────────────────────────────────────
 # yfinance Download
 # ─────────────────────────────────────────────────────────────
-def download_all(tickers: List[str], cache: Dict[str, TickerData]) -> None:
+def download_all(tickers: List[str], cache: Dict[str, TickerData],
+                 use_cache: bool = True, max_cache_age_days: int = 1) -> None:
     for raw in tickers:
         if raw in cache:
             continue
         yf_ticker = to_yf_ticker(raw)
         entry = TickerData(raw_ticker=raw, yf_ticker=yf_ticker)
+
+        # Try cache first
+        if use_cache:
+            cached = load_from_cache(raw, max_age=max_cache_age_days)
+            if cached is not None:
+                entry.history = cached
+                entry.ok = True
+                cache[raw] = entry
+                log.debug("Loaded %s from cache", raw)
+                continue
 
         try:
             hist = yf.download(
@@ -159,6 +205,9 @@ def download_all(tickers: List[str], cache: Dict[str, TickerData]) -> None:
                 else:
                     entry.history = hist
                     entry.ok = True
+                    # Save to cache
+                    if use_cache:
+                        save_to_cache(raw, hist)
 
         except Exception as e:
             entry.reason = f"download error: {e}"
