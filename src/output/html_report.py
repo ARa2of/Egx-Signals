@@ -1763,49 +1763,6 @@ def _build_dashboard_html(signal_store) -> str:
     else:
         chart_html = ""
 
-    # ── Recent Trades Table ──
-    recent = evaluated.sort_values("run_date", ascending=False).head(10)
-    rows_html = ""
-    for _, r in recent.iterrows():
-        outcome = r.get("outcome", "pending")
-        if outcome == "tp1_hit":
-            badge_cls = "tp1"
-        elif outcome == "tp2_hit":
-            badge_cls = "tp2"
-        elif outcome == "tp3_hit":
-            badge_cls = "tp3"
-        elif outcome == "stop_loss":
-            badge_cls = "sl"
-        else:
-            badge_cls = "expired"
-        run_dt = r["run_date"]
-        if hasattr(run_dt, "strftime"):
-            date_str = run_dt.strftime("%d %b")
-        else:
-            date_str = str(run_dt)
-        rows_html += f"""<tr>
-          <td>{date_str}</td>
-          <td><b>{r['ticker']}</b></td>
-          <td>{r.get('recommendation','')}</td>
-          <td>{r.get('entry_price',0):.2f}</td>
-          <td><span class="outcome-badge {badge_cls}">{outcome}</span></td>
-          <td>{r.get('r_multiple',0):+.2f}R</td>
-          <td>{r.get('hold_days',0)}</td>
-          <td>{r.get('pnl_pct',0):+.1f}%</td>
-        </tr>"""
-
-    trades_table = f"""
-    <div class="dash-table-wrap">
-      <div class="dash-table-title">Recent Trades (Last 10)</div>
-      <table class="dash-table">
-        <thead><tr>
-          <th>Date</th><th>Ticker</th><th>Rec</th><th>Entry</th>
-          <th>Outcome</th><th>R-Multiple</th><th>Hold</th><th>PnL</th>
-        </tr></thead>
-        <tbody>{rows_html}</tbody>
-      </table>
-    </div>"""
-
     # ── Performance by Regime ──
     regime_perf = evaluated.groupby("regime").agg(
         count=("ticker", "count"),
@@ -1874,7 +1831,6 @@ def _build_dashboard_html(signal_store) -> str:
   {summary_html}
   {chart_html}
   <div class="dash-grid">
-    {trades_table}
     <div>
       {regime_table}
       {cal_table}
