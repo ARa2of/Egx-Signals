@@ -172,6 +172,15 @@ def append_signals(signals: List[Dict]) -> int:
     # Read existing store
     existing = pq.read_table(SIGNAL_STORE_PATH).to_pandas()
 
+    # Ensure existing has all schema columns (for migration)
+    for field in SIGNAL_SCHEMA:
+        col = field.name
+        if col not in existing.columns:
+            existing[col] = None
+
+    # Reorder existing columns to match schema
+    existing = existing[[f.name for f in SIGNAL_SCHEMA]]
+
     # Combine and deduplicate (keep latest for same ticker+run_date)
     combined = pd.concat([existing, df], ignore_index=True)
     combined.drop_duplicates(subset=["run_date", "ticker"], keep="last", inplace=True)

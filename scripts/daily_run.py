@@ -749,7 +749,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             "intraday_vwap_score": row.get("intraday_vwap_score"),
             "intraday_ad_signal": row.get("intraday_ad_signal"),
             "intraday_ad_score": row.get("intraday_ad_score"),
-            "intraday_adjustments": row.get("intraday_adjustments", {}),
+            "intraday_adjustments": str(row.get("intraday_adjustments", {})),
             # Chart data
             "chart_dates": row.get("chart_dates"),
             "chart_open": row.get("chart_open"),
