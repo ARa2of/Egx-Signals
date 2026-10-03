@@ -175,7 +175,7 @@ def download_all(tickers: List[str], cache: Dict[str, TickerData],
 
         # Try cache first
         if use_cache:
-            cached = load_from_cache(raw, max_age=max_cache_age_days)
+            cached = load_from_cache(raw, max_age_days=max_cache_age_days)
             if cached is not None:
                 entry.history = cached
                 entry.ok = True
