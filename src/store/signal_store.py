@@ -115,6 +115,13 @@ SIGNAL_SCHEMA = pa.schema([
     ("intraday_ad_score", pa.float64()),
     ("intraday_adjustments", pa.string()),
 
+    # Personalized holding period
+    ("hold_personalized", pa.bool_()),
+    ("hold_confidence", pa.float64()),
+    ("hold_days_min", pa.int32()),
+    ("hold_days_max", pa.int32()),
+    ("hold_days_target", pa.int32()),
+
     # Outcome tracking
     ("outcome", pa.string()),
     ("outcome_date", pa.date32()),

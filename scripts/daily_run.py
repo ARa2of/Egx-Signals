@@ -29,6 +29,7 @@ from src.signals.ml import run_ml_pipeline, compute_ml_conviction
 from src.signals.scoring import compute_base_score
 from src.signals.chartscan import init_chartscan, chartscan_analyze, is_enabled as chartscan_enabled
 from src.trade.planner import build_trade_plan
+from src.trade.holding_engine import compute_personalized_hold, format_hold_label
 from src.data.intraday_analysis import run_intraday_analysis
 from src.store.signal_store import append_signals, export_latest_csv
 from src.output.excel import export_analysis, append_daily_history
@@ -355,6 +356,38 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 intraday_data=intraday_result if not intraday_result.get("skipped") else None,
             )
 
+            # Personalized holding period
+            atr_pct = None
+            if trade.get("atr") and current_price:
+                atr_pct = (trade["atr"] / current_price) * 100
+
+            personalized_hold = compute_personalized_hold(
+                signal_store=load_store(),
+                ticker=raw,
+                atr_pct=atr_pct,
+                regime=regime.get("regime", "unknown"),
+                rsi=rsi,
+                adx=adx,
+            )
+            hold_label = format_hold_label(
+                personalized_hold["hold_days_min"],
+                personalized_hold["hold_days_max"],
+                personalized_hold["exit_strategy"]
+            )
+
+            # Override generic holding with personalized
+            trade["holding"] = {
+                "min_weeks": round(personalized_hold["hold_days_min"] / 5, 1),
+                "max_weeks": round(personalized_hold["hold_days_max"] / 5, 1),
+                "target_weeks": round(personalized_hold["hold_days_target"] / 5, 1),
+                "duration_label": hold_label,
+                "exit_strategy": personalized_hold["exit_strategy"],
+                "exit_triggers": [],
+                "personalized": True,
+                "confidence": personalized_hold["confidence"],
+                "factors": personalized_hold["factors"],
+            }
+
             # Build output row
             row = {
                 "Analysis Run Date": date.today(),
@@ -501,6 +534,11 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "hold_label": trade.get("holding", {}).get("duration_label", ""),
                 "hold_exit_strategy": trade.get("holding", {}).get("exit_strategy", ""),
                 "hold_exit_triggers": trade.get("holding", {}).get("exit_triggers", []),
+                "hold_personalized": trade.get("holding", {}).get("personalized", False),
+                "hold_confidence": trade.get("holding", {}).get("confidence", 0),
+                "hold_days_min": personalized_hold["hold_days_min"],
+                "hold_days_max": personalized_hold["hold_days_max"],
+                "hold_days_target": personalized_hold["hold_days_target"],
                 # Intraday data (tvDatafeed)
                 "intraday_rsi": intraday_rsi,
                 "intraday_vwap": intraday_vwap,
@@ -750,6 +788,12 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             "intraday_ad_signal": row.get("intraday_ad_signal"),
             "intraday_ad_score": row.get("intraday_ad_score"),
             "intraday_adjustments": str(row.get("intraday_adjustments", {})),
+            # Personalized holding period
+            "hold_personalized": row.get("hold_personalized", False),
+            "hold_confidence": row.get("hold_confidence", 0),
+            "hold_days_min": row.get("hold_days_min"),
+            "hold_days_max": row.get("hold_days_max"),
+            "hold_days_target": row.get("hold_days_target"),
             # Chart data
             "chart_dates": row.get("chart_dates"),
             "chart_open": row.get("chart_open"),
