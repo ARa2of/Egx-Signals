@@ -505,7 +505,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "intraday_rsi": intraday_rsi,
                 "intraday_vwap": intraday_vwap,
                 "intraday_volatility_pct": intraday_volatility,
-                "intraday_data_quality": intraday.get("data_quality", "none"),
+                "intraday_data_quality": intraday_result.get("skipped", False) and "skipped" or "available",
                 # Intraday analysis (5-min)
                 "intraday_score": intraday_score,
                 "intraday_volume_skew": intraday_details.get("volume_profile", {}).get("volume_skew") if intraday_details else None,
