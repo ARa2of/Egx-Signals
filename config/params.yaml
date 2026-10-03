@@ -8,14 +8,29 @@ description: "Core scoring and trade plan parameters"
 # SCORING WEIGHTS (sum to 100)
 # ─────────────────────────────────────────────────────────────
 weights:
-  trend: 25.0
-  macd: 12.0
-  rsi: 12.0
-  volume: 12.0
-  adi: 10.0
-  support: 10.0
-  vwap: 10.0
-  volume_profile: 9.0
+  trend: 20.0
+  macd: 8.0
+  rsi: 8.0
+  volume: 8.0
+  adi: 6.0
+  support: 6.0
+  vwap: 6.0
+  volume_profile: 8.0
+  intraday: 30.0
+
+# ─────────────────────────────────────────────────────────────
+# INTRADAY SCORING (5-min data, Buy/Watch tickers only)
+# ─────────────────────────────────────────────────────────────
+intraday:
+  enabled: true
+  min_bars: 50
+  fetch_bars: 400  # ~5 sessions of 5-min bars
+  cache_hours: 4
+  components:
+    volume_profile_weight: 0.30
+    momentum_weight: 0.30
+    vwap_weight: 0.25
+    ad_weight: 0.15
 
 # ─────────────────────────────────────────────────────────────
 # RECOMMENDATION THRESHOLDS

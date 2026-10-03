@@ -29,6 +29,7 @@ from src.signals.ml import run_ml_pipeline, compute_ml_conviction
 from src.signals.scoring import compute_base_score
 from src.signals.chartscan import init_chartscan, chartscan_analyze, is_enabled as chartscan_enabled
 from src.trade.planner import build_trade_plan
+from src.data.intraday_analysis import run_intraday_analysis
 from src.store.signal_store import append_signals, export_latest_csv
 from src.output.excel import export_analysis, append_daily_history
 from src.output.alerts import send_daily_alert, send_error_alert
@@ -294,6 +295,18 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             buy_multiplier = mf.get("buy_vol_multiplier")
             is_volume_spike = buy_multiplier is not None and buy_multiplier >= params["volume"]["spike_multiplier"]
 
+            # Intraday Analysis (5-min data, cached)
+            intraday_result = run_intraday_analysis(raw)
+            intraday_score = intraday_result.get("intraday_score") if not intraday_result.get("skipped") else None
+            intraday_details = None if intraday_result.get("skipped") else {
+                "volume_profile": intraday_result.get("volume_profile", {}),
+                "momentum": intraday_result.get("momentum", {}),
+                "vwap": intraday_result.get("vwap", {}),
+                "accumulation_distribution": intraday_result.get("accumulation_distribution", {}),
+            }
+            if intraday_score is not None:
+                log.info("%s: Intraday score=%.1f", raw, intraday_score)
+
             base_score = compute_base_score(
                 current_price=current_price,
                 ema20=ema20, ema50=ema50, ema200=ema200,
@@ -310,6 +323,8 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 poc=vol_profile.get("poc"),
                 va_high=vol_profile.get("va_high"),
                 va_low=vol_profile.get("va_low"),
+                intraday_score=intraday_score,
+                intraday_details=intraday_details,
             )
 
             # Death cross override
@@ -337,6 +352,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 capital=100000, risk_pct=1.0,
                 regime=regime, patterns=patterns, mae_pct=mae_pct,
                 vol_profile=vol_profile, current_price=current_price,
+                intraday_data=intraday_result if not intraday_result.get("skipped") else None,
             )
 
             # Build output row
@@ -490,6 +506,14 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "intraday_vwap": intraday_vwap,
                 "intraday_volatility_pct": intraday_volatility,
                 "intraday_data_quality": intraday.get("data_quality", "none"),
+                # Intraday analysis (5-min)
+                "intraday_score": intraday_score,
+                "intraday_volume_skew": intraday_details.get("volume_profile", {}).get("volume_skew") if intraday_details else None,
+                "intraday_momentum": intraday_details.get("momentum", {}).get("momentum_score") if intraday_details else None,
+                "intraday_vwap_score": intraday_details.get("vwap", {}).get("vwap_score") if intraday_details else None,
+                "intraday_ad_signal": intraday_details.get("accumulation_distribution", {}).get("ad_signal") if intraday_details else None,
+                "intraday_ad_score": intraday_details.get("accumulation_distribution", {}).get("ad_score") if intraday_details else None,
+                "intraday_adjustments": trade.get("intraday_adjustments", {}),
             }
 
             # ── OHLCV history for chart (last 3 months) ──
@@ -718,6 +742,14 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             "intraday_vwap": row.get("intraday_vwap"),
             "intraday_volatility_pct": row.get("intraday_volatility_pct"),
             "intraday_data_quality": row.get("intraday_data_quality", "none"),
+            # Intraday analysis (5-min)
+            "intraday_score": row.get("intraday_score"),
+            "intraday_volume_skew": row.get("intraday_volume_skew"),
+            "intraday_momentum": row.get("intraday_momentum"),
+            "intraday_vwap_score": row.get("intraday_vwap_score"),
+            "intraday_ad_signal": row.get("intraday_ad_signal"),
+            "intraday_ad_score": row.get("intraday_ad_score"),
+            "intraday_adjustments": row.get("intraday_adjustments", {}),
             # Chart data
             "chart_dates": row.get("chart_dates"),
             "chart_open": row.get("chart_open"),

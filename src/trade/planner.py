@@ -220,7 +220,7 @@ def _score_candidate(candidate_price: float, indic: Dict, sr: Dict, fib_levels: 
 # ─────────────────────────────────────────────────────────────
 def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
                        candle_score_delta: int = 0, ml_conviction: Dict = None,
-                       vol_profile: Dict = None) -> Dict:
+                       vol_profile: Dict = None, entry_adjustment: int = 0) -> Dict:
     last_price = indic["close"]
     atr = indic["atr"]
     fib_levels = fib.get("levels", [])
@@ -731,7 +731,8 @@ def compute_holding_recommendation(forecast: Dict, trade: Dict, regime: Dict, pa
 def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
                      capital: float = 10000.0, risk_pct: float = 1.0,
                      regime: Dict = None, patterns: Dict = None, mae_pct: float = None,
-                     vol_profile: Dict = None, current_price: float = None) -> Dict:
+                     vol_profile: Dict = None, current_price: float = None,
+                     intraday_data: Dict = None) -> Dict:
     indic = _get_indicators(df_tech)
     last_price = indic["close"]
 
@@ -746,13 +747,56 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
     # ML conviction first
     conviction = compute_ml_conviction(forecast, last_price, mae_pct)
 
-    # Entry zone (uses conviction + candle delta)
+    # Intraday adjustments to entry/exit
+    intraday_adjustments = {}
+    if intraday_data and not intraday_data.get("skipped"):
+        ad_signal = intraday_data.get("accumulation_distribution", {}).get("ad_signal", "neutral")
+        vwap_trend = intraday_data.get("vwap", {}).get("vwap_trend", "neutral")
+        momentum_trend = intraday_data.get("momentum", {}).get("session_trend", "stable")
+        vol_skew = intraday_data.get("volume_profile", {}).get("volume_skew", 0)
+
+        # Tighter stop if intraday is bearish
+        stop_adjustment = 1.0
+        if ad_signal == "bearish" or vwap_trend == "below":
+            stop_adjustment = 1.2  # 20% wider stop
+            intraday_adjustments["stop_note"] = "Intraday bearish — wider stop"
+        elif ad_signal == "bullish" and vwap_trend == "above":
+            stop_adjustment = 0.85  # 15% tighter stop
+            intraday_adjustments["stop_note"] = "Intraday bullish — tighter stop"
+
+        # Entry urgency adjustment
+        entry_adjustment = 0
+        if momentum_trend == "accelerating" and ad_signal == "bullish":
+            entry_adjustment = 1  # More urgent
+            intraday_adjustments["entry_note"] = "Intraday momentum accelerating"
+        elif momentum_trend == "decelerating":
+            entry_adjustment = -1  # Less urgent
+            intraday_adjustments["entry_note"] = "Intraday momentum decelerating"
+
+        # Volume skew adjustment
+        if vol_skew > 0.3:
+            intraday_adjustments["volume_note"] = "Heavy buying at lows (accumulation)"
+        elif vol_skew < -0.3:
+            intraday_adjustments["volume_note"] = "Heavy selling at highs (distribution)"
+    else:
+        stop_adjustment = 1.0
+        entry_adjustment = 0
+
+    # Entry zone (uses conviction + candle delta + intraday)
     entry = compute_entry_zone(indic, sr, fib, forecast,
                                candle_score_delta=patterns.get("score_delta", 0),
                                ml_conviction=conviction,
-                               vol_profile=vol_profile)
+                               vol_profile=vol_profile,
+                               entry_adjustment=entry_adjustment)
 
     stop = compute_stop_loss(entry["entry_ideal"], entry["stop_price"], indic["atr"], sr)
+    # Apply intraday stop adjustment
+    if stop_adjustment != 1.0 and "stop_price" in stop:
+        adjusted_stop = entry["entry_ideal"] - (entry["entry_ideal"] - stop["stop_price"]) * stop_adjustment
+        stop["stop_price"] = round(adjusted_stop, 3)
+        if "method" in stop:
+            stop["method"] += f" ({stop_adjustment:.0%} intraday adj)"
+
     tps = compute_take_profits(entry["entry_ideal"], stop["stop_price"], forecast, sr, fib, last_price=last_price)
     pos = compute_position_size(capital, entry["entry_ideal"], stop["stop_price"], risk_pct)
     signal = compute_signal_score(last_price, df_tech, sr, forecast, entry["entry_ideal"])
@@ -765,4 +809,5 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
         "entry": entry, "stop": stop, "targets": tps, "position": pos,
         "signal": signal, "conviction": conviction, "holding": holding,
         "regime": regime, "patterns": patterns,
+        "intraday_adjustments": intraday_adjustments,
     }

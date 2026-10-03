@@ -44,6 +44,7 @@ weights/*.pth
 .cache/
 data/cache/
 data/model_cache/
+data/intraday_cache/
 
 # Environment
 .env

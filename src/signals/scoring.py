@@ -25,6 +25,7 @@ SCORE_WEIGHT_ADI = weights_cfg["adi"]
 SCORE_WEIGHT_SUPPORT = weights_cfg["support"]
 SCORE_WEIGHT_VWAP = weights_cfg.get("vwap", 5)
 SCORE_WEIGHT_VP = weights_cfg.get("volume_profile", 5)
+SCORE_WEIGHT_INTRADAY = weights_cfg.get("intraday", 0)
 
 SCORE_BUY_THRESHOLD = thresholds_cfg["buy"]
 SCORE_WATCH_THRESHOLD = thresholds_cfg["watch"]
@@ -277,9 +278,11 @@ def compute_base_score(current_price: Optional[float],
                        support: Optional[float],
                        dist_vwap: Optional[float] = None, vwap: Optional[float] = None,
                        above_poc: Optional[bool] = None, poc: Optional[float] = None,
-                       va_high: Optional[float] = None, va_low: Optional[float] = None) -> Dict:
+                       va_high: Optional[float] = None, va_low: Optional[float] = None,
+                       intraday_score: Optional[float] = None,
+                       intraday_details: Optional[Dict] = None) -> Dict:
     """
-    Compute the 0-100 base score from all eight categories.
+    Compute the 0-100 base score from all categories (including intraday).
     Returns dict with score, breakdown, and recommendation.
     """
     reasons = []
@@ -294,7 +297,40 @@ def compute_base_score(current_price: Optional[float],
     vwap_val, vwap_reasons = score_vwap(dist_vwap, vwap, current_price)
     vp_val, vp_reasons = score_volume_profile(above_poc, poc, va_high, va_low, current_price)
 
-    # Convert to weighted points (new total: 100 points)
+    # Intraday score (0-100) — normalize to 0-1
+    if intraday_score is not None:
+        intraday_val = intraday_score / 100.0
+        # Intraday reasons
+        if intraday_details:
+            vp = intraday_details.get("volume_profile", {})
+            mom = intraday_details.get("momentum", {})
+            vw = intraday_details.get("vwap", {})
+            ad = intraday_details.get("accumulation_distribution", {})
+
+            if vp.get("volume_skew", 0) > 0.2:
+                reasons.append(f"Intraday volume skew bullish ({vp['volume_skew']:.2f})")
+            elif vp.get("volume_skew", 0) < -0.2:
+                reasons.append(f"Intraday volume skew bearish ({vp['volume_skew']:.2f})")
+
+            if mom.get("session_trend") == "accelerating":
+                reasons.append(f"Intraday momentum accelerating (RSI accel +{mom.get('rsi_acceleration', 0):.1f})")
+            elif mom.get("session_trend") == "decelerating":
+                reasons.append(f"Intraday momentum decelerating")
+
+            if vw.get("vwap_trend") == "above":
+                reasons.append(f"Price sustained above VWAP ({vw.get('avg_distance_from_vwap', 0):+.1f}%)")
+            elif vw.get("vwap_trend") == "below":
+                reasons.append(f"Price sustained below VWAP ({vw.get('avg_distance_from_vwap', 0):+.1f}%)")
+
+            if ad.get("ad_signal") == "bullish":
+                reasons.append(f"Intraday accumulation detected (MFI={ad.get('money_flow_index', 0):.0f})")
+            elif ad.get("ad_signal") == "bearish":
+                reasons.append(f"Intraday distribution detected (MFI={ad.get('money_flow_index', 0):.0f})")
+    else:
+        intraday_val = 0.5  # Neutral if not available
+        reasons.append("Intraday data not available (neutral)")
+
+    # Convert to weighted points (total: 100 points)
     trend_pts = trend_val * SCORE_WEIGHT_TREND
     macd_pts = macd_val * SCORE_WEIGHT_MACD
     rsi_pts = rsi_val * SCORE_WEIGHT_RSI
@@ -303,8 +339,9 @@ def compute_base_score(current_price: Optional[float],
     support_pts = support_val * SCORE_WEIGHT_SUPPORT
     vwap_pts = vwap_val * SCORE_WEIGHT_VWAP
     vp_pts = vp_val * SCORE_WEIGHT_VP
+    intraday_pts = intraday_val * SCORE_WEIGHT_INTRADAY
 
-    raw_score = trend_pts + macd_pts + rsi_pts + volume_pts + adi_pts + support_pts + vwap_pts + vp_pts
+    raw_score = trend_pts + macd_pts + rsi_pts + volume_pts + adi_pts + support_pts + vwap_pts + vp_pts + intraday_pts
     raw_score = max(0.0, min(100.0, raw_score))
 
     reasons.extend(trend_reasons)
@@ -325,6 +362,7 @@ def compute_base_score(current_price: Optional[float],
         "support": round(support_pts, 2),
         "vwap": round(vwap_pts, 2),
         "volume_profile": round(vp_pts, 2),
+        "intraday": round(intraday_pts, 2),
     }
 
     # Recommendation

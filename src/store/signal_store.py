@@ -106,6 +106,15 @@ SIGNAL_SCHEMA = pa.schema([
     ("intraday_volatility_pct", pa.float64()),
     ("intraday_data_quality", pa.string()),
 
+    # Intraday analysis (5-min)
+    ("intraday_score", pa.float64()),
+    ("intraday_volume_skew", pa.float64()),
+    ("intraday_momentum", pa.float64()),
+    ("intraday_vwap_score", pa.float64()),
+    ("intraday_ad_signal", pa.string()),
+    ("intraday_ad_score", pa.float64()),
+    ("intraday_adjustments", pa.string()),
+
     # Outcome tracking
     ("outcome", pa.string()),
     ("outcome_date", pa.date32()),
