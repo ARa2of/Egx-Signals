@@ -1566,6 +1566,49 @@ def _build_dashboard_html(signal_store) -> str:
       </table>
     </div>"""
 
+            # ── Top Performing Tickers ──
+            top_tickers_html = ""
+            try:
+                ticker_perf = perf_df.groupby("ticker").agg(
+                    trades=("ticker", "count"),
+                    wins=("exit_reason", lambda x: x.isin(["tp1", "tp2", "tp3"]).sum()),
+                    win_rate=("exit_reason", lambda x: x.isin(["tp1", "tp2", "tp3"]).mean()),
+                    avg_pnl=("pnl_pct", "mean"),
+                    avg_r=("r_multiple", "mean"),
+                    total_pnl=("pnl_pct", "sum"),
+                ).reset_index()
+                # Filter to tickers with at least 2 trades
+                ticker_perf = ticker_perf[ticker_perf["trades"] >= 2].copy()
+                # Sort by win rate, then avg PnL
+                ticker_perf = ticker_perf.sort_values(["win_rate", "avg_pnl"], ascending=[False, False]).head(10)
+
+                if not ticker_perf.empty:
+                    ticker_rows_html = ""
+                    for rank, (_, row) in enumerate(ticker_perf.iterrows(), 1):
+                        wr = row["win_rate"]
+                        wr_cls = "green" if wr >= 0.5 else ("yellow" if wr >= 0.3 else "red")
+                        pnl_cls = "green" if row["avg_pnl"] > 0 else "red"
+                        ticker_rows_html += f"""<tr>
+                          <td>{rank}</td>
+                          <td><b>{row['ticker']}</b></td>
+                          <td>{int(row['trades'])}</td>
+                          <td>{int(row['wins'])}</td>
+                          <td class="{wr_cls}">{wr:.0%}</td>
+                          <td class="{pnl_cls}">{row['avg_pnl']:+.1f}%</td>
+                          <td>{row['avg_r']:+.2f}R</td>
+                        </tr>"""
+
+                    top_tickers_html = f"""
+    <div class="dash-table-wrap">
+      <div class="dash-table-title">Top Performing Tickers (by Win Rate, min 2 trades)</div>
+      <table class="dash-table">
+        <thead><tr><th>#</th><th>Ticker</th><th>Trades</th><th>Wins</th><th>Win Rate</th><th>Avg P&L</th><th>Avg R</th></tr></thead>
+        <tbody>{ticker_rows_html}</tbody>
+      </table>
+    </div>"""
+            except Exception as e:
+                top_tickers_html = f"<div style='color:#8b8fa3;font-size:12px;'>Ticker performance unavailable: {str(e)}</div>"
+
             # ── Monthly Performance vs EGX100 Benchmark ──
             monthly_perf_html = ""
             try:
@@ -1670,7 +1713,7 @@ def _build_dashboard_html(signal_store) -> str:
             except Exception as e:
                 monthly_perf_html = f"<div style='color:#8b8fa3;font-size:12px;'>Monthly comparison unavailable: {str(e)}</div>"
 
-            buy_perf_html = f"{buy_perf_summary}{buy_perf_table}{score_cal_table}{monthly_perf_html}"
+            buy_perf_html = f"{buy_perf_summary}{buy_perf_table}{score_cal_table}{top_tickers_html}{monthly_perf_html}"
 
     # Filter to signals with real outcomes
     evaluated = signal_store[has_outcome].copy()
