@@ -126,6 +126,13 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
     rows = []
     index_rows = []
 
+    # Load signal store once for personalized hold calculations
+    from src.store.signal_store import load_store as _load_store_for_hold
+    try:
+        signal_store_df = _load_store_for_hold()
+    except Exception:
+        signal_store_df = pd.DataFrame()
+
     for raw in valid_tickers:
         try:
             yf_entry = yf_cache[raw]
@@ -362,7 +369,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 atr_pct = (trade["atr"] / current_price) * 100
 
             personalized_hold = compute_personalized_hold(
-                signal_store=load_store(),
+                signal_store=signal_store_df,
                 ticker=raw,
                 atr_pct=atr_pct,
                 regime=regime.get("regime", "unknown"),
