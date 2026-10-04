@@ -89,6 +89,7 @@ jobs:
           git add -f data/signals.parquet data/history.csv 2>/dev/null || true
           git add -f docs/index.html 2>/dev/null || true
           git add output/latest_signals.csv 2>/dev/null || true
+          git add output/agent_data.json 2>/dev/null || true
           if ! git diff --staged --quiet; then
             git pull --rebase origin main 2>/dev/null || true
             git commit -m "Daily signals: ${{ github.run_id }}" || echo "Commit failed"

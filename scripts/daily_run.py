@@ -592,8 +592,8 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             # ── Consensus-based recommendation ──
             # Base (technical) signal
             base_rec = base_score["recommendation"]
-            # ML signal
-            ml_rec = "Buy" if conviction.get("conviction_score", 0) >= 45 else ("Watch" if conviction.get("conviction_score", 0) >= 25 else "Avoid")
+            # ML signal (threshold lowered from 45 to 35)
+            ml_rec = "Buy" if conviction.get("conviction_score", 0) >= 35 else ("Watch" if conviction.get("conviction_score", 0) >= 20 else "Avoid")
             # ChartScan AI signal
             cs_rec = "Buy" if cs_result and cs_result.get("signal") == "Buy" else ("Avoid" if cs_result and cs_result.get("signal") == "Sell" else "Watch")
 
@@ -608,6 +608,10 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 consensus_rec = "Buy"
                 agree = [n for n, r in [("Base", base_rec), ("ML", ml_rec), ("ChartScan", cs_rec)] if r == "Buy"]
                 consensus_basis = f"2/3 agree Buy: {', '.join(agree)}"
+            elif buy_votes == 1 and avoid_votes == 0:
+                consensus_rec = "Buy"
+                agree = [n for n, r in [("Base", base_rec), ("ML", ml_rec), ("ChartScan", cs_rec)] if r == "Buy"]
+                consensus_basis = f"1/3 Buy ({', '.join(agree)}), no Avoid votes — upgraded to Buy"
             elif buy_votes == 1:
                 consensus_rec = "Watch"
                 agree = [n for n, r in [("Base", base_rec), ("ML", ml_rec), ("ChartScan", cs_rec)] if r == "Buy"]
@@ -665,9 +669,10 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                     log.debug("%s: Momentum filter skipped (%s)", raw, e)
 
             # ── Entry Action Override ──
-            # If trade planner says AVOID (no clean setup), downgrade recommendation
+            # Only downgrade if entry action is truly AVOID (not WAIT)
             entry_action = trade["entry"].get("entry_action", "")
-            if "AVOID" in str(entry_action).upper() and consensus_rec in ("Buy", "Strong Buy"):
+            entry_action_upper = str(entry_action).upper()
+            if "AVOID" in entry_action_upper and "WAIT" not in entry_action_upper and consensus_rec in ("Buy", "Strong Buy"):
                 old_rec = consensus_rec
                 consensus_rec = "Watch"
                 consensus_basis = f"Trade planner: {entry_action} — downgrades {old_rec} to Watch"
@@ -716,6 +721,11 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
     html_path = Path(output_dir).parent / "docs" / "index.html"
     _store_df = _load_store_for_report()
     generate_html_report(rows, str(html_path), signal_store=_store_df)
+
+    # Generate AI agent JSON
+    from src.output.agent_json import generate_agent_json
+    agent_json_path = Path(output_dir) / "agent_data.json"
+    generate_agent_json(rows, str(agent_json_path))
 
     # 8. Append to signal store (transform to schema format)
     signal_records = []
