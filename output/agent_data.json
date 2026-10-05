@@ -12,7 +12,7 @@
       "Avoid": 18
     },
     "avg_score": 49.0,
-    "min_score": 20.3,
+    "min_score": 20.4,
     "max_score": 78.5,
     "buy_tickers": [],
     "watch_tickers": [
@@ -217,7 +217,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid, ChartScan=Avoid",
-      "score": 46.87,
+      "score": 46.78,
       "score_breakdown": {
         "trend": 17.66,
         "macd": 0.0,
@@ -227,12 +227,12 @@
         "support": 1.96,
         "vwap": 2.4,
         "volume_profile": 1.6,
-        "intraday": 38.9
+        "intraday": 38.6
       },
       "price": {
         "current_egp": 23.29,
         "current_usd": 0.4452,
-        "fair_value_egp": 93.5613,
+        "fair_value_egp": 92.4478,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -323,10 +323,10 @@
         "high_price": 24.705
       },
       "intraday": {
-        "score": 38.9,
-        "volume_skew": -0.344,
-        "momentum": 27.1,
-        "vwap_score": 41.7,
+        "score": 38.6,
+        "volume_skew": -0.342,
+        "momentum": 25.9,
+        "vwap_score": 41.8,
         "ad_signal": "bullish",
         "ad_score": 0.4
       },
@@ -353,7 +353,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -5.7% since first Buy (76.60) — momentum filter downgrades Buy to Watch",
-      "score": 78.48,
+      "score": 78.45,
       "score_breakdown": {
         "trend": 20.0,
         "macd": 3.24,
@@ -363,7 +363,7 @@
         "support": 5.09,
         "vwap": 4.8,
         "volume_profile": 6.4,
-        "intraday": 66.5
+        "intraday": 66.4
       },
       "price": {
         "current_egp": 72.23,
@@ -464,10 +464,10 @@
         "high_price": 82.763
       },
       "intraday": {
-        "score": 66.5,
-        "volume_skew": 0.949,
-        "momentum": 57.3,
-        "vwap_score": 50.3,
+        "score": 66.4,
+        "volume_skew": 0.948,
+        "momentum": 57.1,
+        "vwap_score": 50.4,
         "ad_signal": "neutral",
         "ad_score": 0.0
       },
@@ -509,7 +509,7 @@
       "price": {
         "current_egp": 207.99,
         "current_usd": 3.6559,
-        "fair_value_egp": 1632.1971,
+        "fair_value_egp": 1873.6891,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -1491,7 +1491,7 @@
       "price": {
         "current_egp": 7.73,
         "current_usd": 0.1474,
-        "fair_value_egp": 22.6378,
+        "fair_value_egp": 22.9223,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -1593,7 +1593,7 @@
       },
       "intraday": {
         "score": 57.1,
-        "volume_skew": 0.426,
+        "volume_skew": 0.427,
         "momentum": 36.7,
         "vwap_score": 68.7,
         "ad_signal": "neutral",
@@ -1875,7 +1875,7 @@
       },
       "intraday": {
         "score": 57.4,
-        "volume_skew": 0.564,
+        "volume_skew": 0.566,
         "momentum": 38.6,
         "vwap_score": 47.3,
         "ad_signal": "bullish",
@@ -1919,7 +1919,7 @@
       "price": {
         "current_egp": 38.5,
         "current_usd": 0.7494,
-        "fair_value_egp": 116.1763,
+        "fair_value_egp": 117.2245,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -3157,7 +3157,7 @@
       "price": {
         "current_egp": 18.94,
         "current_usd": 0.3716,
-        "fair_value_egp": 10.9613,
+        "fair_value_egp": 10.0588,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
@@ -3686,7 +3686,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Watch",
       "recommendation_basis": "Trade planner: AVOID — downgrades Buy to Watch",
-      "score": 53.72,
+      "score": 53.87,
       "score_breakdown": {
         "trend": 20.0,
         "macd": 0.0,
@@ -3696,7 +3696,7 @@
         "support": 0.0,
         "vwap": 3.6,
         "volume_profile": 6.4,
-        "intraday": 40.4
+        "intraday": 40.9
       },
       "price": {
         "current_egp": 13.85,
@@ -3787,9 +3787,9 @@
         "high_price": 15.205
       },
       "intraday": {
-        "score": 40.4,
-        "volume_skew": -0.737,
-        "momentum": 50.2,
+        "score": 40.9,
+        "volume_skew": -0.734,
+        "momentum": 51.6,
         "vwap_score": 67.6,
         "ad_signal": "bearish",
         "ad_score": -0.4
@@ -3832,7 +3832,7 @@
       "price": {
         "current_egp": 57.03,
         "current_usd": 1.0871,
-        "fair_value_egp": 60.2244,
+        "fair_value_egp": 60.2764,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -3963,7 +3963,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -6.7% since first Buy (14.04) — momentum filter downgrades Buy to Watch",
-      "score": 61.58,
+      "score": 61.61,
       "score_breakdown": {
         "trend": 20.0,
         "macd": 3.38,
@@ -3973,7 +3973,7 @@
         "support": 0.0,
         "vwap": 3.6,
         "volume_profile": 4.8,
-        "intraday": 54.2
+        "intraday": 54.3
       },
       "price": {
         "current_egp": 13.1,
@@ -4079,9 +4079,9 @@
         "high_price": 14.634
       },
       "intraday": {
-        "score": 54.2,
-        "volume_skew": 0.214,
-        "momentum": 72.5,
+        "score": 54.3,
+        "volume_skew": 0.22,
+        "momentum": 72.4,
         "vwap_score": 39.1,
         "ad_signal": "bearish",
         "ad_score": -0.4
@@ -4109,7 +4109,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Watch",
       "recommendation_basis": "1/3 Buy (ML), others disagree",
-      "score": 41.14,
+      "score": 41.2,
       "score_breakdown": {
         "trend": 20.0,
         "macd": 0.0,
@@ -4119,7 +4119,7 @@
         "support": 0.0,
         "vwap": 0.6,
         "volume_profile": 4.8,
-        "intraday": 25.8
+        "intraday": 26.0
       },
       "price": {
         "current_egp": 1525.7,
@@ -4225,9 +4225,9 @@
         "high_price": 1633.038
       },
       "intraday": {
-        "score": 25.8,
+        "score": 26.0,
         "volume_skew": -0.962,
-        "momentum": 30.0,
+        "momentum": 30.8,
         "vwap_score": 22.9,
         "ad_signal": "bullish",
         "ad_score": 0.4
@@ -4255,7 +4255,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Watch",
       "recommendation_basis": "1/3 Buy (ChartScan), others disagree",
-      "score": 55.11,
+      "score": 55.14,
       "score_breakdown": {
         "trend": 20.0,
         "macd": 5.35,
@@ -4265,7 +4265,7 @@
         "support": 0.0,
         "vwap": 1.8,
         "volume_profile": 4.0,
-        "intraday": 60.8
+        "intraday": 60.9
       },
       "price": {
         "current_egp": 604.0,
@@ -4351,9 +4351,9 @@
         "high_price": 637.324
       },
       "intraday": {
-        "score": 60.8,
-        "volume_skew": 0.576,
-        "momentum": 39.9,
+        "score": 60.9,
+        "volume_skew": 0.575,
+        "momentum": 40.1,
         "vwap_score": 58.9,
         "ad_signal": "bullish",
         "ad_score": 0.4
@@ -4925,7 +4925,7 @@
       "price": {
         "current_egp": 27.44,
         "current_usd": 0.5363,
-        "fair_value_egp": 44.0394,
+        "fair_value_egp": 43.9331,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -5041,7 +5041,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid, ChartScan=Watch",
-      "score": 58.39,
+      "score": 58.42,
       "score_breakdown": {
         "trend": 20.0,
         "macd": 0.0,
@@ -5051,7 +5051,7 @@
         "support": 0.0,
         "vwap": 4.8,
         "volume_profile": 6.4,
-        "intraday": 54.2
+        "intraday": 54.3
       },
       "price": {
         "current_egp": 19.3,
@@ -5152,9 +5152,9 @@
         "high_price": 21.989
       },
       "intraday": {
-        "score": 54.2,
-        "volume_skew": 0.708,
-        "momentum": 31.0,
+        "score": 54.3,
+        "volume_skew": 0.706,
+        "momentum": 31.3,
         "vwap_score": 47.1,
         "ad_signal": "neutral",
         "ad_score": 0.0
@@ -5182,7 +5182,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid, ChartScan=Watch",
-      "score": 53.64,
+      "score": 53.73,
       "score_breakdown": {
         "trend": 18.93,
         "macd": 3.8,
@@ -5192,7 +5192,7 @@
         "support": 0.0,
         "vwap": 3.6,
         "volume_profile": 4.8,
-        "intraday": 47.6
+        "intraday": 47.9
       },
       "price": {
         "current_egp": 10.99,
@@ -5288,9 +5288,9 @@
         "high_price": 11.771
       },
       "intraday": {
-        "score": 47.6,
-        "volume_skew": -0.514,
-        "momentum": 66.0,
+        "score": 47.9,
+        "volume_skew": -0.518,
+        "momentum": 67.3,
         "vwap_score": 39.9,
         "ad_signal": "bullish",
         "ad_score": 0.4
@@ -5318,7 +5318,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch, ChartScan=Avoid",
-      "score": 44.0,
+      "score": 44.03,
       "score_breakdown": {
         "trend": 8.75,
         "macd": 0.0,
@@ -5328,7 +5328,7 @@
         "support": 4.12,
         "vwap": 2.4,
         "volume_profile": 4.8,
-        "intraday": 53.1
+        "intraday": 53.2
       },
       "price": {
         "current_egp": 8.08,
@@ -5419,9 +5419,9 @@
         "high_price": null
       },
       "intraday": {
-        "score": 53.1,
-        "volume_skew": 0.724,
-        "momentum": 34.2,
+        "score": 53.2,
+        "volume_skew": 0.725,
+        "momentum": 34.6,
         "vwap_score": 49.8,
         "ad_signal": "bearish",
         "ad_score": -0.4
@@ -5590,7 +5590,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid, ChartScan=Watch",
-      "score": 20.31,
+      "score": 20.43,
       "score_breakdown": {
         "trend": 3.0,
         "macd": 0.0,
@@ -5600,7 +5600,7 @@
         "support": 0.0,
         "vwap": 1.2,
         "volume_profile": 1.6,
-        "intraday": 37.7
+        "intraday": 38.1
       },
       "price": {
         "current_egp": 21.24,
@@ -5686,9 +5686,9 @@
         "high_price": 22.875
       },
       "intraday": {
-        "score": 37.7,
-        "volume_skew": 0.148,
-        "momentum": 17.2,
+        "score": 38.1,
+        "volume_skew": 0.151,
+        "momentum": 18.5,
         "vwap_score": 25.1,
         "ad_signal": "neutral",
         "ad_score": 0.2
@@ -5716,7 +5716,7 @@
       "run_date": "2026-10-05",
       "recommendation": "Watch",
       "recommendation_basis": "1/3 Buy (ChartScan), others disagree",
-      "score": 49.38,
+      "score": 49.32,
       "score_breakdown": {
         "trend": 20.0,
         "macd": 0.0,
@@ -5726,7 +5726,7 @@
         "support": 0.0,
         "vwap": 0.6,
         "volume_profile": 4.8,
-        "intraday": 50.5
+        "intraday": 50.3
       },
       "price": {
         "current_egp": 5.55,
@@ -5827,9 +5827,9 @@
         "high_price": 5.914
       },
       "intraday": {
-        "score": 50.5,
-        "volume_skew": 0.136,
-        "momentum": 47.0,
+        "score": 50.3,
+        "volume_skew": 0.165,
+        "momentum": 44.7,
         "vwap_score": 59.5,
         "ad_signal": "bearish",
         "ad_score": -0.4
@@ -6120,7 +6120,7 @@
       },
       "intraday": {
         "score": 42.2,
-        "volume_skew": -0.692,
+        "volume_skew": -0.691,
         "momentum": 43.6,
         "vwap_score": 37.8,
         "ad_signal": "bullish",
