@@ -441,21 +441,56 @@ def detect_trend_regime(df: pd.DataFrame) -> Dict:
     adx = float(last["ADX"]) if not pd.isna(last["ADX"]) else 0.0
 
     close = float(last["Close"])
-    sma50 = float(last.get("SMA_50", close))
-    sma200 = float(last.get("SMA_200", close))
 
-    di_plus = float(last.get("DI_plus", 0))
-    di_minus = float(last.get("DI_minus", 0))
+    def _safe_float(val, default):
+        if val is None:
+            return default
+        try:
+            f = float(val)
+            return default if pd.isna(f) else f
+        except (TypeError, ValueError):
+            return default
 
-    if di_plus > di_minus and close > sma50:
+    sma50 = _safe_float(last.get("SMA_50"), close)
+    sma200 = _safe_float(last.get("SMA_200"), close)
+    ema50 = _safe_float(last.get("EMA_50"), sma50)
+    ema200 = _safe_float(last.get("EMA_200"), sma200)
+
+    di_plus = _safe_float(last.get("DI_plus"), 0.0)
+    di_minus = _safe_float(last.get("DI_minus"), 0.0)
+
+    price_above_sma50 = close > sma50
+    di_bullish = di_plus > di_minus
+    # EMA structure is a stronger trend cue than a single DI snapshot
+    ema_bullish = ema50 > ema200
+
+    if di_bullish and price_above_sma50:
+        direction = "bullish"
+    elif ema_bullish and price_above_sma50 and di_plus >= di_minus * 0.75:
+        # Bullish EMA alignment + price above SMA50; DI not strongly against
+        direction = "bullish"
+    elif (not di_bullish) and ema_bullish and price_above_sma50 and di_plus >= di_minus * 0.5:
         direction = "bullish"
     elif di_minus > di_plus and close < sma50:
+        direction = "bearish"
+    elif (not ema_bullish) and close < sma50 and adx >= 25:
         direction = "bearish"
     else:
         direction = "neutral"
 
     if adx >= 25:
-        regime = "trending_up" if direction == "bullish" else ("trending_down" if direction == "bearish" else "trending")
+        if direction == "bullish":
+            regime = "trending_up"
+        elif direction == "bearish":
+            regime = "trending_down"
+        else:
+            # Strong ADX without clear DI direction but price above SMA50
+            # with bullish EMAs is still an uptrend structure.
+            if price_above_sma50 and ema_bullish:
+                regime = "trending_up"
+                direction = "bullish"
+            else:
+                regime = "trending"
         adx_label = "Strong Trend"
     elif adx >= 20:
         regime = "transitioning"

@@ -35,12 +35,16 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Download ChartScanAI weights
+      - name: Ensure ChartScanAI weights
         run: |
           mkdir -p weights
-          curl -L -o weights/custom_yolov8.pt \
-            https://github.com/Omar-Karimov/ChartScanAI/raw/main/weights/custom_yolov8.pt
-          echo "Downloaded $(du -h weights/custom_yolov8.pt | cut -f1) weights"
+          if [ ! -f weights/custom_yolov8.pt ]; then
+            echo "Weights missing from LFS checkout — downloading from ChartScanAI repo"
+            curl -L --retry 3 -o weights/custom_yolov8.pt \
+              https://github.com/Omar-Karimov/ChartScanAI/raw/main/weights/custom_yolov8.pt
+          fi
+          echo "ChartScan weights: $(du -h weights/custom_yolov8.pt | cut -f1)"
+          python -c "from ultralytics import YOLO; YOLO('weights/custom_yolov8.pt'); print('ChartScan model loads OK')"
 
       - name: Download FX cache
         uses: actions/cache@v4

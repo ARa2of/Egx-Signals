@@ -40,6 +40,27 @@ NEAR_SUPPORT_PCT = volume_cfg["near_support_pct"]
 ADL_WINDOW = data_cfg["adl_window"]
 
 # ─────────────────────────────────────────────────────────────
+# Regime → RSI Config Mapping
+# ─────────────────────────────────────────────────────────────
+def resolve_rsi_regime(regime: str) -> str:
+    """Map detector regime labels onto params.yaml rsi zones.
+
+    detect_trend_regime can emit 'trending' (ADX strong, DI neutral) and
+    'transitioning', which are not keys in rsi_cfg. A strong-ADX 'trending'
+    regime with price above the 50-MA is an uptrend structure — use
+    trending_up bands, not ranging.
+    """
+    if not regime:
+        return "ranging"
+    if regime in rsi_cfg:
+        return regime
+    if regime == "trending":
+        return "trending_up"
+    # transitioning / unknown → ranging
+    return "ranging"
+
+
+# ─────────────────────────────────────────────────────────────
 # Scoring Functions
 # ─────────────────────────────────────────────────────────────
 def score_trend(current_price: Optional[float], ema20: Optional[float],
@@ -103,8 +124,9 @@ def score_rsi(rsi: Optional[float], adx: Optional[float], regime: str = "unknown
     if rsi is None:
         return 0.0, reasons
 
-    # Get regime-specific RSI thresholds
-    regime_rsi = rsi_cfg.get(regime, rsi_cfg.get("ranging", {}))
+    # Get regime-specific RSI thresholds (map ambiguous regime labels)
+    regime_key = resolve_rsi_regime(regime)
+    regime_rsi = rsi_cfg.get(regime_key, rsi_cfg.get("ranging", {}))
     oversold = regime_rsi.get("oversold", RSI_OVERSOLD)
     healthy_low = regime_rsi.get("healthy_low", 40)
     healthy_high = regime_rsi.get("healthy_high", 70)
@@ -208,10 +230,19 @@ def score_support(is_near_support: bool, volume_confirmed: bool,
     return proximity_score, ["price near support"]
 
 def score_vwap(dist_vwap: Optional[float], vwap: Optional[float],
-               current_price: Optional[float] = None) -> Tuple[float, List[str]]:
+               current_price: Optional[float] = None,
+               adx: Optional[float] = None,
+               ema_bullish: Optional[bool] = None) -> Tuple[float, List[str]]:
     reasons = []
     if dist_vwap is None or vwap is None or vwap <= 0:
         return 0.0, reasons
+
+    # In a confirmed uptrend, trading above VWAP is participation, not a
+    # mean-reversion sell signal. Only penalise truly extreme extensions.
+    strong_trend = (
+        (adx is not None and adx >= ADX_TREND_THRESHOLD)
+        or ema_bullish is True
+    )
 
     score = 0.0
     pct = dist_vwap * 100
@@ -223,9 +254,20 @@ def score_vwap(dist_vwap: Optional[float], vwap: Optional[float],
         elif pct <= 5.0:
             score = 0.8
             reasons.append(f"price {pct:.1f}% above VWAP (strong momentum)")
+        elif pct <= 8.0:
+            if strong_trend:
+                score = 0.65
+                reasons.append(f"price {pct:.1f}% above VWAP (trend extension)")
+            else:
+                score = 0.3
+                reasons.append(f"price {pct:.1f}% above VWAP (extended, mean-reversion risk)")
         else:
-            score = 0.3
-            reasons.append(f"price {pct:.1f}% above VWAP (extended, mean-reversion risk)")
+            if strong_trend:
+                score = 0.45
+                reasons.append(f"price {pct:.1f}% above VWAP (deep extension, trend intact)")
+            else:
+                score = 0.3
+                reasons.append(f"price {pct:.1f}% above VWAP (extended, mean-reversion risk)")
     else:
         abs_pct = abs(pct)
         if abs_pct <= 2.0:
@@ -242,7 +284,8 @@ def score_vwap(dist_vwap: Optional[float], vwap: Optional[float],
 
 def score_volume_profile(above_poc: Optional[bool], poc: Optional[float],
                          va_high: Optional[float], va_low: Optional[float],
-                         current_price: Optional[float] = None) -> Tuple[float, List[str]]:
+                         current_price: Optional[float] = None,
+                         strong_trend: bool = False) -> Tuple[float, List[str]]:
     reasons = []
     if poc is None or above_poc is None:
         return 0.0, reasons
@@ -252,6 +295,14 @@ def score_volume_profile(above_poc: Optional[bool], poc: Optional[float],
         if current_price is not None and va_high is not None and current_price <= va_high:
             score = 0.8
             reasons.append(f"price above POC ({poc:.3f}), within value area")
+        elif current_price is not None and va_high is not None and current_price > va_high:
+            # Breaking out above the value area — bullish when trend is confirmed
+            if strong_trend:
+                score = 0.7
+                reasons.append(f"price breaking above value area ({va_high:.3f}) in strong trend")
+            else:
+                score = 0.5
+                reasons.append(f"price above POC ({poc:.3f}), outside value area")
         else:
             score = 0.5
             reasons.append(f"price above POC ({poc:.3f})")
@@ -287,6 +338,13 @@ def compute_base_score(current_price: Optional[float],
     """
     reasons = []
 
+    ema_bullish_flag = (
+        ema50 is not None and ema200 is not None and ema50 > ema200
+    )
+    strong_trend = (
+        (adx is not None and adx >= ADX_TREND_THRESHOLD) or ema_bullish_flag
+    )
+
     # Score each category
     trend_val, trend_reasons = score_trend(current_price, ema20, ema50, ema200)
     macd_val, macd_reasons = score_macd(macd, macd_signal)
@@ -294,8 +352,12 @@ def compute_base_score(current_price: Optional[float],
     volume_val, volume_reasons = score_volume(vol_multiplier, buy_vol_multiplier)
     adi_val, adi_reasons = score_adi(adl_trend, mfi)
     support_val, support_reasons = score_support(is_near_support, volume_confirmed, current_price, support)
-    vwap_val, vwap_reasons = score_vwap(dist_vwap, vwap, current_price)
-    vp_val, vp_reasons = score_volume_profile(above_poc, poc, va_high, va_low, current_price)
+    vwap_val, vwap_reasons = score_vwap(
+        dist_vwap, vwap, current_price, adx=adx, ema_bullish=ema_bullish_flag
+    )
+    vp_val, vp_reasons = score_volume_profile(
+        above_poc, poc, va_high, va_low, current_price, strong_trend=strong_trend
+    )
 
     # Intraday score (0-100) — normalize to 0-1
     if intraday_score is not None:

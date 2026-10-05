@@ -38,6 +38,8 @@ data/*.csv
 # Model weights (use Git LFS)
 weights/*.pt
 weights/*.pth
+# ChartScanAI YOLO weights are committed via Git LFS
+!weights/custom_yolov8.pt
 
 # Cache
 ~/.cache/

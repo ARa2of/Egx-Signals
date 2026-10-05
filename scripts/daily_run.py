@@ -227,7 +227,35 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             macd_bullish = "Yes" if (macd and macd_signal and macd > macd_signal) else ("No" if macd and macd_signal else None)
 
             # Technical enrichment
-            raw_df = yf_entry.history[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
+            raw_df = yf_entry.history[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"]).copy()
+
+            # Merge TradingView live session into yf bars so indicators and
+            # scoring use the same price series (avoids stale-yf + live-TV mix).
+            if ta_entry and ta_entry.ok and close_ta:
+                tv_ind = ta_entry.indicators
+                tv_close = float(close_ta)
+                tv_open = tv_ind.get("open")
+                tv_high = tv_ind.get("high")
+                tv_low = tv_ind.get("low")
+                tv_vol = tv_ind.get("volume")
+                tv_open = float(tv_open) if tv_open is not None else tv_close
+                tv_high = float(tv_high) if tv_high is not None else max(tv_close, tv_open)
+                tv_low = float(tv_low) if tv_low is not None else min(tv_close, tv_open)
+                tv_vol = float(tv_vol) if tv_vol is not None else 0.0
+
+                today_norm = pd.Timestamp(date.today()).normalize()
+                if len(raw_df) and pd.Timestamp(raw_df.index[-1]).normalize() == today_norm:
+                    raw_df.loc[raw_df.index[-1], ["Open", "High", "Low", "Close", "Volume"]] = [
+                        tv_open, tv_high, tv_low, tv_close, tv_vol
+                    ]
+                else:
+                    new_row = pd.DataFrame(
+                        [[tv_open, tv_high, tv_low, tv_close, tv_vol]],
+                        index=pd.DatetimeIndex([today_norm]),
+                        columns=["Open", "High", "Low", "Close", "Volume"],
+                    )
+                    raw_df = pd.concat([raw_df, new_row])
+
             tech = enrich(raw_df)
             df_tech = tech["df_enriched"]
             fib = tech["fibonacci"]
@@ -235,6 +263,48 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             patterns = tech["patterns"]
             regime = tech["regime"]
             vol_profile = tech["volume_profile"]
+
+            # Indicator fallbacks from enriched bars when TV is missing fields
+            def _tech_last(col):
+                if col in df_tech.columns and len(df_tech):
+                    v = df_tech[col].iloc[-1]
+                    try:
+                        fv = float(v)
+                        return None if pd.isna(fv) else fv
+                    except (TypeError, ValueError):
+                        return None
+                return None
+
+            if adx is None:
+                adx = _tech_last("ADX")
+            if ema20 is None:
+                ema20 = _tech_last("EMA_20")
+            if ema50 is None:
+                ema50 = _tech_last("EMA_50")
+            if ema200 is None:
+                ema200 = _tech_last("EMA_200")
+            if rsi is None:
+                rsi = _tech_last("RSI")
+            if macd is None:
+                macd = _tech_last("MACD")
+            if macd_signal is None:
+                macd_signal = _tech_last("MACD_sig")
+            if sma50 is None:
+                sma50 = _tech_last("SMA_50")
+            if sma200 is None:
+                sma200 = _tech_last("SMA_200")
+
+            # Recompute cross flags with fallback indicators
+            if sma50 is not None and sma200 is not None:
+                if sma50 > sma200:
+                    golden_cross, death_cross = "Yes", "No"
+                elif sma50 < sma200:
+                    golden_cross, death_cross = "No", "Yes"
+                else:
+                    golden_cross, death_cross = "No", "No"
+            ema_bullish = "Yes" if (ema50 and ema200 and ema50 > ema200) else ("No" if ema50 and ema200 else None)
+            diamond_cross = "Yes" if (ema20 and ema50 and ema20 > ema50) else ("No" if ema20 and ema50 else None)
+            macd_bullish = "Yes" if (macd and macd_signal and macd > macd_signal) else ("No" if macd and macd_signal else None)
 
             # VWAP
             last_vwap = float(df_tech["VWAP"].iloc[-1]) if "VWAP" in df_tech.columns and not pd.isna(df_tech["VWAP"].iloc[-1]) else None
@@ -285,6 +355,16 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 mae_pct,
                 direction_accuracy=ml_result.get("direction_accuracy"),
                 ensemble_weights=ml_result.get("ensemble_weights"),
+                trend_context={
+                    "bullish": bool(
+                        (adx or 0) >= 25
+                        and ema50 and ema200 and ema50 > ema200
+                        and current_price and current_price > ema50
+                    ),
+                    "adx": adx,
+                    "regime": regime.get("regime", "unknown"),
+                },
+                direction_proba=ml_result.get("direction_proba"),
             )
 
             # ChartScan AI
@@ -303,8 +383,54 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             buy_multiplier = mf.get("buy_vol_multiplier")
             is_volume_spike = buy_multiplier is not None and buy_multiplier >= params["volume"]["spike_multiplier"]
 
-            # Intraday Analysis (5-min data, cached)
-            intraday_result = run_intraday_analysis(raw)
+            # Bull-trend context for intraday (volume-at-hows vs distribution)
+            ema_bullish_flag = bool(ema50 and ema200 and ema50 > ema200)
+            bull_trend = bool(
+                (adx or 0) >= 25
+                and ema_bullish_flag
+                and current_price and ema50 and current_price > ema50
+            )
+            trend_context = {
+                "bullish": bull_trend,
+                "adx": adx,
+                "regime": regime.get("regime", "unknown"),
+                "golden_cross": golden_cross == "Yes",
+            }
+
+            # Preliminary score (intraday neutral) — decide whether to fetch 5-min data
+            prelim_score = compute_base_score(
+                current_price=current_price,
+                ema20=ema20, ema50=ema50, ema200=ema200,
+                macd=macd, macd_signal=macd_signal,
+                rsi=rsi, adx=adx, regime=regime.get("regime", "unknown"),
+                vol_multiplier=vol.get("vol_multiplier"),
+                buy_vol_multiplier=buy_multiplier,
+                adl_trend=adl_trend, mfi=mfi,
+                is_near_support=is_near_support,
+                volume_confirmed=is_volume_spike,
+                support=sr.get("support"),
+                dist_vwap=last_dist_vwap, vwap=last_vwap,
+                above_poc=vol_profile.get("above_poc"),
+                poc=vol_profile.get("poc"),
+                va_high=vol_profile.get("va_high"),
+                va_low=vol_profile.get("va_low"),
+                intraday_score=None,
+                intraday_details=None,
+            )
+            prelim_rec = prelim_score["recommendation"]
+            prelim_pts = prelim_score["raw_score"]
+
+            # Intraday Analysis — Buy/Watch candidates only (as documented)
+            if prelim_rec in ("Buy", "Watch") or prelim_pts >= 45:
+                intraday_result = run_intraday_analysis(
+                    raw, recommendation=prelim_rec, trend_context=trend_context
+                )
+            else:
+                intraday_result = {
+                    "skipped": True,
+                    "reason": f"preliminary={prelim_rec} score={prelim_pts:.1f}",
+                }
+
             intraday_score = intraday_result.get("intraday_score") if not intraday_result.get("skipped") else None
             intraday_details = None if intraday_result.get("skipped") else {
                 "volume_profile": intraday_result.get("volume_profile", {}),
@@ -313,7 +439,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "accumulation_distribution": intraday_result.get("accumulation_distribution", {}),
             }
             if intraday_score is not None:
-                log.info("%s: Intraday score=%.1f", raw, intraday_score)
+                log.info("%s: Intraday score=%.1f (bull_trend=%s)", raw, intraday_score, bull_trend)
 
             base_score = compute_base_score(
                 current_price=current_price,
@@ -470,6 +596,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "Score - Support": base_score["score_breakdown"]["support"],
                 "Score - VWAP": base_score["score_breakdown"]["vwap"],
                 "Score - Volume Profile": base_score["score_breakdown"]["volume_profile"],
+                "Score - Intraday": base_score["score_breakdown"]["intraday"],
                 "VWAP": round(last_vwap, 4) if last_vwap else None,
                 "Dist VWAP %": round(last_dist_vwap * 100, 2) if last_dist_vwap is not None else None,
                 "Volume Profile POC": vol_profile.get("poc"),
@@ -589,50 +716,99 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                         current_price = tv_c
                         row["Current EGP Price"] = tv_c
 
-            # ── Consensus-based recommendation ──
+            # ── Consensus-based recommendation (v2.2) ──
             # Base (technical) signal
             base_rec = base_score["recommendation"]
-            # ML signal (threshold lowered from 45 to 35)
+            score_val = base_score["raw_score"]
+            # ML signal
             ml_rec = "Buy" if conviction.get("conviction_score", 0) >= 35 else ("Watch" if conviction.get("conviction_score", 0) >= 20 else "Avoid")
-            # ChartScan AI signal
-            cs_rec = "Buy" if cs_result and cs_result.get("signal") == "Buy" else ("Avoid" if cs_result and cs_result.get("signal") == "Sell" else "Watch")
+            # ChartScan AI — abstain when model is missing / no real signal
+            if cs_result and cs_result.get("signal") == "Buy" and (cs_result.get("confidence") or 0) > 0:
+                cs_rec = "Buy"
+            elif cs_result and cs_result.get("signal") == "Sell" and (cs_result.get("confidence") or 0) > 0:
+                cs_rec = "Avoid"
+            elif cs_result and (cs_result.get("confidence") or 0) > 0:
+                cs_rec = "Watch"
+            else:
+                cs_rec = None  # abstain — YOLO weights not loaded or neutral with 0 conf
 
-            buy_votes = sum(1 for r in [base_rec, ml_rec, cs_rec] if r == "Buy")
-            watch_votes = sum(1 for r in [base_rec, ml_rec, cs_rec] if r == "Watch")
-            avoid_votes = sum(1 for r in [base_rec, ml_rec, cs_rec] if r == "Avoid")
+            named_votes = [("Base", base_rec), ("ML", ml_rec), ("ChartScan", cs_rec)]
+            active_votes = [(n, r) for n, r in named_votes if r is not None]
+            buy_votes = sum(1 for _, r in active_votes if r == "Buy")
+            watch_votes = sum(1 for _, r in active_votes if r == "Watch")
+            avoid_votes = sum(1 for _, r in active_votes if r == "Avoid")
+            agree_buy = [n for n, r in active_votes if r == "Buy"]
+            active_n = len(active_votes)
 
-            if buy_votes == 3:
-                consensus_rec = "Strong Buy"
-                consensus_basis = "All 3 methods agree: Buy"
-            elif buy_votes == 2:
+            # Strong technical base can carry Buy even if ML is cautious.
+            # Requires confirmed trend structure, not just a high score.
+            strong_technicals = (
+                base_rec == "Buy"
+                and death_cross != "Yes"
+                and golden_cross == "Yes"
+                and diamond_cross == "Yes"
+                and (adx or 0) >= 30
+                and macd_bullish == "Yes"
+            )
+
+            if strong_technicals and cs_rec != "Avoid":
                 consensus_rec = "Buy"
-                agree = [n for n, r in [("Base", base_rec), ("ML", ml_rec), ("ChartScan", cs_rec)] if r == "Buy"]
-                consensus_basis = f"2/3 agree Buy: {', '.join(agree)}"
+                consensus_basis = (
+                    f"Strong technical base (score={score_val:.1f}, golden+diamond cross, "
+                    f"ADX={adx:.0f}, MACD bullish) — ML={ml_rec}"
+                    + (f", ChartScan={cs_rec}" if cs_rec else ", ChartScan abstain")
+                )
+            elif buy_votes >= 2 and buy_votes == active_n and active_n >= 2:
+                consensus_rec = "Strong Buy"
+                consensus_basis = f"All {active_n} active methods agree Buy: {', '.join(agree_buy)}"
+            elif buy_votes >= 2:
+                consensus_rec = "Buy"
+                consensus_basis = f"{buy_votes}/{active_n} active agree Buy: {', '.join(agree_buy)}"
             elif buy_votes == 1 and avoid_votes == 0:
                 consensus_rec = "Buy"
-                agree = [n for n, r in [("Base", base_rec), ("ML", ml_rec), ("ChartScan", cs_rec)] if r == "Buy"]
-                consensus_basis = f"1/3 Buy ({', '.join(agree)}), no Avoid votes — upgraded to Buy"
+                consensus_basis = f"1 Buy ({agree_buy[0]}), no Avoid among active voters — upgraded to Buy"
             elif buy_votes == 1:
                 consensus_rec = "Watch"
-                agree = [n for n, r in [("Base", base_rec), ("ML", ml_rec), ("ChartScan", cs_rec)] if r == "Buy"]
-                consensus_basis = f"1/3 Buy ({', '.join(agree)}), others disagree"
-            elif watch_votes == 3:
+                consensus_basis = f"1 Buy ({agree_buy[0]}), others disagree"
+            elif watch_votes >= 1 and avoid_votes == 0:
                 consensus_rec = "Watch"
-                consensus_basis = "All 3 methods: Watch/Neutral"
-            else:
+                consensus_basis = "No Buy votes, no Avoid — Watch"
+            elif avoid_votes >= 1 and buy_votes == 0:
                 consensus_rec = "Avoid"
-                consensus_basis = f"Base={base_rec}, ML={ml_rec}, ChartScan={cs_rec}"
+                consensus_basis = ", ".join(f"{n}={r}" for n, r in named_votes if r is not None)
+            else:
+                consensus_rec = "Watch"
+                consensus_basis = "Insufficient active signals"
 
-            # ── RSI Overbought Hard Cap ──
-            # If RSI is above overbought threshold, never allow Buy/Strong Buy
+            # ── RSI Overbought Hard Cap (v2.2: regime-mapped + ADX-aware) ──
             rsi_cfg = params.get("rsi", {})
             regime_key = regime.get("regime", "ranging")
+            if regime_key not in rsi_cfg:
+                if regime_key == "trending":
+                    regime_key = "trending_up"
+                else:
+                    regime_key = "ranging"
             regime_rsi = rsi_cfg.get(regime_key, rsi_cfg.get("ranging", {}))
             overbought_threshold = regime_rsi.get("overbought", 80)
+
+            # Trend exception: strong ADX + bullish EMA alignment + price above
+            # EMA50 means elevated RSI is trend strength, not a blow-off.
+            trend_exception = bool(
+                (adx or 0) >= 30
+                and ema_bullish_flag
+                and current_price and ema50 and current_price > ema50
+            )
+
             if rsi and rsi > overbought_threshold and consensus_rec in ("Buy", "Strong Buy"):
-                old_rec = consensus_rec
-                consensus_rec = "Watch"
-                consensus_basis = f"RSI overbought ({rsi:.1f} > {overbought_threshold}) downgrades {old_rec} to Watch"
+                if trend_exception:
+                    consensus_basis += (
+                        f"; RSI {rsi:.1f}>{overbought_threshold} tolerated "
+                        f"(ADX={adx:.0f}, EMA bullish, price>EMA50)"
+                    )
+                else:
+                    old_rec = consensus_rec
+                    consensus_rec = "Watch"
+                    consensus_basis = f"RSI overbought ({rsi:.1f} > {overbought_threshold}) downgrades {old_rec} to Watch"
 
             # ── Stale Entry Detection ──
             # If entry price is above current price, flag as stale
@@ -681,7 +857,8 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             row["Recommendation Basis"] = consensus_basis
             row["Base Rec"] = base_rec
             row["ML Rec"] = ml_rec
-            row["ChartScan Rec"] = cs_rec
+            row["ChartScan Rec"] = cs_rec if cs_rec is not None else "abstain"
+            row["bull_trend"] = bull_trend
 
             # Add index sentiment
             mem = ticker_index_map.get(raw, "UNINDEX")
@@ -782,6 +959,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             "chartscan_sell_patterns": row.get("chartscan_sell_patterns"),
             "score_vwap": row.get("Score - VWAP"),
             "score_volume_profile": row.get("Score - Volume Profile"),
+            "score_intraday": row.get("Score - Intraday"),
             "vwap": row.get("VWAP"),
             "dist_vwap_pct": row.get("Dist VWAP %"),
             "vp_poc": row.get("Volume Profile POC"),

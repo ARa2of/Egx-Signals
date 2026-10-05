@@ -10,8 +10,8 @@ import pickle
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from xgboost import XGBRegressor
-from lightgbm import LGBMRegressor
+from xgboost import XGBRegressor, XGBClassifier
+from lightgbm import LGBMRegressor, LGBMClassifier
 from sklearn.preprocessing import RobustScaler
 from sklearn.metrics import mean_absolute_error, accuracy_score
 from typing import Dict, Optional, List
@@ -48,7 +48,7 @@ def save_models_cache(ticker: str, models: Dict, scaler=None, meta: Dict = None)
     except Exception as e:
         log.debug("Failed to cache models for %s: %s", ticker, e)
 
-def load_models_cache(ticker: str, max_age_days: int = 7) -> Optional[Dict]:
+def load_models_cache(ticker: str, max_age_days: int = 14) -> Optional[Dict]:
     """Load cached models if fresh enough."""
     path = _model_cache_path(ticker)
     if not path.exists():
@@ -208,6 +208,26 @@ def build_features(target_df: pd.DataFrame,
     # ── Momentum: ROC ──
     for period in [5, 10, 20]:
         feat[f"roc_{period}"] = (close / close.shift(period) - 1).clip(-0.5, 0.5)
+
+    # ── Trend persistence (v2.2) — help models distinguish trending vs topping ──
+    if "EMA_20" in target_df.columns:
+        feat["above_ema20"] = (close > target_df["EMA_20"]).astype(float)
+    if "EMA_50" in target_df.columns:
+        feat["above_ema50"] = (close > target_df["EMA_50"]).astype(float)
+        feat["days_above_ema50"] = (
+            (close > target_df["EMA_50"]).rolling(10, min_periods=3).sum() / 10.0
+        )
+    if "EMA_200" in target_df.columns:
+        feat["above_ema200"] = (close > target_df["EMA_200"]).astype(float)
+    if "SMA_50" in target_df.columns and "SMA_200" in target_df.columns:
+        feat["sma50_gt_sma200"] = (target_df["SMA_50"] > target_df["SMA_200"]).astype(float)
+    feat["up_days_10"] = (close > close.shift(1)).rolling(10, min_periods=3).sum() / 10.0
+    feat["ret_sign_consistency"] = (
+        np.sign(_safe_return(close, 1)).rolling(10, min_periods=3).mean()
+    )
+    # ROC conditioned on trend structure: same momentum means more when above key MAs
+    if "EMA_50" in target_df.columns:
+        feat["roc5_above_ema50"] = feat.get("roc_5", 0.0) * (close > target_df["EMA_50"]).astype(float)
 
     # ── Momentum: Stochastic %K ──
     if "High" in target_df.columns and "Low" in target_df.columns:
@@ -437,6 +457,61 @@ def _optuna_tune(X, y, model_type="xgb"):
 # ─────────────────────────────────────────────────────────────
 # Ensemble Training & Forecast
 # ─────────────────────────────────────────────────────────────
+def _build_direction_models(X_tr, y_tr, xgb_params=None, lgbm_params=None):
+    """Train proper classifiers for up/down direction (not regressors)."""
+    xgb_params = xgb_params or XGB_PARAMS
+    lgbm_params = lgbm_params or LGBM_PARAMS
+    models = {}
+    for model_type, params in [("xgb", xgb_params), ("lgbm", lgbm_params)]:
+        mp = {**params, "random_state": RANDOM_SEED}
+        if model_type == "lgbm":
+            mp["verbosity"] = -1
+            mp.pop("tree_method", None)
+            model = LGBMClassifier(objective="binary", **mp)
+        else:
+            mp["tree_method"] = "hist"
+            mp["verbosity"] = 0
+            model = XGBClassifier(objective="binary:logistic", **mp)
+        model.fit(X_tr, y_tr)
+        models[model_type] = model
+    return models
+
+
+def _direction_accuracy(models, X_te, y_te) -> Dict[str, float]:
+    acc = {}
+    for model_type, model in models.items():
+        if hasattr(model, "predict_proba"):
+            proba = model.predict_proba(X_te)[:, 1]
+            pred = (proba > 0.5).astype(int)
+        else:
+            pred = (model.predict(X_te) > 0.5).astype(int)
+        acc[model_type] = float(accuracy_score(y_te, pred))
+    return acc
+
+
+def _direction_proba(models, last_row, ensemble_weights=None) -> Optional[Dict]:
+    """P(up) per model + ensemble — used for trend-aware conviction."""
+    if not models:
+        return None
+    w = ensemble_weights or ENSEMBLE_W
+    w_xgb = w.get("xgb", 0.5)
+    w_lgbm = w.get("lgbm", 0.5)
+    out = {}
+    probs = {}
+    for model_type, model in models.items():
+        if hasattr(model, "predict_proba"):
+            p = float(model.predict_proba(last_row)[0, 1])
+        else:
+            p = float(model.predict(last_row)[0])
+        probs[model_type] = p
+        out[f"{model_type}_p_up"] = p
+    if "xgb" in probs and "lgbm" in probs:
+        out["ensemble_p_up"] = w_xgb * probs["xgb"] + w_lgbm * probs["lgbm"]
+    elif probs:
+        out["ensemble_p_up"] = float(np.mean(list(probs.values())))
+    return out
+
+
 def _train_ensemble(X, y, xgb_params=None, lgbm_params=None):
     xgb_params = xgb_params or XGB_PARAMS
     lgbm_params = lgbm_params or LGBM_PARAMS
@@ -515,7 +590,7 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
                     tv_close: float = None) -> Dict:
     try:
         # Try to load cached models first
-        cached = load_models_cache(target, max_age_days=7)
+        cached = load_models_cache(target, max_age_days=14)
         if cached and "models" in cached:
             log.info("%s: Using cached ML models", target)
             try:
@@ -538,6 +613,16 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
                 models = cached.get("models")
                 meta = cached.get("meta", {})
 
+                # Invalidate cache when feature schema changed (v2.2 trend features)
+                cached_feats = meta.get("feature_names")
+                current_feats = list(features_full_clean.columns)
+                if cached_feats and list(cached_feats) != current_feats:
+                    log.info(
+                        "%s: cached feature set changed (%d -> %d cols), retraining",
+                        target, len(cached_feats), len(current_feats),
+                    )
+                    raise ValueError("feature schema mismatch")
+
                 last_feat_row = pd.DataFrame(
                     scaler.transform(features_full_clean.iloc[[-1]]),
                     columns=features_full_clean.columns,
@@ -556,9 +641,12 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
                         xgb_pred = float(xgb_m.predict(last_feat_row)[0])
                         lgbm_pred = float(lgbm_m.predict(last_feat_row)[0])
                         ensemble_pred = w_xgb * xgb_pred + w_lgbm * lgbm_pred
+                        # Models are trained on log returns — use exp(), not (1+r)
                         forecast[name] = {
-                            "price": round(last_price * (1 + ensemble_pred), 3),
-                            "return_pct": round(ensemble_pred * 100, 2),
+                            "price": round(last_price * float(np.exp(ensemble_pred)), 3),
+                            "return_pct": round(float(np.expm1(ensemble_pred)) * 100, 2),
+                            "xgb_return": xgb_pred * 100,
+                            "lgbm_return": lgbm_pred * 100,
                         }
                         pred_data[name] = {
                             "xgb_return": xgb_pred * 100,
@@ -568,16 +656,25 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
                 if not forecast:
                     return {"error": "Cached models missing quantile models"}
 
+                dir_proba = None
+                dir_models = meta.get("direction_models")
+                if dir_models:
+                    try:
+                        dir_proba = _direction_proba(dir_models, last_feat_row, ENSEMBLE_W)
+                    except Exception as e:
+                        log.debug("%s: cached direction proba failed: %s", target, e)
+
                 return {
                     "forecast": forecast,
                     "last_date": raw_close.index[-1],
                     "forecast_end": raw_close.index[-1] + pd.Timedelta(days=HORIZON),
                     "last_price": last_price,
                     "last_price_source": last_price_source,
-                    "feature_names": list(features.columns),
+                    "feature_names": current_feats,
                     "feature_importance": meta.get("feature_importance", {}),
                     "eval": meta.get("eval", {}),
                     "direction_accuracy": meta.get("direction_accuracy", {}),
+                    "direction_proba": dir_proba,
                     "ensemble_weights": ENSEMBLE_W,
                     "pred_returns": pred_data,
                     "cached": True,
@@ -620,25 +717,15 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
         # Walk-forward evaluation
         eval_result = walk_forward_eval(X_scaled, y)
 
-        # Direction classification accuracy
+        # Direction classification accuracy (proper classifiers)
         split = int(len(X_scaled) * TRAIN_RATIO)
         X_tr_dir, X_te_dir = X_scaled.iloc[:split], X_scaled.iloc[split:]
         y_tr_dir, y_te_dir = y_dir.iloc[:split], y_dir.iloc[split:]
 
-        dir_acc = {}
-        for model_type, model_params in [("xgb", xgb_params_tuned or XGB_PARAMS),
-                                          ("lgbm", lgbm_params_tuned or LGBM_PARAMS)]:
-            mp = {**model_params, "random_state": RANDOM_SEED}
-            if model_type == "lgbm":
-                mp["verbosity"] = -1
-                dir_model = LGBMRegressor(objective="binary", **mp)
-            else:
-                mp["tree_method"] = "hist"
-                mp["verbosity"] = 0
-                dir_model = XGBRegressor(objective="binary:logistic", **mp)
-            dir_model.fit(X_tr_dir, y_tr_dir)
-            dir_pred = (dir_model.predict(X_te_dir) > 0.5).astype(int)
-            dir_acc[model_type] = float(accuracy_score(y_te_dir, dir_pred))
+        dir_models = _build_direction_models(
+            X_tr_dir, y_tr_dir, xgb_params_tuned, lgbm_params_tuned
+        )
+        dir_acc = _direction_accuracy(dir_models, X_te_dir, y_te_dir)
 
         # Forecast
         raw_close = target_df_enriched["Close"].dropna()
@@ -668,11 +755,20 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
             xgb_params_tuned, lgbm_params_tuned
         )
 
-        # Save models to cache
+        # Direction proba for trend-aware conviction
+        dir_proba = None
+        try:
+            dir_proba = _direction_proba(dir_models, last_feat_row, ENSEMBLE_W)
+        except Exception as e:
+            log.debug("%s: direction proba failed: %s", target, e)
+
+        # Save models to cache (include direction models + feature names)
         if "models" in forecast_result:
             save_models_cache(target, forecast_result["models"], scaler, meta={
                 "eval": eval_result,
                 "direction_accuracy": dir_acc,
+                "direction_models": dir_models,
+                "feature_names": list(X_scaled.columns),
                 "feature_importance": forecast_result.get("importances", {}).to_dict() if hasattr(forecast_result.get("importances"), "to_dict") else {},
             })
 
@@ -696,6 +792,7 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
             "n_total_rows": len(X),
             "scaler": scaler,
             "direction_accuracy": dir_acc,
+            "direction_proba": dir_proba,
             "ensemble_weights": ENSEMBLE_W,
             "tuned": xgb_params_tuned is not None,
         }
@@ -704,17 +801,33 @@ def run_ml_pipeline(target_df_enriched: pd.DataFrame,
         return {"error": str(e)}
 
 # ─────────────────────────────────────────────────────────────
-# ML Conviction Scoring — V2 (ensemble-aware)
+# ML Conviction Scoring — V3 (ensemble + trend-aware)
 # ─────────────────────────────────────────────────────────────
 def compute_ml_conviction(forecast: Dict, last_price: float,
                           mae_pct: float = None, direction_accuracy: Dict = None,
-                          ensemble_weights: Dict = None) -> Dict:
-    med_price = forecast.get("Medium", {}).get("price", last_price)
-    high_price = forecast.get("High", {}).get("price", last_price)
-    low_price = forecast.get("Low", {}).get("price", last_price)
+                          ensemble_weights: Dict = None,
+                          trend_context: Dict = None,
+                          direction_proba: Dict = None) -> Dict:
+    """Conviction score 0-100.
+
+    v3: trend_context and direction_proba stop confirmed uptrends from being
+    zeroed out by a flat/slightly-negative 10-day median forecast (mean-reversion
+    bias). Bounded-downside forecasts also earn credit.
+    """
+    trend_context = trend_context or {}
+    bull_trend = bool(trend_context.get("bullish"))
+    adx = trend_context.get("adx")
+
+    med_price = forecast.get("Medium", {}).get("price", last_price) or last_price
+    high_price = forecast.get("High", {}).get("price", last_price) or last_price
+    low_price = forecast.get("Low", {}).get("price", last_price) or last_price
+    if not last_price or last_price <= 0:
+        last_price = med_price or 1.0
 
     upside_pct = (med_price - last_price) / last_price * 100
-    cone_width = high_price - low_price
+    upside_high_pct = (high_price - last_price) / last_price * 100
+    downside_pct = (last_price - low_price) / last_price * 100
+    cone_width = max(high_price - low_price, 0.0)
     cone_pct = cone_width / last_price * 100
     up_from_now = high_price - last_price
     down_from_now = last_price - low_price
@@ -741,8 +854,28 @@ def compute_ml_conviction(forecast: Dict, last_price: float,
     elif asymmetry >= 1.5: score += 8
     elif asymmetry >= 1.0: score += 3
 
-    # MAE penalty (up to -20 pts)
-    if mae_pct is not None and abs(upside_pct) > 0:
+    # Downside protection (up to +12) — bounded risk with some upside
+    if downside_pct <= 2.0 and upside_high_pct >= 1.0:
+        score += 12
+    elif downside_pct <= 4.0 and upside_high_pct >= 2.0:
+        score += 8
+    elif downside_pct <= 6.0 and upside_high_pct >= 3.0:
+        score += 5
+
+    # Direction probability (up to +10) from classifiers
+    if direction_proba and direction_proba.get("ensemble_p_up") is not None:
+        p_up = float(direction_proba["ensemble_p_up"])
+        if p_up >= 0.60:
+            score += 10
+        elif p_up >= 0.55:
+            score += 6
+        elif p_up >= 0.52:
+            score += 3
+        elif p_up < 0.40:
+            score -= 4
+
+    # MAE penalty (up to -20) — only when the forecast move is material
+    if mae_pct is not None and abs(upside_pct) >= 1.0:
         mae_ratio = mae_pct / max(abs(upside_pct), 0.01)
         if mae_ratio > 2.0: score -= 20
         elif mae_ratio > 1.5: score -= 12
@@ -757,14 +890,33 @@ def compute_ml_conviction(forecast: Dict, last_price: float,
 
     # Ensemble agreement bonus (up to +10 pts)
     if forecast.get("Medium"):
-        xgb_ret = forecast["Medium"].get("xgb_return", 0)
-        lgbm_ret = forecast["Medium"].get("lgbm_return", 0)
+        xgb_ret = forecast["Medium"].get("xgb_return", 0) or 0
+        lgbm_ret = forecast["Medium"].get("lgbm_return", 0) or 0
         if xgb_ret > 0 and lgbm_ret > 0:
             score += 10
         elif (xgb_ret > 0) != (lgbm_ret > 0):
             score -= 5
 
-    score = min(100, max(0, score))
+    # Trend context (v3): confirmed bull trend should not be "BLOCKED"
+    # by a shallow mean-reversion median forecast.
+    trend_note = None
+    if bull_trend:
+        if upside_pct >= 0.5:
+            score += 8
+            trend_note = "Bull trend + positive median forecast"
+        elif upside_pct >= -1.0:
+            score += 6
+            trend_note = "Bull trend + shallow pullback forecast (not bearish)"
+        elif upside_pct >= -2.5:
+            score += 2
+            trend_note = "Bull trend + mild pullback forecast"
+        else:
+            trend_note = "Bull trend but median forecast clearly negative"
+        # Floor: intact bull trend + bounded downside should not read as BLOCKED
+        if score < 25 and upside_pct >= -2.0 and downside_pct <= 8.0:
+            score = 25
+
+    score = min(100, max(0, int(round(score))))
 
     if score >= 70:
         label = "High Conviction [GREEN]"
@@ -772,19 +924,27 @@ def compute_ml_conviction(forecast: Dict, last_price: float,
     elif score >= 45:
         label = "Moderate Conviction [YELLOW]"
         rec = "Ensemble mildly bullish - consider 50-75% of normal position size."
-    elif score >= 25:
+    elif score >= (20 if bull_trend else 25):
         label = "Low Conviction [RED]"
         rec = "Ensemble uncertain - reduce position size to 25-50% or wait for a clearer signal."
     else:
         label = "No Conviction [BLOCKED]"
         rec = "Ensemble sees little/no upside - avoid new longs or stay out entirely."
 
-    return {
+    result = {
         "conviction_score": score,
         "conviction_label": label,
         "upside_pct": round(upside_pct, 2),
+        "upside_high_pct": round(upside_high_pct, 2),
+        "downside_pct": round(downside_pct, 2),
         "cone_pct": round(cone_pct, 2),
         "asymmetry": round(asymmetry, 2),
         "recommendation": rec,
         "direction_accuracy": direction_accuracy,
+        "direction_proba": direction_proba,
+        "bull_trend": bull_trend,
+        "trend_note": trend_note,
     }
+    if adx is not None:
+        result["adx"] = adx
+    return result

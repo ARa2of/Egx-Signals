@@ -90,7 +90,7 @@ def fetch_intraday_5min(ticker: str, n_bars: int = 400,
 # ─────────────────────────────────────────────────────────────
 # 1. VOLUME PROFILE ANALYSIS (Volume-at-Price distribution)
 # ─────────────────────────────────────────────────────────────
-def analyze_volume_profile(df: pd.DataFrame) -> Dict:
+def analyze_volume_profile(df: pd.DataFrame, bull_trend: bool = False) -> Dict:
     """Analyze volume distribution across price levels.
 
     Returns:
@@ -99,10 +99,14 @@ def analyze_volume_profile(df: pd.DataFrame) -> Dict:
         - va_high: Value Area High (70% of volume above this)
         - va_low: Value Area Low (70% of volume below this)
         - price_position_in_va: Where price sits in value area (0-1)
+
+    When bull_trend is True, high volume at highs is treated as possible
+    accumulation/breakout participation rather than distribution.
     """
     if df is None or df.empty or len(df) < 50:
         return {"volume_skew": 0, "poc_price": None, "va_high": None,
-                "va_low": None, "price_position_in_va": 0.5}
+                "va_low": None, "price_position_in_va": 0.5,
+                "trend_adjusted": False}
 
     typical = (df["high"] + df["low"] + df["close"]) / 3
     vol = df["volume"].values
@@ -114,7 +118,7 @@ def analyze_volume_profile(df: pd.DataFrame) -> Dict:
     if p_max <= p_min:
         return {"volume_skew": 0, "poc_price": float(p_max),
                 "va_high": float(p_max), "va_low": float(p_min),
-                "price_position_in_va": 0.5}
+                "price_position_in_va": 0.5, "trend_adjusted": False}
 
     bin_edges = np.linspace(p_min, p_max, n_bins + 1)
     bin_vol = np.zeros(n_bins)
@@ -154,6 +158,14 @@ def analyze_volume_profile(df: pd.DataFrame) -> Dict:
     else:
         skew = 0
 
+    trend_adjusted = False
+    if bull_trend and skew < 0:
+        # In a confirmed uptrend, volume at highs is often breakout/accumulation
+        # participation — dampen the distribution signal instead of treating
+        # every push higher as selling.
+        skew = skew * 0.3
+        trend_adjusted = True
+
     # Price position in value area
     last_price = float(df["close"].iloc[-1])
     if va_high > va_low:
@@ -168,13 +180,14 @@ def analyze_volume_profile(df: pd.DataFrame) -> Dict:
         "va_high": round(va_high, 3),
         "va_low": round(va_low, 3),
         "price_position_in_va": round(float(price_position), 3),
+        "trend_adjusted": trend_adjusted,
     }
 
 
 # ─────────────────────────────────────────────────────────────
 # 2. MOMENTUM SCORE
 # ─────────────────────────────────────────────────────────────
-def analyze_momentum(df: pd.DataFrame) -> Dict:
+def analyze_momentum(df: pd.DataFrame, bull_trend: bool = False) -> Dict:
     """Analyze intraday momentum across sessions.
 
     Returns:
@@ -235,6 +248,14 @@ def analyze_momentum(df: pd.DataFrame) -> Dict:
     else:
         trend = "stable"
 
+    # In a confirmed bull trend, RSI cooling from extremes is normal —
+    # keep score anchored to actual RSI level when momentum is still firm.
+    if bull_trend:
+        if rsi_recent >= 55:
+            momentum = max(momentum, min(100.0, float(rsi_recent)))
+        if trend == "decelerating" and rsi_recent >= 60:
+            trend = "stable"
+
     return {
         "momentum_score": round(momentum, 1),
         "rsi_acceleration": round(float(rsi_accel), 2),
@@ -246,7 +267,7 @@ def analyze_momentum(df: pd.DataFrame) -> Dict:
 # ─────────────────────────────────────────────────────────────
 # 3. VWAP INTERACTION
 # ─────────────────────────────────────────────────────────────
-def analyze_vwap_interaction(df: pd.DataFrame) -> Dict:
+def analyze_vwap_interaction(df: pd.DataFrame, bull_trend: bool = False) -> Dict:
     """Analyze how price interacts with VWAP across sessions.
 
     Returns:
@@ -295,6 +316,10 @@ def analyze_vwap_interaction(df: pd.DataFrame) -> Dict:
     vwap_score = (above_ratio * 60 + dist_component * 0.4)
     vwap_score = max(0, min(100, float(vwap_score)))
 
+    # Sustained VWAP control in an uptrend is bullish even if distance is modest
+    if bull_trend and above_ratio >= 0.6:
+        vwap_score = max(vwap_score, 60.0)
+
     # VWAP trend
     if avg_dist > 1:
         trend = "above"
@@ -314,13 +339,16 @@ def analyze_vwap_interaction(df: pd.DataFrame) -> Dict:
 # ─────────────────────────────────────────────────────────────
 # 4. ACCUMULATION / DISTRIBUTION
 # ─────────────────────────────────────────────────────────────
-def analyze_accumulation_distribution(df: pd.DataFrame) -> Dict:
+def analyze_accumulation_distribution(df: pd.DataFrame, bull_trend: bool = False) -> Dict:
     """Detect smart money accumulation vs distribution.
 
     Logic:
     - High volume at low prices = accumulation (bullish)
     - High volume at high prices = distribution (bearish)
     - Uses CLV (Close Location Value) weighted by volume
+
+    When bull_trend is True, volume at highs carries a weaker distribution
+    penalty (breakout participation vs. distribution).
 
     Returns:
         - ad_signal: 'bullish', 'bearish', 'neutral'
@@ -383,7 +411,7 @@ def analyze_accumulation_distribution(df: pd.DataFrame) -> Dict:
     if vol_lows_ratio > vol_highs_ratio + 0.05:
         ad_score += 0.4  # More volume at lows = accumulation
     elif vol_highs_ratio > vol_lows_ratio + 0.05:
-        ad_score -= 0.4  # More volume at highs = distribution
+        ad_score -= 0.2 if bull_trend else 0.4  # Softer distribution penalty in uptrend
     if mfi > 60:
         ad_score += 0.2
     elif mfi < 40:
@@ -410,10 +438,14 @@ def analyze_accumulation_distribution(df: pd.DataFrame) -> Dict:
 # ─────────────────────────────────────────────────────────────
 # MASTER: Full Intraday Analysis
 # ─────────────────────────────────────────────────────────────
-def run_intraday_analysis(ticker: str, recommendation: str = None) -> Dict:
+def run_intraday_analysis(ticker: str, recommendation: str = None,
+                          trend_context: Dict = None) -> Dict:
     """Run full intraday analysis for a ticker.
 
     Only processes Buy/Watch tickers to save API calls.
+    trend_context: optional dict with bullish/adx/regime flags so that
+    volume-at-highs is not misread as distribution during confirmed uptrends.
+
     Returns combined analysis results.
     """
     # Skip Avoid tickers
@@ -425,11 +457,14 @@ def run_intraday_analysis(ticker: str, recommendation: str = None) -> Dict:
     if df is None or df.empty:
         return {"skipped": True, "reason": "no_data"}
 
+    trend_context = trend_context or {}
+    bull_trend = bool(trend_context.get("bullish", False))
+
     # Run all analyses
-    vol_profile = analyze_volume_profile(df)
-    momentum = analyze_momentum(df)
-    vwap = analyze_vwap_interaction(df)
-    ad = analyze_accumulation_distribution(df)
+    vol_profile = analyze_volume_profile(df, bull_trend=bull_trend)
+    momentum = analyze_momentum(df, bull_trend=bull_trend)
+    vwap = analyze_vwap_interaction(df, bull_trend=bull_trend)
+    ad = analyze_accumulation_distribution(df, bull_trend=bull_trend)
 
     # Combined intraday score (0-100)
     # Weights: volume profile 30%, momentum 30%, VWAP 25%, AD 15%
@@ -444,6 +479,10 @@ def run_intraday_analysis(ticker: str, recommendation: str = None) -> Dict:
     )
     intraday_score = max(0, min(100, float(intraday_score)))
 
+    # Confirmed bull trends: intraday noise should not veto trend quality
+    if bull_trend and intraday_score < 55:
+        intraday_score = max(intraday_score, 55.0)
+
     return {
         "skipped": False,
         "ticker": ticker,
@@ -452,5 +491,7 @@ def run_intraday_analysis(ticker: str, recommendation: str = None) -> Dict:
         "momentum": momentum,
         "vwap": vwap,
         "accumulation_distribution": ad,
+        "trend_context": trend_context,
+        "bull_trend": bull_trend,
         "bars_analyzed": len(df),
     }

@@ -1,22 +1,24 @@
 # EGX Signal Generator Parameters
 # Versioned config — update version when params change
-version: "v2.1"
-updated: "2026-10-01"
+version: "v2.2"
+updated: "2026-10-05"
 description: "Core scoring and trade plan parameters"
 
 # ─────────────────────────────────────────────────────────────
 # SCORING WEIGHTS (sum to 100)
+# v2.2: intraday weight cut 30→15 (was suppressing trend names);
+#       trend/volume/vwap rebalanced to reward momentum breakouts.
 # ─────────────────────────────────────────────────────────────
 weights:
-  trend: 20.0
-  macd: 8.0
-  rsi: 8.0
-  volume: 8.0
-  adi: 6.0
-  support: 6.0
-  vwap: 6.0
-  volume_profile: 8.0
-  intraday: 30.0
+  trend: 26.0
+  macd: 9.0
+  rsi: 9.0
+  volume: 10.0
+  adi: 7.0
+  support: 7.0
+  vwap: 8.0
+  volume_profile: 9.0
+  intraday: 15.0
 
 # ─────────────────────────────────────────────────────────────
 # INTRADAY SCORING (5-min data, Buy/Watch tickers only)
@@ -43,13 +45,15 @@ thresholds:
 
 # ─────────────────────────────────────────────────────────────
 # RSI ZONES (regime-aware)
+# v2.2: trending_up bands widened — RSI 70-80 in a confirmed
+#       trend (ADX>=25, EMA bullish) is strength, not a sell.
 # ─────────────────────────────────────────────────────────────
 rsi:
   trending_up:
     oversold: 35
     healthy_low: 45
-    healthy_high: 70
-    overbought: 75
+    healthy_high: 72
+    overbought: 80
   ranging:
     oversold: 28
     healthy_low: 40

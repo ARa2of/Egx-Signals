@@ -19,15 +19,38 @@ AGENT_JSON_PATH = _PROJECT_ROOT / "output" / "agent_data.json"
 
 def _safe(val):
     """Convert numpy/pandas types to native Python for JSON."""
-    if pd.isna(val):
+    try:
+        if val is None or (isinstance(val, float) and pd.isna(val)):
+            return None
+        if hasattr(val, "item"):
+            val = val.item()
+        if isinstance(val, float) and pd.isna(val):
+            return None
+    except (TypeError, ValueError):
         return None
-    if hasattr(val, "item"):
-        return val.item()
     if isinstance(val, pd.Timestamp):
         return val.isoformat()
     if isinstance(val, (date, datetime)):
         return val.isoformat()
     return val
+
+
+def _ml_confidence(row: Dict):
+    """Normalize ML confidence to 0-100."""
+    conf = row.get("ML Conviction", row.get("ml_confidence"))
+    if conf is None:
+        return None
+    conf = _safe(conf)
+    if conf is None:
+        return None
+    try:
+        conf = float(conf)
+    except (TypeError, ValueError):
+        return None
+    # ml_confidence is stored 0-1; ML Conviction is 0-100
+    if conf <= 1.0:
+        conf *= 100.0
+    return round(conf, 1)
 
 
 def _build_ticker_block(row: Dict) -> Dict:
@@ -47,7 +70,7 @@ def _build_ticker_block(row: Dict) -> Dict:
             "support": _safe(row.get("Score - Support", row.get("score_support"))),
             "vwap": _safe(row.get("Score - VWAP", row.get("score_vwap"))),
             "volume_profile": _safe(row.get("Score - Volume Profile", row.get("score_volume_profile"))),
-            "intraday": _safe(row.get("intraday_score")),
+            "intraday": _safe(row.get("Score - Intraday", row.get("intraday_score"))),
         },
         "price": {
             "current_egp": _safe(row.get("Current EGP Price", row.get("close"))),
@@ -95,7 +118,7 @@ def _build_ticker_block(row: Dict) -> Dict:
         },
         "ml": {
             "signal": row.get("ML Signal", row.get("ml_signal")),
-            "confidence": _safe(row.get("ML Conviction", row.get("ml_confidence"))),
+            "confidence": _ml_confidence(row),
             "medium_price": _safe(row.get("ML Medium Price", row.get("ml_medium_price"))),
             "low_price": _safe(row.get("ml_low_price")),
             "high_price": _safe(row.get("ml_high_price")),

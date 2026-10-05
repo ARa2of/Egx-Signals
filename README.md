@@ -4,8 +4,9 @@ Daily automated signal generation for Egyptian Exchange (EGX) stocks.
 ## Overview
 - **Runs daily at 5:00 PM UK time** via GitHub Actions
 - **TradingView batch scanning** (primary) + yfinance fallback
-- **6-category weighted scoring** (Trend, MACD, RSI, Volume, ADI, Support)
-- **ML price forecasting** (XGBoost quantile regression, 5-day horizon)
+- **9-category weighted scoring** (Trend, MACD, RSI, Volume, ADI, Support, VWAP, Volume Profile, Intraday)
+- **Consensus recommendation** (Base + ML + ChartScan, with strong-technical override)
+- **ML price forecasting** (XGBoost+LightGBM quantile ensemble, 10-day horizon)
 - **ATR-based trade planning** (entry zones, stops, targets, position sizing)
 - **Signal history** stored in Parquet for backtesting and enhancement
 - **Telegram alerts** for signal changes and high-conviction setups
@@ -72,21 +73,24 @@ Output: `output/EGX_Signals_YYYYMMDD.xlsx` + `output/latest_signals.csv`
 ### Key Parameters (`config/params.yaml`)
 ```yaml
 weights:
-  trend: 30.0
-  macd: 15.0
-  rsi: 15.0
-  volume: 15.0
-  adi: 12.5
-  support: 12.5
+  trend: 26.0
+  macd: 9.0
+  rsi: 9.0
+  volume: 10.0
+  adi: 7.0
+  support: 7.0
+  vwap: 8.0
+  volume_profile: 9.0
+  intraday: 15.0
 
 thresholds:
   buy: 60.0
   watch: 50.0
 
 trade:
-  stop_loss_atr: 1.5
+  stop_loss_atr: 1.8
   target_atr: 3.0
-  min_rr: 1.2
+  min_rr: 3.0
 ```
 
 ### Enhancement (`config/enhancement.yaml`)
