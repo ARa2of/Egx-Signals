@@ -183,7 +183,7 @@ def generate_agent_json(rows: List[Dict], output_path: Optional[str] = None) -> 
         "meta": {
             "generated": date.today().isoformat(),
             "source": "EGX Signal Generator",
-            "version": "2.1",
+            "version": "2.2",
             "description": "Structured signal data for AI agent consumption",
         },
         "summary": {

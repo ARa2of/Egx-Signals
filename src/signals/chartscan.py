@@ -96,35 +96,52 @@ def chartscan_analyze(history: pd.DataFrame, ticker: str) -> Optional[Dict]:
                     "buy_patterns": 0, "sell_patterns": 0}
 
         # Parse class labels: class 0 = Buy, class 1 = Sell
+        # Ignore weak detections — YOLO fires on single candle shapes a lot.
+        MIN_BOX_CONF = 0.40
         buy_count = 0
         sell_count = 0
-        confs = []
+        buy_confs = []
+        sell_confs = []
         for box in boxes:
             cls = int(box.cls[0])
             conf = float(box.conf[0])
-            confs.append(conf)
+            if conf < MIN_BOX_CONF:
+                continue
             if cls == 0:
                 buy_count += 1
+                buy_confs.append(conf)
             elif cls == 1:
                 sell_count += 1
+                sell_confs.append(conf)
 
-        avg_conf = sum(confs) / len(confs) if confs else 0.0
+        all_confs = buy_confs + sell_confs
+        avg_conf = sum(all_confs) / len(all_confs) if all_confs else 0.0
+        avg_buy = sum(buy_confs) / len(buy_confs) if buy_confs else 0.0
+        avg_sell = sum(sell_confs) / len(sell_confs) if sell_confs else 0.0
 
-        if buy_count > sell_count:
+        # Majority + confidence gate: a single weak Sell box is not a signal
+        if buy_count >= sell_count + 1 and avg_buy >= 0.45:
             signal = "Buy"
-        elif sell_count > buy_count:
+            conf_out = avg_buy
+        elif sell_count >= buy_count + 1 and avg_sell >= 0.50:
             signal = "Sell"
+            conf_out = avg_sell
         else:
             signal = "Neutral"
+            conf_out = avg_conf
 
-        log.info("%s: ChartScanAI — signal=%s, conf=%.2f, buy=%d, sell=%d",
-                 ticker, signal, avg_conf, buy_count, sell_count)
+        log.info(
+            "%s: ChartScanAI — signal=%s, conf=%.2f, buy=%d, sell=%d",
+            ticker, signal, conf_out, buy_count, sell_count,
+        )
 
         return {
             "signal": signal,
-            "confidence": round(avg_conf, 4),
+            "confidence": round(conf_out, 4),
             "buy_patterns": buy_count,
             "sell_patterns": sell_count,
+            "avg_buy_conf": round(avg_buy, 4),
+            "avg_sell_conf": round(avg_sell, 4),
         }
     except Exception as e:
         log.warning("ChartScanAI failed for %s: %s", ticker, e)

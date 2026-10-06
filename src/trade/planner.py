@@ -298,12 +298,15 @@ def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
             "entry_low": round(last_price - zone_half, 3),
             "entry_high": round(last_price + zone_half, 3),
             "entry_score": 0,
+            # No clean pullback/breakout level — entry-quality issue, not a
+            # direction veto. Strong uptrends often have no "nice" entry.
             "entry_source": "Fallback (no clean setup)",
-            "entry_action": "AVOID",
+            "entry_action": "CHASE — NO CLEAN PULLBACK",
             "distance_pct": 0.0,
             "all_candidates": [],
             "stop_price": round(atr_stop, 3),
             "rr_ratio": round(reward / risk, 2) if risk > 0 else 0,
+            "entry_quality": "chase",
         }
 
     scored.sort(key=lambda c: (c["score"], c["price"]), reverse=True)
@@ -332,6 +335,14 @@ def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
 
     if best["score"] < 20:
         action = "AVOID — POOR SETUP"
+    elif "CHASE" in action or "WAIT" in action:
+        pass
+    else:
+        action = action  # BUY NOW / BUY ON BREAKOUT keep as-is
+
+    entry_quality = "poor" if best["score"] < 20 else (
+        "chase" if ("CHASE" in action or "WAIT" in action) else "clean"
+    )
 
     return {
         "entry_ideal": best["price"],
@@ -344,6 +355,7 @@ def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
         "all_candidates": scored,
         "stop_price": best["stop"],
         "rr_ratio": best["rr_ratio"],
+        "entry_quality": entry_quality,
     }
 
 # ─────────────────────────────────────────────────────────────

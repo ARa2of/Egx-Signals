@@ -874,12 +874,23 @@ def compute_ml_conviction(forecast: Dict, last_price: float,
         elif p_up < 0.40:
             score -= 4
 
-    # MAE penalty (up to -20) — only when the forecast move is material
-    if mae_pct is not None and abs(upside_pct) >= 1.0:
+    # MAE penalty — only material when the forecast move is meaningful.
+    # Small predicted moves with a few % model error are normal uncertainty,
+    # not a reason to zero out conviction.
+    if mae_pct is not None and abs(upside_pct) >= 1.5:
         mae_ratio = mae_pct / max(abs(upside_pct), 0.01)
-        if mae_ratio > 2.0: score -= 20
-        elif mae_ratio > 1.5: score -= 12
-        elif mae_ratio > 1.0: score -= 6
+        if mae_ratio > 3.0:
+            score -= 10
+        elif mae_ratio > 2.0:
+            score -= 6
+        elif mae_ratio > 1.5:
+            score -= 3
+
+    # Path-to-upside: High quantile above spot even if Medium is flat/negative
+    if upside_high_pct >= 0.5 and downside_pct <= 10.0:
+        score += 4
+    elif upside_high_pct >= 0.2 and downside_pct <= 6.0:
+        score += 2
 
     # Direction accuracy bonus (up to +20 pts)
     if direction_accuracy:

@@ -366,6 +366,9 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 },
                 direction_proba=ml_result.get("direction_proba"),
             )
+            # Same 3-tier labels as consensus (Buy>=35, Watch>=20, else Avoid)
+            _conv = conviction.get("conviction_score", 0) or 0
+            ml_rec = "Buy" if _conv >= 35 else ("Watch" if _conv >= 20 else "Avoid")
 
             # ChartScan AI
             cs_result = None
@@ -373,6 +376,25 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 cs_result = chartscan_analyze(yf_entry.history, raw)
                 if cs_result:
                     log.info("%s: ChartScanAI signal=%s, conf=%.2f", raw, cs_result.get("signal"), cs_result.get("confidence"))
+
+            # Sanitize ChartScan: YOLO can label bullish charts "Sell" on a
+            # single candle shape. Require strong confidence to emit Sell, and
+            # neutralize Sell when candlestick patterns say bullish.
+            if cs_result and cs_result.get("signal") == "Sell":
+                cs_conf = float(cs_result.get("confidence") or 0)
+                cs_sell_n = int(cs_result.get("sell_patterns") or 0)
+                cs_buy_n = int(cs_result.get("buy_patterns") or 0)
+                candle_sig = str(patterns.get("latest_signal", "neutral")).lower()
+                if cs_conf < 0.50 or cs_sell_n <= cs_buy_n:
+                    cs_result = {**cs_result, "signal": "Neutral",
+                                 "sanitized": "weak_sell_or_majority"}
+                    log.info("%s: ChartScan Sell sanitized -> Neutral (conf=%.2f sell=%d buy=%d)",
+                             raw, cs_conf, cs_sell_n, cs_buy_n)
+                elif candle_sig == "bullish" and cs_conf < 0.70:
+                    cs_result = {**cs_result, "signal": "Neutral",
+                                 "sanitized": "candle_bullish_vs_yolo_sell"}
+                    log.info("%s: ChartScan Sell vs bullish candle -> Neutral (conf=%.2f)",
+                             raw, cs_conf)
 
             # Base Score
             is_near_support = False
@@ -637,7 +659,7 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 # Multi-level support/resistance
                 "support_levels": [{"price": s["price"], "strength": s["strength"], "touches": s["touches"]} for s in sr_tech.get("support", [])[:5]],
                 "resistance_levels": [{"price": r["price"], "strength": r["strength"], "touches": r["touches"]} for r in sr_tech.get("resistance", [])[:5]],
-                "ml_signal": "Buy" if conviction.get("conviction_score", 0) >= 45 else "Avoid",
+                "ml_signal": ml_rec,
                 "ml_confidence": conviction.get("conviction_score", 0) / 100,
                 "ml_medium_price": ml_result.get("forecast", {}).get("Medium", {}).get("price"),
                 "ml_low_price": ml_result.get("forecast", {}).get("Low", {}).get("price"),
@@ -646,13 +668,14 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 "ml_forecast_end": ml_result.get("forecast_end", "").strftime("%Y-%m-%d") if hasattr(ml_result.get("forecast_end", ""), "strftime") else str(ml_result.get("forecast_end", "")),
                 "ml_cone_pct": conviction.get("cone_pct"),
                 "ml_last_price_source": ml_result.get("last_price_source", "yfinance"),
+                "ml_trend_note": conviction.get("trend_note"),
                 "candle_signal": patterns.get("latest_signal", "neutral"),
                 "candle_score_delta": patterns.get("score_delta", 0),
                 "chartscan_signal": cs_result.get("signal", "N/A") if cs_result else "N/A",
                 "chartscan_confidence": cs_result.get("confidence") if cs_result else None,
                 "chartscan_buy_patterns": cs_result.get("buy_patterns", 0) if cs_result else 0,
                 "chartscan_sell_patterns": cs_result.get("sell_patterns", 0) if cs_result else 0,
-                "ML Signal": "Buy" if conviction.get("conviction_score", 0) >= 45 else "Avoid",
+                "ML Signal": ml_rec,
                 "ML Confidence": conviction.get("conviction_score", 0) / 100,
                 "ML Medium Price": ml_result.get("forecast", {}).get("Medium", {}).get("price"),
                 "ML Conviction": conviction.get("conviction_score", 0),
@@ -720,12 +743,12 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             # Base (technical) signal
             base_rec = base_score["recommendation"]
             score_val = base_score["raw_score"]
-            # ML signal
-            ml_rec = "Buy" if conviction.get("conviction_score", 0) >= 35 else ("Watch" if conviction.get("conviction_score", 0) >= 20 else "Avoid")
-            # ChartScan AI — abstain when model is missing / no real signal
-            if cs_result and cs_result.get("signal") == "Buy" and (cs_result.get("confidence") or 0) > 0:
+            # ML signal — use same tiers already assigned after conviction
+            # ChartScan AI — abstain when model missing / no real signal.
+            # Avoid requires a solid Sell (conf>=0.50, majority of boxes).
+            if cs_result and cs_result.get("signal") == "Buy" and (cs_result.get("confidence") or 0) >= 0.40:
                 cs_rec = "Buy"
-            elif cs_result and cs_result.get("signal") == "Sell" and (cs_result.get("confidence") or 0) > 0:
+            elif cs_result and cs_result.get("signal") == "Sell" and (cs_result.get("confidence") or 0) >= 0.50:
                 cs_rec = "Avoid"
             elif cs_result and (cs_result.get("confidence") or 0) > 0:
                 cs_rec = "Watch"
@@ -845,13 +868,36 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                     log.debug("%s: Momentum filter skipped (%s)", raw, e)
 
             # ── Entry Action Override ──
-            # Only downgrade if entry action is truly AVOID (not WAIT)
+            # Entry quality ≠ direction. "CHASE / WAIT / no clean pullback"
+            # means the planner lacks a nice level — it does NOT mean the
+            # trend is unbuyable. Only veto Buy on true poor setups, and
+            # never veto a confirmed strong-technical trend.
             entry_action = trade["entry"].get("entry_action", "")
+            entry_source = trade["entry"].get("entry_source", "")
+            entry_quality = trade["entry"].get("entry_quality", "")
             entry_action_upper = str(entry_action).upper()
-            if "AVOID" in entry_action_upper and "WAIT" not in entry_action_upper and consensus_rec in ("Buy", "Strong Buy"):
-                old_rec = consensus_rec
-                consensus_rec = "Watch"
-                consensus_basis = f"Trade planner: {entry_action} — downgrades {old_rec} to Watch"
+            entry_source_upper = str(entry_source).upper()
+            is_chase_or_wait = (
+                "CHASE" in entry_action_upper
+                or "WAIT" in entry_action_upper
+                or "FALLBACK" in entry_source_upper
+                or "NO CLEAN" in entry_action_upper
+                or entry_quality == "chase"
+            )
+            is_poor_setup = (
+                "POOR SETUP" in entry_action_upper
+                or entry_quality == "poor"
+            )
+
+            if consensus_rec in ("Buy", "Strong Buy"):
+                if is_poor_setup and not strong_technicals:
+                    old_rec = consensus_rec
+                    consensus_rec = "Watch"
+                    consensus_basis = f"Trade planner: {entry_action} — downgrades {old_rec} to Watch"
+                elif is_poor_setup and strong_technicals:
+                    consensus_basis += f"; entry quality flag: {entry_action} (trend Buy kept)"
+                elif is_chase_or_wait:
+                    consensus_basis += f"; entry: {entry_action} ({entry_source}) — chase/wait risk, direction kept"
 
             row["Recommendation"] = consensus_rec
             row["Recommendation Basis"] = consensus_basis
