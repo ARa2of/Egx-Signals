@@ -11,6 +11,8 @@ from typing import Dict, List, Optional
 
 import pandas as pd
 
+from src.config import load_params
+
 log = logging.getLogger(__name__)
 
 _PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -183,7 +185,7 @@ def generate_agent_json(rows: List[Dict], output_path: Optional[str] = None) -> 
         "meta": {
             "generated": date.today().isoformat(),
             "source": "EGX Signal Generator",
-            "version": "2.2",
+            "version": load_params().get("version", "unknown"),
             "description": "Structured signal data for AI agent consumption",
         },
         "summary": {
