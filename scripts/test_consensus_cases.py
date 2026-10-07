@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 def consensus(base_rec, ml_conv, cs_signal, cs_conf, candle, entry_action,
               entry_source="", strong=None, adx=30, golden=True, diamond=True,
-              macd_bull=True, death=False):
+              macd_bull=True, death=False, idx_sent=None):
     ml_rec = "Buy" if ml_conv >= 35 else ("Watch" if ml_conv >= 20 else "Avoid")
 
     # ChartScan sanitize (mirrors daily_run)
@@ -57,6 +57,13 @@ def consensus(base_rec, ml_conv, cs_signal, cs_conf, candle, entry_action,
     else:
         rec, basis = "Watch", "insufficient"
 
+    # Market-context gate (v2.3, mirrors daily_run): a Bearish index
+    # withholds the weakest upgrade (single Buy vote, no Avoid).
+    # Strong technicals and 2+ Buy votes are exempt.
+    if idx_sent == "Bearish" and rec == "Buy" and buy_v == 1 and avoid_v == 0 and not strong:
+        rec = "Watch"
+        basis += "; index Bearish gate"
+
     # Entry override
     ea = entry_action.upper()
     src = entry_source.upper()
@@ -87,6 +94,13 @@ cases = [
     # ARCC: high score, ML Buy, CS Neutral, entry chase — momentum filter not simulated
     dict(label="ARCC", base_rec="Buy", ml_conv=85, cs_signal="Neutral", cs_conf=0.41,
          candle="neutral", entry_action="CHASE — NO CLEAN PULLBACK", adx=35.1, strong=True),
+    # BEARIDX (v2.3 market-context gate): single Buy vote, no Avoid, no strong
+    # technicals — Bearish index withholds the upgrade -> Watch
+    dict(label="BEARIDX", base_rec="Buy", ml_conv=30, cs_signal="Neutral", cs_conf=0.35,
+         candle="neutral", entry_action="BUY NOW", adx=22, strong=False, idx_sent="Bearish"),
+    # BULLIDX: identical setup but Bullish index keeps the single-Buy upgrade -> Buy
+    dict(label="BULLIDX", base_rec="Buy", ml_conv=30, cs_signal="Neutral", cs_conf=0.35,
+         candle="neutral", entry_action="BUY NOW", adx=22, strong=False, idx_sent="Bullish"),
 ]
 
 print(f"{'case':8} {'final':10} {'ml_rec':8} {'cs_rec':8} basis")
@@ -103,6 +117,11 @@ for c in cases:
     if c["label"] == "MBSC":
         ok = ok and rec == "Buy" and cs_rec != "Avoid"
         print(f"         MBSC chartscan after sanitize: {cs_raw}")
+    if c["label"] == "BEARIDX":
+        ok = ok and rec == "Watch"
+        print(f"         BEARIDX gate: {basis}")
+    if c["label"] == "BULLIDX":
+        ok = ok and rec == "Buy"
 
 print()
 print("EXPECTATIONS:", "PASS" if ok else "FAIL")

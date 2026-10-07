@@ -509,6 +509,10 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 regime=regime, patterns=patterns, mae_pct=mae_pct,
                 vol_profile=vol_profile, current_price=current_price,
                 intraday_data=intraday_result if not intraday_result.get("skipped") else None,
+                trend_context=trend_context,
+                direction_accuracy=ml_result.get("direction_accuracy"),
+                direction_proba=ml_result.get("direction_proba"),
+                ensemble_weights=ml_result.get("ensemble_weights"),
             )
 
             # Personalized holding period
@@ -803,6 +807,25 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 consensus_rec = "Watch"
                 consensus_basis = "Insufficient active signals"
 
+            # ── Market-Context Gate (v2.3) ──
+            # A bearish index should not block well-evidenced Buys (strong
+            # technicals or 2+ Buy votes), but the weakest upgrade path
+            # (single Buy vote, no Avoid) needs market support.
+            idx_mem_mkt = ticker_index_map.get(raw, "UNINDEX")
+            idx_label_mkt = "EGX100" if idx_mem_mkt == "UNINDEX" else idx_mem_mkt
+            idx_sent = index_sentiment.get(idx_label_mkt, {}).get("sentiment", "Unknown")
+            mkt_cfg = params.get("market_context", {})
+            if (mkt_cfg.get("use_index_sentiment", True)
+                    and consensus_rec == "Buy"
+                    and buy_votes == 1 and avoid_votes == 0
+                    and not strong_technicals
+                    and idx_sent == "Bearish"):
+                consensus_rec = "Watch"
+                consensus_basis = (f"{idx_label_mkt} Bearish - single-Buy upgrade withheld "
+                                   f"(market-context gate): {consensus_basis}")
+            if consensus_rec in ("Buy", "Strong Buy") and idx_sent not in ("Unknown", None):
+                consensus_basis += f" [{idx_label_mkt} {idx_sent}]"
+
             # ── RSI Overbought Hard Cap (v2.2: regime-mapped + ADX-aware) ──
             rsi_cfg = params.get("rsi", {})
             regime_key = regime.get("regime", "ranging")
@@ -843,10 +866,14 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                 trade["entry"]["stale"] = True
 
             # ── Price Momentum Filter ──
-            # If price dropped >5% since first Buy signal, require higher score to maintain Buy
+            # If price dropped >5% since a recent Buy signal, require higher score to maintain Buy.
+            # v2.3: rolling window (most recent Buy within N sessions) instead of the
+            # all-time first Buy — an ancient Buy close pinned tickers at Watch forever
+            # after one deep drawdown (backlog item #4).
             thresholds_cfg = params.get("thresholds", {})
             momentum_drop = thresholds_cfg.get("momentum_penalty_drop_pct", 0.05)
             momentum_score_add = thresholds_cfg.get("momentum_penalty_score_add", 10)
+            momentum_lookback_days = thresholds_cfg.get("momentum_filter_lookback_days", 60)
             if consensus_rec in ("Buy", "Strong Buy") and current_price:
                 try:
                     from src.store.signal_store import load_store as _load_momentum_store
@@ -856,14 +883,25 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
                         (_mom_store["recommendation"].isin(["Buy", "Strong Buy"]))
                     ]
                     if not _prev_buys.empty:
-                        _first_buy_close = _prev_buys.sort_values("run_date").iloc[0].get("close")
-                        if _first_buy_close and _first_buy_close > 0:
-                            _price_drop = (current_price - _first_buy_close) / _first_buy_close
-                            if _price_drop < -momentum_drop:
-                                old_rec = consensus_rec
-                                consensus_rec = "Watch"
-                                consensus_basis = f"Price dropped {_price_drop:.1%} since first Buy ({_first_buy_close:.2f}) — momentum filter downgrades {old_rec} to Watch"
-                                log.info("%s: Momentum filter triggered (%.1f%% drop since first Buy)", raw, _price_drop * 100)
+                        _cutoff = pd.Timestamp.now() - pd.Timedelta(days=momentum_lookback_days)
+                        _recent_buys = _prev_buys[
+                            pd.to_datetime(_prev_buys["run_date"]) >= _cutoff
+                        ]
+                        if not _recent_buys.empty:
+                            _ref_buy_close = _recent_buys.sort_values("run_date").iloc[-1].get("close")
+                            if _ref_buy_close and _ref_buy_close > 0:
+                                _price_drop = (current_price - _ref_buy_close) / _ref_buy_close
+                                if _price_drop < -momentum_drop:
+                                    old_rec = consensus_rec
+                                    consensus_rec = "Watch"
+                                    consensus_basis = (
+                                        f"Price dropped {_price_drop:.1%} since Buy "
+                                        f"({_ref_buy_close:.2f}, last {momentum_lookback_days}d) — "
+                                        f"momentum filter downgrades {old_rec} to Watch"
+                                    )
+                                    log.info("%s: Momentum filter triggered (%.1f%% drop since recent Buy)", raw, _price_drop * 100)
+                        else:
+                            log.debug("%s: Momentum filter skipped (no Buy in last %dd)", raw, momentum_lookback_days)
                 except Exception as e:
                     log.debug("%s: Momentum filter skipped (%s)", raw, e)
 

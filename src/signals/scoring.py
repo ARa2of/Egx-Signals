@@ -30,8 +30,11 @@ SCORE_WEIGHT_INTRADAY = weights_cfg.get("intraday", 0)
 SCORE_BUY_THRESHOLD = thresholds_cfg["buy"]
 SCORE_WATCH_THRESHOLD = thresholds_cfg["watch"]
 
-RSI_OVERSOLD = 32.83
-RSI_OVERBOUGHT = 80.54
+# Fallbacks only — regime zones from params.yaml take priority in score_rsi.
+# Derived from params rsi.ranging defaults so config and code never diverge.
+_RSI_FALLBACK = params.get("rsi", {}).get("ranging", {})
+RSI_OVERSOLD = _RSI_FALLBACK.get("oversold", 28)
+RSI_OVERBOUGHT = _RSI_FALLBACK.get("overbought", 70)
 ADX_TREND_THRESHOLD = data_cfg["adx_trend_threshold"]
 MFI_OVERBOUGHT = data_cfg["mfi_overbought"]
 MFI_OVERSOLD = data_cfg["mfi_oversold"]
@@ -135,11 +138,11 @@ def score_rsi(rsi: Optional[float], adx: Optional[float], regime: str = "unknown
     if healthy_low <= rsi <= healthy_high:
         score = 1.0
         reasons.append(f"RSI in healthy bullish zone ({rsi:.1f})")
-    elif 35 <= rsi < healthy_low:
+    elif oversold <= rsi < healthy_low:
         score = 0.6
         reasons.append(f"RSI neutral-firm ({rsi:.1f})")
-    elif rsi < 35:
-        score = 0.8 if rsi <= oversold else 0.4
+    elif rsi < oversold:
+        score = 0.8
         reasons.append(f"RSI oversold, potential reversal ({rsi:.1f})")
     elif rsi <= overbought:
         strong_trend = adx is not None and adx >= ADX_TREND_THRESHOLD

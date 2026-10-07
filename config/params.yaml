@@ -1,7 +1,7 @@
 # EGX Signal Generator Parameters
 # Versioned config — update version when params change
-version: "v2.2"
-updated: "2026-10-05"
+version: "v2.3"
+updated: "2026-10-07"
 description: "Core scoring and trade plan parameters"
 
 # ─────────────────────────────────────────────────────────────
@@ -42,6 +42,17 @@ thresholds:
   watch: 50.0
   momentum_penalty_drop_pct: 0.05
   momentum_penalty_score_add: 10
+  # v2.3: momentum filter uses the most recent Buy within this window
+  # (was: all-time first Buy close — stale-forever risk, backlog #4)
+  momentum_filter_lookback_days: 60
+
+# ── Market Context Gate (v2.3) ──
+market_context:
+  # When true, a Bearish index (per the ticker's EGX index membership)
+  # blocks the weakest consensus upgrade path (single Buy vote, no Avoid)
+  # and holds it at Watch. Strong technicals and 2+ Buy votes are exempt —
+  # they are independent evidence.
+  use_index_sentiment: true
 
 # ─────────────────────────────────────────────────────────────
 # RSI ZONES (regime-aware)

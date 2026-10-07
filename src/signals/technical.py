@@ -39,13 +39,25 @@ def compute_volume_profile(df: pd.DataFrame, n_bins: int = 20) -> Dict:
         return {"poc": price_max, "va_high": price_max, "va_low": price_min, "bins": [], "above_poc": None}
 
     bin_size = (price_max - price_min) / n_bins
+    # v2.3: split each bar's volume across the bins its range spans instead of
+    # counting the full bar volume in every overlapped bin (wide bars used to
+    # inflate several bins and skew POC/VA). Same convention as the S/R histogram.
+    bin_vol = np.zeros(n_bins)
+    lows = data["Low"].to_numpy(dtype=float)
+    highs = data["High"].to_numpy(dtype=float)
+    vols = data["Volume"].to_numpy(dtype=float)
+    for i in range(len(data)):
+        lo_idx = int((lows[i] - price_min) / bin_size)
+        hi_idx = int((highs[i] - price_min) / bin_size)
+        lo_idx = max(0, min(n_bins - 1, lo_idx))
+        hi_idx = max(0, min(n_bins - 1, hi_idx))
+        share = vols[i] / (hi_idx - lo_idx + 1)
+        bin_vol[lo_idx:hi_idx + 1] += share
     bins = []
     for i in range(n_bins):
         lo = price_min + i * bin_size
         hi = lo + bin_size
-        mask = (data["Low"] < hi) & (data["High"] >= lo)
-        vol_in_bin = float(data.loc[mask, "Volume"].sum())
-        bins.append({"price_low": round(lo, 3), "price_high": round(hi, 3), "volume": vol_in_bin})
+        bins.append({"price_low": round(lo, 3), "price_high": round(hi, 3), "volume": float(bin_vol[i])})
 
     max_vol = max(b["volume"] for b in bins) if bins else 1
     for b in bins:

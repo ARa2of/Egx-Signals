@@ -7,6 +7,7 @@ import pandas as pd
 from typing import Dict, List, Optional, Tuple
 from src.config import load_params
 from src.signals.ml import compute_ml_conviction
+from src.signals.scoring import resolve_rsi_regime
 
 params = load_params()
 trade_cfg = params["trade"]
@@ -23,6 +24,10 @@ MIN_RR = trade_cfg["min_rr"]
 PROXIMITY_PENALTY_PER_ATR = trade_cfg["proximity_penalty_per_atr"]
 TARGET_ATR = trade_cfg["target_atr"]
 MAX_ENTRY_DISTANCE_PCT = trade_cfg.get("max_entry_distance_pct", 0.08)
+# Take-profit percentages from params.yaml (v2.3: no longer hardcoded in planner)
+TP1_PCT = trade_cfg.get("tp1_pct", 1.0)
+TP2_PCT = trade_cfg.get("tp2_pct", 2.0)
+TP3_PCT = trade_cfg.get("tp3_pct", 6.0)
 
 # Enhanced entry indicators
 ENTRY_INDICATORS = enhanced_cfg["entry_indicators"]
@@ -220,7 +225,7 @@ def _score_candidate(candidate_price: float, indic: Dict, sr: Dict, fib_levels: 
 # ─────────────────────────────────────────────────────────────
 def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
                        candle_score_delta: int = 0, ml_conviction: Dict = None,
-                       vol_profile: Dict = None, entry_adjustment: int = 0) -> Dict:
+                       vol_profile: Dict = None) -> Dict:
     last_price = indic["close"]
     atr = indic["atr"]
     fib_levels = fib.get("levels", [])
@@ -265,9 +270,20 @@ def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
     # These are valid when the stock is expected to rise but needs to clear resistance first
     for r in sr.get("resistance", []):
         if r["price"] > last_price and r["price"] < last_price * 1.05:
-            # Only if ML forecast supports upside beyond this level
+            # ML must support upside beyond this level. The *median* forecast is
+            # not the only evidence: after big runs the median mean-reverts flat/
+            # negative while the High quantile and the direction model still back
+            # continuation. v2.3: also accept High-quantile clearance or P(up) ≥ 0.55.
             med_price = forecast.get("Medium", {}).get("price", last_price)
-            if med_price > r["price"] * 1.02:
+            high_price = forecast.get("High", {}).get("price", last_price)
+            p_up = None
+            if ml_conviction:
+                dir_p = ml_conviction.get("direction_proba") or {}
+                p_up = dir_p.get("ensemble_p_up")
+            med_ok = med_price is not None and med_price > r["price"] * 1.02
+            high_ok = high_price is not None and high_price > r["price"] * 1.02
+            p_up_ok = p_up is not None and p_up >= 0.55
+            if med_ok or high_ok or p_up_ok:
                 raw_candidates.append((r["price"], f"Breakout ({r['strength']})"))
 
     # Current price
@@ -413,11 +429,11 @@ def compute_take_profits(entry: float, stop: float, forecast: Dict, sr: Dict, fi
     risk = entry - stop
     targets = []
 
-    # Optimal percentage-based TPs from backtest
-    tp1_pct = 1.0
-    tp2_pct = 2.0
-    tp3_pct = 6.0
-    min_rr = 3.0
+    # Percentage-based TPs — from params.yaml (backtest-tuned defaults)
+    tp1_pct = TP1_PCT
+    tp2_pct = TP2_PCT
+    tp3_pct = TP3_PCT
+    min_rr = MIN_RR
 
     # Calculate TP prices
     tp1_price = entry * (1 + tp1_pct / 100)
@@ -425,9 +441,9 @@ def compute_take_profits(entry: float, stop: float, forecast: Dict, sr: Dict, fi
     tp3_price = entry * (1 + tp3_pct / 100)
 
     # Add percentage-based TPs (always present)
-    for price, label, pct in [(tp1_price, "TP1 (1%)", tp1_pct),
-                               (tp2_price, "TP2 (2%)", tp2_pct),
-                               (tp3_price, "TP3 (6%)", tp3_pct)]:
+    for price, label, pct in [(tp1_price, f"TP1 ({tp1_pct:g}%)", tp1_pct),
+                               (tp2_price, f"TP2 ({tp2_pct:g}%)", tp2_pct),
+                               (tp3_price, f"TP3 ({tp3_pct:g}%)", tp3_pct)]:
         rr = (price - entry) / risk if risk > 0 else 0
         targets.append({
             "source": label,
@@ -506,7 +522,8 @@ def compute_position_size(capital: float, entry: float, stop: float, risk_pct: f
 # ─────────────────────────────────────────────────────────────
 # Signal Score
 # ─────────────────────────────────────────────────────────────
-def compute_signal_score(last_price: float, df_tech: pd.DataFrame, sr: Dict, forecast: Dict, entry_price: float) -> Dict:
+def compute_signal_score(last_price: float, df_tech: pd.DataFrame, sr: Dict, forecast: Dict, entry_price: float,
+                         regime: str = "ranging") -> Dict:
     score = 0
     details = []
     indic = _get_indicators(df_tech)
@@ -524,7 +541,11 @@ def compute_signal_score(last_price: float, df_tech: pd.DataFrame, sr: Dict, for
     check("Price / Entry above SMA 200", 10, entry_price > indic["sma200"], f"SMA200={indic['sma200']:.2f}")
 
     rsi = indic["rsi"]
-    check("RSI in healthy zone (35–65)", 10, 35 <= rsi <= 65, f"RSI={rsi:.1f}")
+    rsi_zones = params.get("rsi", {}).get(resolve_rsi_regime(regime), {})
+    rsi_low = rsi_zones.get("healthy_low", 40)
+    rsi_high = rsi_zones.get("healthy_high", 68)
+    check(f"RSI in healthy zone ({rsi_low:.0f}-{rsi_high:.0f})", 10,
+          rsi_low <= rsi <= rsi_high, f"RSI={rsi:.1f}")
     check("MACD > Signal (bullish)", 10, indic["macd"] > indic["macd_sig"], f"MACD={indic['macd']:.3f} Sig={indic['macd_sig']:.3f}")
 
     check("Entry at/near support zone", 10,
@@ -744,7 +765,11 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
                      capital: float = 10000.0, risk_pct: float = 1.0,
                      regime: Dict = None, patterns: Dict = None, mae_pct: float = None,
                      vol_profile: Dict = None, current_price: float = None,
-                     intraday_data: Dict = None) -> Dict:
+                     intraday_data: Dict = None,
+                     trend_context: Dict = None,
+                     direction_accuracy: Dict = None,
+                     direction_proba: Dict = None,
+                     ensemble_weights: Dict = None) -> Dict:
     indic = _get_indicators(df_tech)
     last_price = indic["close"]
 
@@ -756,8 +781,24 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
     regime = regime or {"regime": "unknown", "adx": 0.0, "direction": "neutral"}
     patterns = patterns or {"patterns": [], "latest_signal": "neutral", "score_delta": 0}
 
-    # ML conviction first
-    conviction = compute_ml_conviction(forecast, last_price, mae_pct)
+    # ML conviction first — v2.3: pass trend context + direction info so the
+    # planner's conviction matches the report's (bull-trend floor and P(up)
+    # adjustments used to be silently dropped here, depressing ML-agreement
+    # points for uptrends).
+    if trend_context is None:
+        _reg_name = str(regime.get("regime", "unknown")) if regime else "unknown"
+        trend_context = {
+            "bullish": "trending_up" in _reg_name,
+            "adx": (regime or {}).get("adx"),
+            "regime": _reg_name,
+        }
+    conviction = compute_ml_conviction(
+        forecast, last_price, mae_pct,
+        direction_accuracy=direction_accuracy,
+        ensemble_weights=ensemble_weights,
+        trend_context=trend_context,
+        direction_proba=direction_proba,
+    )
 
     # Intraday adjustments to entry/exit
     intraday_adjustments = {}
@@ -776,13 +817,10 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
             stop_adjustment = 0.85  # 15% tighter stop
             intraday_adjustments["stop_note"] = "Intraday bullish — tighter stop"
 
-        # Entry urgency adjustment
-        entry_adjustment = 0
+        # Entry urgency note (report-only; planner has no urgency knob)
         if momentum_trend == "accelerating" and ad_signal == "bullish":
-            entry_adjustment = 1  # More urgent
             intraday_adjustments["entry_note"] = "Intraday momentum accelerating"
         elif momentum_trend == "decelerating":
-            entry_adjustment = -1  # Less urgent
             intraday_adjustments["entry_note"] = "Intraday momentum decelerating"
 
         # Volume skew adjustment
@@ -792,14 +830,12 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
             intraday_adjustments["volume_note"] = "Heavy selling at highs (distribution)"
     else:
         stop_adjustment = 1.0
-        entry_adjustment = 0
 
     # Entry zone (uses conviction + candle delta + intraday)
     entry = compute_entry_zone(indic, sr, fib, forecast,
                                candle_score_delta=patterns.get("score_delta", 0),
                                ml_conviction=conviction,
-                               vol_profile=vol_profile,
-                               entry_adjustment=entry_adjustment)
+                               vol_profile=vol_profile)
 
     stop = compute_stop_loss(entry["entry_ideal"], entry["stop_price"], indic["atr"], sr)
     # Apply intraday stop adjustment
@@ -811,7 +847,8 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
 
     tps = compute_take_profits(entry["entry_ideal"], stop["stop_price"], forecast, sr, fib, last_price=last_price)
     pos = compute_position_size(capital, entry["entry_ideal"], stop["stop_price"], risk_pct)
-    signal = compute_signal_score(last_price, df_tech, sr, forecast, entry["entry_ideal"])
+    signal = compute_signal_score(last_price, df_tech, sr, forecast, entry["entry_ideal"],
+                                  regime=(regime or {}).get("regime", "ranging"))
 
     partial_trade = {"entry": entry, "stop": stop, "targets": tps, "signal": signal}
     holding = compute_holding_recommendation(forecast, partial_trade, regime, patterns, conviction, last_price)
