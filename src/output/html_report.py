@@ -1208,7 +1208,10 @@ def _build_ticker_card(row, fund_df=None):
 
         cs_signal=cs_signal if cs_signal and cs_signal != "N/A" else "No pattern",
         cs_class="green" if cs_signal == "Buy" else "red" if cs_signal == "Sell" else "",
-        cs_confidence=f"{cs_conf * 100:.0f}%" if cs_conf else "N/A",
+        # 0.0 is a real result — model ran, no pattern found on this chart.
+        # Never render it as N/A (falsy check bug); only None/NaN mean "no data".
+        cs_confidence=("N/A" if cs_conf is None or cs_conf != cs_conf
+                       else f"{float(cs_conf) * 100:.0f}%"),
         candle_signal=row.get("candle_signal", "N/A"),
 
         pe=_fmt(pe, 1) if pe else "N/A",
