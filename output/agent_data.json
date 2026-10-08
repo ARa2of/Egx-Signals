@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated": "2026-10-07",
+    "generated": "2026-10-08",
     "source": "EGX Signal Generator",
-    "version": "2.2",
+    "version": "v2.3",
     "description": "Structured signal data for AI agent consumption"
   },
   "summary": {
@@ -13,7 +13,7 @@
       "Avoid": 11,
       "Strong Buy": 3
     },
-    "avg_score": 49.0,
+    "avg_score": 49.3,
     "min_score": 26.6,
     "max_score": 79.5,
     "buy_tickers": [
@@ -73,7 +73,7 @@
   "stocks": [
     {
       "ticker": "ADIB",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 30.55,
@@ -214,7 +214,7 @@
     },
     {
       "ticker": "SAUD",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 48.58,
@@ -355,7 +355,7 @@
     },
     {
       "ticker": "ARCC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (ML), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 58.76,
@@ -501,7 +501,7 @@
     },
     {
       "ticker": "MCQE",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 37.91,
@@ -647,7 +647,7 @@
     },
     {
       "ticker": "SCEM",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 46.25,
@@ -793,7 +793,7 @@
     },
     {
       "ticker": "AMER",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 69.73,
@@ -939,7 +939,7 @@
     },
     {
       "ticker": "ARAB",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 79.55,
@@ -1033,7 +1033,7 @@
       },
       "intraday": {
         "score": 70.3,
-        "volume_skew": 0.59,
+        "volume_skew": 0.587,
         "momentum": 62.2,
         "vwap_score": 75.3,
         "ad_signal": "neutral",
@@ -1059,7 +1059,7 @@
     },
     {
       "ticker": "COPR",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 55.42,
@@ -1179,7 +1179,7 @@
       },
       "intraday": {
         "score": 60.4,
-        "volume_skew": 0.525,
+        "volume_skew": 0.526,
         "momentum": 59.3,
         "vwap_score": 60.8,
         "ad_signal": "bearish",
@@ -1205,7 +1205,7 @@
     },
     {
       "ticker": "ENGC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 26.6,
@@ -1346,7 +1346,7 @@
     },
     {
       "ticker": "GGCC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid, ChartScan=Watch",
       "score": 36.58,
@@ -1477,7 +1477,7 @@
     },
     {
       "ticker": "MASR",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (ML), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]",
       "score": 55.74,
@@ -1592,7 +1592,7 @@
       },
       "intraday": {
         "score": 67.7,
-        "volume_skew": 0.278,
+        "volume_skew": 0.277,
         "momentum": 71.0,
         "vwap_score": 79.1,
         "ad_signal": "neutral",
@@ -1618,7 +1618,7 @@
     },
     {
       "ticker": "OBRI",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 34.18,
@@ -1749,7 +1749,7 @@
     },
     {
       "ticker": "OCDI",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 34.72,
@@ -1895,14 +1895,14 @@
     },
     {
       "ticker": "ORHD",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 34.8,
+      "score": 45.07,
       "score_breakdown": {
-        "trend": 3.9,
+        "trend": 12.37,
         "macd": 0.0,
-        "rsi": 7.2,
+        "rsi": 9.0,
         "volume": 10.0,
         "adi": 0.0,
         "support": 0.0,
@@ -1918,14 +1918,14 @@
         "undervalued": true
       },
       "technicals": {
-        "rsi": 9.53,
-        "adx": 27.04,
+        "rsi": 39.74,
+        "adx": 23.36,
         "mfi": 62.67,
-        "macd": -3.0193,
-        "macd_signal": -1.0866,
+        "macd": -0.2743,
+        "macd_signal": -0.2044,
         "macd_bullish": false,
-        "sma50": 40.8238,
-        "sma200": 32.595,
+        "sma50": 12.8091,
+        "sma200": 10.1363,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
@@ -1987,11 +1987,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "5-16 days (Trail Stop)",
+        "label": "4-12 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 16,
-        "days_target": 11,
+        "days_min": 4,
+        "days_max": 12,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -2006,7 +2006,7 @@
     },
     {
       "ticker": "PHDC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 41.1,
@@ -2137,7 +2137,7 @@
     },
     {
       "ticker": "RREI",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 34.43,
@@ -2283,7 +2283,7 @@
     },
     {
       "ticker": "ZMID",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 38.89,
@@ -2429,7 +2429,7 @@
     },
     {
       "ticker": "LCSW",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 78.09,
@@ -2570,7 +2570,7 @@
     },
     {
       "ticker": "EFIH",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX30 Bearish]; entry: WAIT — SIGNIFICANT DIP REQUIRED (SMA 50) — chase/wait risk, direction kept",
       "score": 76.61,
@@ -2696,10 +2696,10 @@
     },
     {
       "ticker": "ETEL",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "EGX30 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (ML), no Avoid among active voters — upgraded to Buy",
-      "score": 57.62,
+      "score": 58.91,
       "score_breakdown": {
         "trend": 26.0,
         "macd": 5.3,
@@ -2709,7 +2709,7 @@
         "support": 0.0,
         "vwap": 3.6,
         "volume_profile": 6.3,
-        "intraday": 8.25
+        "intraday": 9.54
       },
       "price": {
         "current_egp": 148.0,
@@ -2795,9 +2795,9 @@
         "high_price": 159.804
       },
       "intraday": {
-        "score": 55.0,
-        "volume_skew": -0.177,
-        "momentum": 31.1,
+        "score": 63.6,
+        "volume_skew": 0.668,
+        "momentum": 28.6,
         "vwap_score": 72.1,
         "ad_signal": "bullish",
         "ad_score": 0.6
@@ -2822,7 +2822,7 @@
     },
     {
       "ticker": "RACC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 32.95,
@@ -2953,10 +2953,10 @@
     },
     {
       "ticker": "MFPC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "EGX30 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (ML), no Avoid among active voters — upgraded to Buy",
-      "score": 52.37,
+      "score": 52.31,
       "score_breakdown": {
         "trend": 24.18,
         "macd": 0.0,
@@ -2966,7 +2966,7 @@
         "support": 0.0,
         "vwap": 1.6,
         "volume_profile": 5.4,
-        "intraday": 8.68
+        "intraday": 8.62
       },
       "price": {
         "current_egp": 46.5,
@@ -3062,9 +3062,9 @@
         "high_price": 57.502
       },
       "intraday": {
-        "score": 57.9,
-        "volume_skew": 0.063,
-        "momentum": 59.8,
+        "score": 57.5,
+        "volume_skew": 0.06,
+        "momentum": 58.6,
         "vwap_score": 60.0,
         "ad_signal": "neutral",
         "ad_score": 0.2
@@ -3089,7 +3089,7 @@
     },
     {
       "ticker": "EFID",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 32.94,
@@ -3205,7 +3205,7 @@
     },
     {
       "ticker": "JUFO",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch, ChartScan=Avoid",
       "score": 34.8,
@@ -3341,7 +3341,7 @@
     },
     {
       "ticker": "EGAL",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 42.33,
@@ -3487,7 +3487,7 @@
     },
     {
       "ticker": "SWDY",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 48.06,
@@ -3633,7 +3633,7 @@
     },
     {
       "ticker": "AMOC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX30 Bearish]; entry: WAIT — SIGNIFICANT DIP REQUIRED (EMA 20) — chase/wait risk, direction kept",
       "score": 72.53,
@@ -3759,7 +3759,7 @@
     },
     {
       "ticker": "EGAS",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 43.55,
@@ -3905,7 +3905,7 @@
     },
     {
       "ticker": "ZEOT",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -10.3% since Buy (14.04, last 60d) — momentum filter downgrades Buy to Watch",
       "score": 51.75,
@@ -4051,7 +4051,7 @@
     },
     {
       "ticker": "AXPH",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 39.9,
@@ -4197,7 +4197,7 @@
     },
     {
       "ticker": "CPCI",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "No Buy votes, no Avoid — Watch",
       "score": 57.86,
@@ -4328,7 +4328,7 @@
     },
     {
       "ticker": "ISPH",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 36.22,
@@ -4454,7 +4454,7 @@
     },
     {
       "ticker": "MCRO",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 37.53,
@@ -4600,7 +4600,7 @@
     },
     {
       "ticker": "RMDA",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid, ChartScan=Watch",
       "score": 36.37,
@@ -4746,7 +4746,7 @@
     },
     {
       "ticker": "POUL",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 44.79,
@@ -4857,10 +4857,10 @@
     },
     {
       "ticker": "ORWE",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Watch, ChartScan=Avoid",
-      "score": 54.48,
+      "score": 54.43,
       "score_breakdown": {
         "trend": 22.45,
         "macd": 0.0,
@@ -4870,7 +4870,7 @@
         "support": 0.0,
         "vwap": 3.2,
         "volume_profile": 5.4,
-        "intraday": 10.23
+        "intraday": 10.19
       },
       "price": {
         "current_egp": 27.14,
@@ -4971,9 +4971,9 @@
         "high_price": null
       },
       "intraday": {
-        "score": 68.2,
-        "volume_skew": 0.768,
-        "momentum": 51.3,
+        "score": 67.9,
+        "volume_skew": 0.766,
+        "momentum": 50.5,
         "vwap_score": 51.1,
         "ad_signal": "bullish",
         "ad_score": 0.8
@@ -4998,7 +4998,7 @@
     },
     {
       "ticker": "AMIA",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 56.85,
@@ -5134,7 +5134,7 @@
     },
     {
       "ticker": "ETRS",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (ML), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]",
       "score": 59.2,
@@ -5270,7 +5270,7 @@
     },
     {
       "ticker": "MTIE",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 45.41,
@@ -5396,7 +5396,7 @@
     },
     {
       "ticker": "TALM",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 62.78,
@@ -5537,7 +5537,7 @@
     },
     {
       "ticker": "OLFI",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 37.48,
@@ -5657,10 +5657,10 @@
     },
     {
       "ticker": "SIPC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: WAIT FOR PULLBACK (Support (Strong)) — chase/wait risk, direction kept",
-      "score": 76.33,
+      "score": 76.32,
       "score_breakdown": {
         "trend": 26.0,
         "macd": 9.0,
@@ -5670,7 +5670,7 @@
         "support": 0.0,
         "vwap": 3.6,
         "volume_profile": 7.2,
-        "intraday": 11.54
+        "intraday": 11.52
       },
       "price": {
         "current_egp": 6.2,
@@ -5756,10 +5756,10 @@
         "high_price": 6.316
       },
       "intraday": {
-        "score": 76.9,
-        "volume_skew": 0.814,
-        "momentum": 65.5,
-        "vwap_score": 84.2,
+        "score": 76.8,
+        "volume_skew": 0.807,
+        "momentum": 65.4,
+        "vwap_score": 84.1,
         "ad_signal": "neutral",
         "ad_score": 0.2
       },
@@ -5783,7 +5783,7 @@
     },
     {
       "ticker": "MBSC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -6.9% since Buy (404.75, last 60d) — momentum filter downgrades Buy to Watch",
       "score": 72.86,
@@ -5801,7 +5801,7 @@
       "price": {
         "current_egp": 377.0,
         "current_usd": 7.257,
-        "fair_value_egp": 965.6963,
+        "fair_value_egp": 959.1745,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -5929,10 +5929,10 @@
     },
     {
       "ticker": "ATQA",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (ML), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
-      "score": 54.86,
+      "score": 54.2,
       "score_breakdown": {
         "trend": 24.22,
         "macd": 0.0,
@@ -5942,7 +5942,7 @@
         "support": 0.0,
         "vwap": 1.6,
         "volume_profile": 5.4,
-        "intraday": 11.14
+        "intraday": 10.49
       },
       "price": {
         "current_egp": 12.25,
@@ -6048,10 +6048,10 @@
         "high_price": 13.083
       },
       "intraday": {
-        "score": 74.3,
-        "volume_skew": 0.948,
+        "score": 69.9,
+        "volume_skew": 0.659,
         "momentum": 81.8,
-        "vwap_score": 52.0,
+        "vwap_score": 52.1,
         "ad_signal": "neutral",
         "ad_score": 0.0
       },
@@ -6075,7 +6075,7 @@
     },
     {
       "ticker": "ISMQ",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 36.99,
@@ -6211,10 +6211,10 @@
     },
     {
       "ticker": "ADCI",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
-      "score": 45.0,
+      "score": 46.6,
       "score_breakdown": {
         "trend": 19.35,
         "macd": 0.0,
@@ -6222,13 +6222,13 @@
         "volume": 0.0,
         "adi": 0.0,
         "support": 2.16,
-        "vwap": 1.6,
+        "vwap": 3.2,
         "volume_profile": 5.4,
         "intraday": 7.5
       },
       "price": {
         "current_egp": 272.95,
-        "current_usd": 5.2398,
+        "current_usd": 5.2059,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
@@ -6236,7 +6236,7 @@
       "technicals": {
         "rsi": 44.51,
         "adx": 24.73,
-        "mfi": 68.45,
+        "mfi": 68.37,
         "macd": -4.2348,
         "macd_signal": -3.5697,
         "macd_bullish": false,
@@ -6248,9 +6248,9 @@
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 36713.0,
+        "avg_3m": 35823.0,
         "last_day": 2600.0,
-        "multiplier": 0.071
+        "multiplier": 0.073
       },
       "support_resistance": {
         "support": 267.66,
@@ -6279,7 +6279,7 @@
           {
             "price": 267.553,
             "strength": "Strong",
-            "touches": 2
+            "touches": 3
           }
         ],
         "resistance_levels": [
@@ -6287,11 +6287,6 @@
             "price": 289.435,
             "strength": "Strong",
             "touches": 11
-          },
-          {
-            "price": 274.11,
-            "strength": "Strong",
-            "touches": 9
           },
           {
             "price": 296.517,
@@ -6304,6 +6299,11 @@
             "touches": 6
           },
           {
+            "price": 275.407,
+            "strength": "Strong",
+            "touches": 5
+          },
+          {
             "price": 306.736,
             "strength": "Medium",
             "touches": 2
@@ -6314,20 +6314,20 @@
         "entry_price": 272.95,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 254.11,
+        "stop_loss": 257.517,
         "tp1": 275.68,
         "tp2": 278.409,
         "tp3": 289.327,
-        "tp1_rr": 0.14,
-        "tp2_rr": 0.29,
-        "tp3_rr": 0.87
+        "tp1_rr": 0.18,
+        "tp2_rr": 0.35,
+        "tp3_rr": 1.06
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 100.0,
-        "medium_price": 272.638,
-        "low_price": 210.062,
-        "high_price": 294.846
+        "confidence": 15.0,
+        "medium_price": 274.58,
+        "low_price": 215.715,
+        "high_price": 291.404
       },
       "intraday": {
         "score": null,
@@ -6357,7 +6357,7 @@
     },
     {
       "ticker": "ICFC",
-      "run_date": "2026-10-07",
+      "run_date": "2026-10-08",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Neutral]",
       "score": 62.08,
@@ -6462,7 +6462,7 @@
       },
       "intraday": {
         "score": 66.5,
-        "volume_skew": 0.68,
+        "volume_skew": 0.681,
         "momentum": 61.4,
         "vwap_score": 61.5,
         "ad_signal": "neutral",
