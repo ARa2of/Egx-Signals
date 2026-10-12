@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-10-11",
+    "generated": "2026-10-12",
     "source": "EGX Signal Generator",
     "version": "v2.3",
     "description": "Structured signal data for AI agent consumption"
@@ -8,125 +8,119 @@
   "summary": {
     "total_stocks": 47,
     "recommendations": {
-      "Watch": 30,
-      "Strong Buy": 1,
-      "Avoid": 12,
-      "Buy": 4
+      "Watch": 31,
+      "Avoid": 13,
+      "Buy": 3
     },
-    "avg_score": 45.9,
-    "min_score": 23.2,
-    "max_score": 76.6,
+    "avg_score": 39.2,
+    "min_score": 19.4,
+    "max_score": 77.8,
     "buy_tickers": [
-      "ARCC",
+      "EFIH",
       "ETEL",
-      "CPCI",
-      "TALM",
-      "ICFC"
+      "CPCI"
     ],
     "watch_tickers": [
       "ADIB",
       "SAUD",
-      "MCQE",
+      "ARCC",
       "SCEM",
       "ARAB",
+      "COPR",
       "ENGC",
-      "MASR",
       "OCDI",
       "ORHD",
       "PHDC",
       "RREI",
       "ZMID",
-      "LCSW",
-      "EFIH",
       "MFPC",
       "EFID",
+      "JUFO",
       "EGAL",
       "SWDY",
       "AMOC",
-      "EGAS",
       "ZEOT",
       "AXPH",
       "ISPH",
       "MCRO",
       "POUL",
+      "ORWE",
+      "ETRS",
+      "TALM",
       "OLFI",
-      "SIPC",
       "MBSC",
       "ATQA",
-      "ISMQ"
+      "ISMQ",
+      "ICFC"
     ],
     "avoid_tickers": [
+      "MCQE",
       "AMER",
-      "COPR",
       "GGCC",
+      "MASR",
       "OBRI",
+      "LCSW",
       "RACC",
-      "JUFO",
+      "EGAS",
       "RMDA",
-      "ORWE",
       "AMIA",
-      "ETRS",
       "MTIE",
+      "SIPC",
       "ADCI"
     ]
   },
   "stocks": [
     {
       "ticker": "ADIB",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 33.73,
+      "score": 25.98,
       "score_breakdown": {
-        "trend": 10.82,
+        "trend": 10.39,
         "macd": 0.0,
         "rsi": 5.4,
-        "volume": 0.0,
-        "adi": 3.5,
-        "support": 3.91,
+        "volume": 0.09,
+        "adi": 0.0,
+        "support": 0.0,
         "vwap": 0.8,
         "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 46.6,
+        "current_egp": 45.9,
         "current_usd": 0.9148,
         "fair_value_egp": 110.3912,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 29.33,
-        "adx": 35.19,
-        "mfi": 60.12,
-        "macd": -1.2372,
-        "macd_signal": -0.7877,
+        "rsi": 27.36,
+        "adx": 37.59,
+        "mfi": 60.03,
+        "macd": -1.4191,
+        "macd_signal": -0.9139,
         "macd_bullish": false,
-        "sma50": 52.3542,
-        "sma200": 43.8665,
+        "sma50": 52.2152,
+        "sma200": 43.9514,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 1662719.0,
-        "last_day": 1477603.0,
-        "multiplier": 0.889
+        "avg_3m": 1638579.0,
+        "last_day": 1710893.0,
+        "multiplier": 1.044
       },
       "support_resistance": {
         "support": 46.02,
-        "resistance": 48.49,
+        "resistance": 46.88,
         "support_levels": [
           {
-            "price": 46.027,
+            "price": 45.174,
             "strength": "Strong",
-            "touches": 13
-          },
-          {
-            "price": 44.915,
-            "strength": "Strong",
-            "touches": 5
+            "touches": 4
           },
           {
             "price": 44.055,
@@ -141,19 +135,19 @@
             "touches": 13
           },
           {
+            "price": 46.027,
+            "strength": "Strong",
+            "touches": 13
+          },
+          {
             "price": 52.096,
             "strength": "Strong",
             "touches": 11
           },
           {
-            "price": 47.067,
+            "price": 46.938,
             "strength": "Strong",
-            "touches": 11
-          },
-          {
-            "price": 48.223,
-            "strength": "Strong",
-            "touches": 7
+            "touches": 12
           },
           {
             "price": 54.643,
@@ -163,23 +157,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 46.6,
+        "entry_price": 45.9,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 44.149,
-        "tp1": 47.066,
-        "tp2": 47.532,
-        "tp3": 49.396,
-        "tp1_rr": 0.19,
-        "tp2_rr": 0.38,
-        "tp3_rr": 1.14
+        "stop_loss": 43.344,
+        "tp1": 46.359,
+        "tp2": 46.818,
+        "tp3": 48.654,
+        "tp1_rr": 0.18,
+        "tp2_rr": 0.36,
+        "tp3_rr": 1.08
       },
       "ml": {
         "signal": "Buy",
         "confidence": 92.0,
-        "medium_price": 47.928,
-        "low_price": 45.713,
-        "high_price": 50.29
+        "medium_price": 47.211,
+        "low_price": 45.614,
+        "high_price": 50.078
       },
       "intraday": {
         "score": null,
@@ -198,7 +192,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -209,65 +203,77 @@
     },
     {
       "ticker": "SAUD",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 43.24,
+      "score": 31.27,
       "score_breakdown": {
-        "trend": 17.04,
+        "trend": 15.77,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
-        "adi": 3.5,
+        "adi": 0.0,
         "support": 0.0,
         "vwap": 0.8,
-        "volume_profile": 5.4,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 22.8,
+        "current_egp": 21.8,
         "current_usd": 0.4396,
-        "fair_value_egp": 91.9901,
+        "fair_value_egp": 93.1002,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 46.04,
-        "adx": 14.98,
-        "mfi": 63.74,
-        "macd": -0.1225,
-        "macd_signal": -0.0586,
+        "rsi": 39.34,
+        "adx": 14.92,
+        "mfi": 63.71,
+        "macd": -0.2205,
+        "macd_signal": -0.091,
         "macd_bullish": false,
-        "sma50": 23.283,
-        "sma200": 20.5235,
+        "sma50": 23.2796,
+        "sma200": 20.5554,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "ranging"
       },
       "volume": {
-        "avg_3m": 691756.0,
-        "last_day": 106959.0,
-        "multiplier": 0.155
+        "avg_3m": 689665.0,
+        "last_day": 503229.0,
+        "multiplier": 0.73
       },
       "support_resistance": {
-        "support": 22.85,
+        "support": 22.7,
         "resistance": 23.27,
         "support_levels": [
-          {
-            "price": 22.769,
-            "strength": "Strong",
-            "touches": 14
-          },
           {
             "price": 21.417,
             "strength": "Strong",
             "touches": 12
           },
           {
-            "price": 22.322,
+            "price": 20.925,
             "strength": "Strong",
-            "touches": 10
+            "touches": 4
+          },
+          {
+            "price": 19.99,
+            "strength": "Medium",
+            "touches": 2
+          }
+        ],
+        "resistance_levels": [
+          {
+            "price": 22.769,
+            "strength": "Strong",
+            "touches": 15
+          },
+          {
+            "price": 23.536,
+            "strength": "Strong",
+            "touches": 13
           },
           {
             "price": 21.968,
@@ -275,52 +281,35 @@
             "touches": 8
           },
           {
-            "price": 20.925,
+            "price": 22.322,
             "strength": "Strong",
-            "touches": 4
-          }
-        ],
-        "resistance_levels": [
-          {
-            "price": 23.414,
-            "strength": "Strong",
-            "touches": 13
+            "touches": 9
           },
           {
             "price": 24.6,
             "strength": "Strong",
             "touches": 4
-          },
-          {
-            "price": 24.097,
-            "strength": "Strong",
-            "touches": 2
-          },
-          {
-            "price": 26.35,
-            "strength": "Weak",
-            "touches": 1
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 22.788,
-        "entry_action": "BUY NOW",
-        "entry_source": "VP VA Low",
-        "stop_loss": 22.587,
-        "tp1": 23.016,
-        "tp2": 23.244,
-        "tp3": 23.414,
-        "tp1_rr": 1.13,
-        "tp2_rr": 2.27,
-        "tp3_rr": 3.11
+        "entry_price": 21.8,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 20.297,
+        "tp1": 22.018,
+        "tp2": 22.236,
+        "tp3": 23.108,
+        "tp1_rr": 0.15,
+        "tp2_rr": 0.29,
+        "tp3_rr": 0.87
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 44.0,
-        "medium_price": 22.871,
-        "low_price": 21.933,
-        "high_price": 24.103
+        "confidence": 58.0,
+        "medium_price": 22.027,
+        "low_price": 20.784,
+        "high_price": 23.522
       },
       "intraday": {
         "score": null,
@@ -339,7 +328,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -350,46 +339,46 @@
     },
     {
       "ticker": "ARCC",
-      "run_date": "2026-10-11",
-      "recommendation": "Strong Buy",
-      "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
-      "score": 63.96,
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (ML), others disagree",
+      "score": 46.79,
       "score_breakdown": {
-        "trend": 25.17,
-        "macd": 5.97,
+        "trend": 18.48,
+        "macd": 4.81,
         "rsi": 9.0,
-        "volume": 0.03,
-        "adi": 3.5,
+        "volume": 0.0,
+        "adi": 0.0,
         "support": 0.0,
-        "vwap": 4.8,
+        "vwap": 1.6,
         "volume_profile": 5.4,
-        "intraday": 10.08
+        "intraday": 7.5
       },
       "price": {
-        "current_egp": 70.65,
+        "current_egp": 67.43,
         "current_usd": 1.3602,
         "fair_value_egp": 544.4933,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 51.43,
-        "adx": 29.62,
-        "mfi": 66.12,
-        "macd": -0.4404,
-        "macd_signal": -0.7859,
+        "rsi": 45.1,
+        "adx": 27.78,
+        "mfi": 66.23,
+        "macd": -0.5777,
+        "macd_signal": -0.7443,
         "macd_bullish": true,
-        "sma50": 70.6076,
-        "sma200": 56.8321,
+        "sma50": 70.8342,
+        "sma200": 56.9088,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "trending_up"
+        "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 764488.0,
-        "last_day": 776168.0,
-        "multiplier": 1.015
+        "avg_3m": 772522.0,
+        "last_day": 358990.0,
+        "multiplier": 0.465
       },
       "support_resistance": {
         "support": 60.01,
@@ -411,12 +400,12 @@
             "touches": 3
           },
           {
-            "price": 63.756,
+            "price": 54.51,
             "strength": "Strong",
             "touches": 3
           },
           {
-            "price": 54.51,
+            "price": 63.756,
             "strength": "Strong",
             "touches": 3
           }
@@ -450,31 +439,31 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 70.65,
+        "entry_price": 67.43,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 64.342,
-        "tp1": 71.357,
-        "tp2": 72.063,
-        "tp3": 74.889,
+        "stop_loss": 61.087,
+        "tp1": 68.104,
+        "tp2": 68.779,
+        "tp3": 71.476,
         "tp1_rr": 0.11,
-        "tp2_rr": 0.22,
-        "tp3_rr": 0.67
+        "tp2_rr": 0.21,
+        "tp3_rr": 0.64
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 85.0,
-        "medium_price": 74.048,
-        "low_price": 68.02,
-        "high_price": 83.828
+        "confidence": 87.0,
+        "medium_price": 70.898,
+        "low_price": 65.108,
+        "high_price": 79.393
       },
       "intraday": {
-        "score": 67.2,
-        "volume_skew": 0.657,
-        "momentum": 60.7,
-        "vwap_score": 60.7,
-        "ad_signal": "neutral",
-        "ad_score": 0.2
+        "score": null,
+        "volume_skew": null,
+        "momentum": null,
+        "vwap_score": null,
+        "ad_signal": null,
+        "ad_score": null
       },
       "holding": {
         "label": "4-12 days (Trail Stop)",
@@ -485,7 +474,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -496,56 +485,51 @@
     },
     {
       "ticker": "MCQE",
-      "run_date": "2026-10-11",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 38.01,
+      "run_date": "2026-10-12",
+      "recommendation": "Avoid",
+      "recommendation_basis": "Base=Avoid, ML=Watch, ChartScan=Watch",
+      "score": 32.03,
       "score_breakdown": {
-        "trend": 11.11,
+        "trend": 9.37,
         "macd": 0.0,
-        "rsi": 5.4,
-        "volume": 7.8,
+        "rsi": 9.0,
+        "volume": 3.56,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 0.8,
-        "volume_profile": 5.4,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 194.05,
+        "current_egp": 182.0,
         "current_usd": 3.7651,
-        "fair_value_egp": 1937.8907,
+        "fair_value_egp": 1687.8694,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 43.0,
-        "adx": 21.29,
-        "mfi": 66.38,
-        "macd": -6.9938,
-        "macd_signal": -6.731,
+        "rsi": 38.19,
+        "adx": 20.58,
+        "mfi": 66.07,
+        "macd": -7.9246,
+        "macd_signal": -6.9698,
         "macd_bullish": false,
-        "sma50": 217.1878,
-        "sma200": 187.5095,
+        "sma50": 217.1792,
+        "sma200": 187.7579,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "trending"
+        "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 185292.0,
-        "last_day": 417813.0,
-        "multiplier": 2.255
+        "avg_3m": 191012.0,
+        "last_day": 304386.0,
+        "multiplier": 1.594
       },
       "support_resistance": {
         "support": 188.01,
-        "resistance": 197.0,
+        "resistance": 194.883,
         "support_levels": [
-          {
-            "price": 182.003,
-            "strength": "Strong",
-            "touches": 10
-          },
           {
             "price": 179.25,
             "strength": "Strong",
@@ -557,11 +541,6 @@
             "touches": 7
           },
           {
-            "price": 185.05,
-            "strength": "Strong",
-            "touches": 5
-          },
-          {
             "price": 166.66,
             "strength": "Strong",
             "touches": 3
@@ -569,17 +548,17 @@
         ],
         "resistance_levels": [
           {
+            "price": 182.003,
+            "strength": "Strong",
+            "touches": 11
+          },
+          {
             "price": 194.094,
             "strength": "Strong",
-            "touches": 9
+            "touches": 10
           },
           {
-            "price": 240.66,
-            "strength": "Strong",
-            "touches": 6
-          },
-          {
-            "price": 235.075,
+            "price": 185.05,
             "strength": "Strong",
             "touches": 5
           },
@@ -596,23 +575,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 181.469,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "Fib 38.2%",
-        "stop_loss": 177.816,
-        "tp1": 183.284,
-        "tp2": 185.098,
-        "tp3": 192.357,
-        "tp1_rr": 0.5,
-        "tp2_rr": 0.99,
-        "tp3_rr": 2.98
+        "entry_price": 182.0,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 158.0,
+        "tp1": 183.82,
+        "tp2": 185.64,
+        "tp3": 192.92,
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.15,
+        "tp3_rr": 0.46
       },
       "ml": {
-        "signal": "Buy",
-        "confidence": 59.0,
-        "medium_price": 198.067,
-        "low_price": 186.199,
-        "high_price": 220.075
+        "signal": "Watch",
+        "confidence": 27.0,
+        "medium_price": 179.568,
+        "low_price": 172.147,
+        "high_price": 201.457
       },
       "intraday": {
         "score": null,
@@ -623,17 +602,17 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-9 days (Quick Exit)",
-        "exit_strategy": "quick_exit",
-        "days_min": 3,
-        "days_max": 9,
-        "days_target": 7,
+        "label": "4-12 days (Trail Stop)",
+        "exit_strategy": "trail_stop",
+        "days_min": 4,
+        "days_max": 12,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
         "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.0
+        "chartscan_confidence": 0.4362
       },
       "index": {
         "membership": "EGX30",
@@ -642,50 +621,50 @@
     },
     {
       "ticker": "SCEM",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
-      "recommendation_basis": "Price dropped -6.2% since Buy (94.90, last 60d) — momentum filter downgrades Strong Buy to Watch",
-      "score": 63.42,
+      "recommendation_basis": "Price dropped -8.3% since Buy (94.90, last 60d) — momentum filter downgrades Buy to Watch",
+      "score": 51.22,
       "score_breakdown": {
-        "trend": 25.41,
-        "macd": 4.53,
+        "trend": 19.43,
+        "macd": 4.83,
         "rsi": 9.0,
-        "volume": 4.69,
+        "volume": 3.03,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 4.8,
+        "vwap": 3.2,
         "volume_profile": 5.4,
-        "intraday": 9.59
+        "intraday": 6.33
       },
       "price": {
-        "current_egp": 89.0,
+        "current_egp": 87.0,
         "current_usd": 1.6381,
         "fair_value_egp": 636.6305,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 51.63,
-        "adx": 29.65,
-        "mfi": 61.08,
-        "macd": -2.0074,
-        "macd_signal": -2.4234,
+        "rsi": 48.58,
+        "adx": 29.48,
+        "mfi": 61.47,
+        "macd": -1.7702,
+        "macd_signal": -2.2928,
         "macd_bullish": true,
-        "sma50": 91.469,
-        "sma200": 69.6569,
+        "sma50": 91.607,
+        "sma200": 69.7794,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending"
       },
       "volume": {
-        "avg_3m": 1346854.0,
-        "last_day": 2400362.0,
-        "multiplier": 1.782
+        "avg_3m": 1381771.0,
+        "last_day": 542814.0,
+        "multiplier": 0.393
       },
       "support_resistance": {
         "support": 76.75,
-        "resistance": 87.99,
+        "resistance": 105.96,
         "support_levels": [
           {
             "price": 81.377,
@@ -693,24 +672,24 @@
             "touches": 6
           },
           {
-            "price": 87.99,
-            "strength": "Strong",
-            "touches": 4
-          },
-          {
             "price": 77.273,
             "strength": "Strong",
             "touches": 4
           },
           {
-            "price": 67.028,
+            "price": 84.689,
             "strength": "Strong",
-            "touches": 4
+            "touches": 3
           },
           {
-            "price": 84.478,
+            "price": 67.028,
+            "strength": "Strong",
+            "touches": 3
+          },
+          {
+            "price": 74.55,
             "strength": "Medium",
-            "touches": 2
+            "touches": 1
           }
         ],
         "resistance_levels": [
@@ -730,43 +709,43 @@
             "touches": 6
           },
           {
-            "price": 89.9,
-            "strength": "Medium",
-            "touches": 2
+            "price": 87.99,
+            "strength": "Strong",
+            "touches": 4
           },
           {
-            "price": 105.96,
-            "strength": "Weak",
-            "touches": 1
+            "price": 90.412,
+            "strength": "Medium",
+            "touches": 2
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 89.0,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 81.138,
-        "tp1": 89.89,
-        "tp2": 90.78,
-        "tp3": 94.34,
-        "tp1_rr": 0.11,
-        "tp2_rr": 0.23,
-        "tp3_rr": 0.68
+        "entry_price": 81.638,
+        "entry_action": "WAIT FOR PULLBACK",
+        "entry_source": "VP VA Low",
+        "stop_loss": 80.726,
+        "tp1": 82.454,
+        "tp2": 83.271,
+        "tp3": 84.6,
+        "tp1_rr": 0.9,
+        "tp2_rr": 1.79,
+        "tp3_rr": 3.25
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 76.0,
-        "medium_price": 89.324,
-        "low_price": 87.487,
-        "high_price": 96.999
+        "confidence": 68.0,
+        "medium_price": 89.108,
+        "low_price": 84.6,
+        "high_price": 97.727
       },
       "intraday": {
-        "score": 63.9,
-        "volume_skew": -0.024,
-        "momentum": 72.5,
-        "vwap_score": 67.9,
-        "ad_signal": "bullish",
-        "ad_score": 0.4
+        "score": 42.2,
+        "volume_skew": -0.204,
+        "momentum": 17.7,
+        "vwap_score": 75.9,
+        "ad_signal": "neutral",
+        "ad_score": -0.2
       },
       "holding": {
         "label": "3-9 days (Quick Exit)",
@@ -788,46 +767,46 @@
     },
     {
       "ticker": "AMER",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
-      "score": 56.92,
+      "score": 52.92,
       "score_breakdown": {
-        "trend": 26.0,
-        "macd": 4.5,
+        "trend": 20.8,
+        "macd": 4.65,
         "rsi": 9.0,
-        "volume": 1.28,
+        "volume": 0.07,
         "adi": 0.0,
-        "support": 0.0,
-        "vwap": 3.2,
+        "support": 2.92,
+        "vwap": 1.6,
         "volume_profile": 5.4,
-        "intraday": 7.54
+        "intraday": 8.49
       },
       "price": {
-        "current_egp": 4.98,
+        "current_egp": 4.88,
         "current_usd": 0.0963,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 48.63,
-        "adx": 21.25,
-        "mfi": 66.11,
-        "macd": -0.1599,
-        "macd_signal": -0.1918,
+        "rsi": 46.44,
+        "adx": 19.88,
+        "mfi": 66.24,
+        "macd": -0.1474,
+        "macd_signal": -0.1829,
         "macd_bullish": true,
-        "sma50": 5.5214,
-        "sma200": 3.1452,
+        "sma50": 5.529,
+        "sma200": 3.1587,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "trending"
+        "regime": "transitioning"
       },
       "volume": {
-        "avg_3m": 15991957.0,
-        "last_day": 22625430.0,
-        "multiplier": 1.415
+        "avg_3m": 15127729.0,
+        "last_day": 15664714.0,
+        "multiplier": 1.035
       },
       "support_resistance": {
         "support": 4.8,
@@ -888,42 +867,42 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 4.65,
+        "entry_price": 4.55,
         "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "Support (Strong)",
-        "stop_loss": 4.514,
-        "tp1": 4.697,
-        "tp2": 4.743,
-        "tp3": 4.929,
-        "tp1_rr": 0.34,
-        "tp2_rr": 0.68,
-        "tp3_rr": 2.05
+        "entry_source": "Support (Medium)",
+        "stop_loss": 4.404,
+        "tp1": 4.595,
+        "tp2": 4.641,
+        "tp3": 4.823,
+        "tp1_rr": 0.31,
+        "tp2_rr": 0.62,
+        "tp3_rr": 1.87
       },
       "ml": {
         "signal": "Avoid",
         "confidence": 0.0,
-        "medium_price": 4.808,
-        "low_price": 4.34,
-        "high_price": 5.272
+        "medium_price": 4.736,
+        "low_price": 4.221,
+        "high_price": 5.297
       },
       "intraday": {
-        "score": 50.3,
-        "volume_skew": 0.287,
-        "momentum": 13.4,
-        "vwap_score": 71.9,
+        "score": 56.6,
+        "volume_skew": 0.158,
+        "momentum": 44.6,
+        "vwap_score": 79.5,
         "ad_signal": "neutral",
-        "ad_score": 0.2
+        "ad_score": -0.2
       },
       "holding": {
-        "label": "4-11 days (Quick Exit)",
+        "label": "3-10 days (Quick Exit)",
         "exit_strategy": "quick_exit",
-        "days_min": 4,
-        "days_max": 11,
-        "days_target": 8,
+        "days_min": 3,
+        "days_max": 10,
+        "days_target": 7,
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -934,46 +913,46 @@
     },
     {
       "ticker": "ARAB",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
-      "score": 76.59,
+      "score": 77.75,
       "score_breakdown": {
         "trend": 26.0,
         "macd": 9.0,
         "rsi": 9.0,
         "volume": 10.0,
-        "adi": 4.2,
+        "adi": 3.5,
         "support": 0.0,
         "vwap": 3.6,
-        "volume_profile": 6.3,
-        "intraday": 8.49
+        "volume_profile": 7.2,
+        "intraday": 9.45
       },
       "price": {
-        "current_egp": 0.285,
+        "current_egp": 0.276,
         "current_usd": 0.0052,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 70.05,
-        "adx": 25.07,
-        "mfi": 59.94,
-        "macd": 0.0057,
-        "macd_signal": -0.0001,
+        "rsi": 63.66,
+        "adx": 25.69,
+        "mfi": 60.19,
+        "macd": 0.0069,
+        "macd_signal": 0.0013,
         "macd_bullish": true,
-        "sma50": 0.247,
-        "sma200": 0.2036,
+        "sma50": 0.2478,
+        "sma200": 0.204,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_up"
       },
       "volume": {
-        "avg_3m": 399365440.0,
-        "last_day": 981855730.0,
-        "multiplier": 2.459
+        "avg_3m": 403546958.0,
+        "last_day": 649994120.0,
+        "multiplier": 1.611
       },
       "support_resistance": {
         "support": 0.243,
@@ -1000,39 +979,39 @@
             "touches": 9
           },
           {
-            "price": 0.237,
+            "price": 0.209,
             "strength": "Strong",
-            "touches": 5
+            "touches": 8
           }
         ],
         "resistance_levels": []
       },
       "trade_plan": {
-        "entry_price": 0.285,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 0.264,
-        "tp1": 0.288,
-        "tp2": 0.291,
-        "tp3": 0.302,
-        "tp1_rr": 0.14,
-        "tp2_rr": 0.27,
-        "tp3_rr": 0.81
+        "entry_price": 0.258,
+        "entry_action": "WAIT FOR PULLBACK",
+        "entry_source": "Support (Strong)",
+        "stop_loss": 0.25,
+        "tp1": 0.261,
+        "tp2": 0.263,
+        "tp3": 0.273,
+        "tp1_rr": 0.32,
+        "tp2_rr": 0.64,
+        "tp3_rr": 1.93
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 2.0,
-        "medium_price": 0.274,
-        "low_price": 0.263,
-        "high_price": 0.303
+        "confidence": 0.0,
+        "medium_price": 0.271,
+        "low_price": 0.239,
+        "high_price": 0.316
       },
       "intraday": {
-        "score": 56.6,
-        "volume_skew": 0.178,
-        "momentum": 24.9,
-        "vwap_score": 83.8,
-        "ad_signal": "bullish",
-        "ad_score": 0.4
+        "score": 63.0,
+        "volume_skew": 0.5,
+        "momentum": 34.4,
+        "vwap_score": 90.6,
+        "ad_signal": "neutral",
+        "ad_score": 0.0
       },
       "holding": {
         "label": "4-12 days (Trail Stop)",
@@ -1043,7 +1022,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bullish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -1054,60 +1033,65 @@
     },
     {
       "ticker": "COPR",
-      "run_date": "2026-10-11",
-      "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Avoid",
-      "score": 48.14,
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (ML), others disagree",
+      "score": 41.47,
       "score_breakdown": {
-        "trend": 24.64,
+        "trend": 18.6,
         "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
         "adi": 0.0,
-        "support": 0.0,
-        "vwap": 1.6,
-        "volume_profile": 5.4,
+        "support": 3.77,
+        "vwap": 0.8,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 0.473,
+        "current_egp": 0.461,
         "current_usd": 0.0092,
         "fair_value_egp": 0.4967,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 47.16,
-        "adx": 18.38,
-        "mfi": 60.54,
-        "macd": 0.0015,
-        "macd_signal": 0.0025,
+        "rsi": 43.63,
+        "adx": 17.97,
+        "mfi": 60.49,
+        "macd": -0.0004,
+        "macd_signal": 0.0019,
         "macd_bullish": false,
-        "sma50": 0.4746,
-        "sma200": 0.3639,
+        "sma50": 0.4758,
+        "sma200": 0.3648,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "transitioning"
       },
       "volume": {
-        "avg_3m": 103050897.0,
-        "last_day": 22781179.0,
-        "multiplier": 0.221
+        "avg_3m": 102944281.0,
+        "last_day": 46725853.0,
+        "multiplier": 0.454
       },
       "support_resistance": {
-        "support": 0.476,
+        "support": 0.455,
         "resistance": 0.522,
         "support_levels": [
           {
-            "price": 0.358,
+            "price": 0.359,
             "strength": "Strong",
-            "touches": 13
+            "touches": 12
           },
           {
             "price": 0.372,
             "strength": "Strong",
             "touches": 8
+          },
+          {
+            "price": 0.354,
+            "strength": "Strong",
+            "touches": 7
           },
           {
             "price": 0.382,
@@ -1118,11 +1102,6 @@
             "price": 0.409,
             "strength": "Strong",
             "touches": 6
-          },
-          {
-            "price": 0.424,
-            "strength": "Strong",
-            "touches": 4
           }
         ],
         "resistance_levels": [
@@ -1154,23 +1133,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 0.473,
+        "entry_price": 0.461,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 0.432,
-        "tp1": 0.478,
-        "tp2": 0.482,
-        "tp3": 0.501,
-        "tp1_rr": 0.12,
-        "tp2_rr": 0.23,
-        "tp3_rr": 0.69
+        "stop_loss": 0.42,
+        "tp1": 0.466,
+        "tp2": 0.47,
+        "tp3": 0.489,
+        "tp1_rr": 0.11,
+        "tp2_rr": 0.22,
+        "tp3_rr": 0.67
       },
       "ml": {
-        "signal": "Avoid",
-        "confidence": 11.0,
-        "medium_price": 0.474,
-        "low_price": 0.414,
-        "high_price": 0.554
+        "signal": "Buy",
+        "confidence": 38.0,
+        "medium_price": 0.473,
+        "low_price": 0.41,
+        "high_price": 0.546
       },
       "intraday": {
         "score": null,
@@ -1200,15 +1179,15 @@
     },
     {
       "ticker": "ENGC",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 23.19,
+      "score": 19.4,
       "score_breakdown": {
         "trend": 3.9,
         "macd": 0.0,
-        "rsi": 9.0,
-        "volume": 0.19,
+        "rsi": 5.4,
+        "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 0.8,
@@ -1216,44 +1195,39 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 36.0,
+        "current_egp": 35.14,
         "current_usd": 0.7081,
         "fair_value_egp": 82.1311,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 36.13,
-        "adx": 23.11,
-        "mfi": 66.82,
-        "macd": -2.0408,
-        "macd_signal": -1.8415,
+        "rsi": 34.08,
+        "adx": 24.18,
+        "mfi": 66.69,
+        "macd": -2.1036,
+        "macd_signal": -1.894,
         "macd_bullish": false,
-        "sma50": 43.415,
-        "sma200": 36.8339,
+        "sma50": 43.2924,
+        "sma200": 36.8231,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 515934.0,
-        "last_day": 194504.0,
-        "multiplier": 0.377
+        "avg_3m": 502816.0,
+        "last_day": 217859.0,
+        "multiplier": 0.433
       },
       "support_resistance": {
         "support": 33.91,
-        "resistance": 38.29,
+        "resistance": 37.0,
         "support_levels": [
           {
-            "price": 35.638,
+            "price": 34.06,
             "strength": "Strong",
             "touches": 6
-          },
-          {
-            "price": 34.102,
-            "strength": "Strong",
-            "touches": 4
           },
           {
             "price": 33.18,
@@ -1263,50 +1237,50 @@
         ],
         "resistance_levels": [
           {
-            "price": 42.109,
+            "price": 42.123,
             "strength": "Strong",
             "touches": 10
           },
           {
-            "price": 37.521,
-            "strength": "Strong",
-            "touches": 9
-          },
-          {
-            "price": 36.574,
+            "price": 36.858,
             "strength": "Strong",
             "touches": 8
           },
           {
-            "price": 43.935,
+            "price": 43.595,
             "strength": "Strong",
-            "touches": 4
+            "touches": 8
           },
           {
             "price": 38.33,
             "strength": "Strong",
             "touches": 4
+          },
+          {
+            "price": 40.663,
+            "strength": "Strong",
+            "touches": 3
           }
         ]
       },
       "trade_plan": {
         "entry_price": 34.499,
-        "entry_action": "WAIT FOR PULLBACK",
+        "entry_action": "BUY NOW",
         "entry_source": "Fib 38.2%",
-        "stop_loss": 33.829,
+        "stop_loss": 33.788,
         "tp1": 34.844,
         "tp2": 35.189,
-        "tp3": 36.574,
-        "tp1_rr": 0.51,
-        "tp2_rr": 1.03,
-        "tp3_rr": 3.1
+        "tp3": 36.569,
+        "tp1_rr": 0.49,
+        "tp2_rr": 0.97,
+        "tp3_rr": 2.91
       },
       "ml": {
         "signal": "Buy",
         "confidence": 96.0,
-        "medium_price": 38.997,
-        "low_price": 33.975,
-        "high_price": 43.477
+        "medium_price": 37.98,
+        "low_price": 33.106,
+        "high_price": 43.505
       },
       "intraday": {
         "score": null,
@@ -1336,14 +1310,14 @@
     },
     {
       "ticker": "GGCC",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
-      "score": 35.94,
+      "score": 30.77,
       "score_breakdown": {
-        "trend": 13.24,
+        "trend": 11.67,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
@@ -1352,30 +1326,30 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 0.706,
+        "current_egp": 0.67,
         "current_usd": 0.0138,
         "fair_value_egp": 2.3757,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 35.87,
-        "adx": 21.69,
-        "mfi": 64.51,
-        "macd": -0.0452,
-        "macd_signal": -0.0445,
+        "rsi": 31.53,
+        "adx": 22.47,
+        "mfi": 64.48,
+        "macd": -0.0468,
+        "macd_signal": -0.0449,
         "macd_bullish": false,
-        "sma50": 0.8834,
-        "sma200": 0.5442,
+        "sma50": 0.8802,
+        "sma200": 0.5455,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 38749837.0,
-        "last_day": 9049237.0,
-        "multiplier": 0.234
+        "avg_3m": 38312466.0,
+        "last_day": 6425877.0,
+        "multiplier": 0.168
       },
       "support_resistance": {
         "support": 0.655,
@@ -1387,22 +1361,17 @@
             "touches": 1
           },
           {
+            "price": 0.525,
+            "strength": "Weak",
+            "touches": 0
+          },
+          {
             "price": 0.583,
             "strength": "Weak",
             "touches": 0
           }
         ],
         "resistance_levels": [
-          {
-            "price": 0.878,
-            "strength": "Strong",
-            "touches": 10
-          },
-          {
-            "price": 0.852,
-            "strength": "Strong",
-            "touches": 10
-          },
           {
             "price": 0.721,
             "strength": "Strong",
@@ -1414,6 +1383,11 @@
             "touches": 2
           },
           {
+            "price": 0.83,
+            "strength": "Medium",
+            "touches": 2
+          },
+          {
             "price": 0.805,
             "strength": "Medium",
             "touches": 2
@@ -1421,23 +1395,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 0.706,
+        "entry_price": 0.67,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 0.637,
-        "tp1": 0.713,
-        "tp2": 0.72,
-        "tp3": 0.748,
+        "stop_loss": 0.6,
+        "tp1": 0.677,
+        "tp2": 0.683,
+        "tp3": 0.71,
         "tp1_rr": 0.1,
-        "tp2_rr": 0.2,
-        "tp3_rr": 0.61
+        "tp2_rr": 0.19,
+        "tp3_rr": 0.57
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 6.0,
-        "medium_price": 0.698,
-        "low_price": 0.636,
-        "high_price": 0.749
+        "confidence": 100.0,
+        "medium_price": 0.664,
+        "low_price": 0.609,
+        "high_price": 0.712
       },
       "intraday": {
         "score": null,
@@ -1456,7 +1430,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -1467,60 +1441,55 @@
     },
     {
       "ticker": "MASR",
-      "run_date": "2026-10-11",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (ChartScan), others disagree",
-      "score": 54.83,
+      "run_date": "2026-10-12",
+      "recommendation": "Avoid",
+      "recommendation_basis": "Base=Avoid, ML=Avoid, ChartScan=Watch",
+      "score": 40.07,
       "score_breakdown": {
-        "trend": 18.5,
-        "macd": 5.9,
+        "trend": 11.98,
+        "macd": 4.59,
         "rsi": 9.0,
-        "volume": 4.31,
+        "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 3.2,
-        "volume_profile": 7.2,
-        "intraday": 6.72
+        "vwap": 1.6,
+        "volume_profile": 5.4,
+        "intraday": 7.5
       },
       "price": {
-        "current_egp": 7.73,
+        "current_egp": 7.4,
         "current_usd": 0.1504,
-        "fair_value_egp": 23.4288,
+        "fair_value_egp": 23.1374,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 50.59,
-        "adx": 13.42,
-        "mfi": 61.39,
-        "macd": -0.0473,
-        "macd_signal": -0.0822,
+        "rsi": 43.36,
+        "adx": 13.71,
+        "mfi": 61.33,
+        "macd": -0.0642,
+        "macd_signal": -0.0786,
         "macd_bullish": true,
-        "sma50": 7.796,
-        "sma200": 6.3784,
+        "sma50": 7.7844,
+        "sma200": 6.3946,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "ranging"
       },
       "volume": {
-        "avg_3m": 9259431.0,
-        "last_day": 10177043.0,
-        "multiplier": 1.099
+        "avg_3m": 9235947.0,
+        "last_day": 8870339.0,
+        "multiplier": 0.96
       },
       "support_resistance": {
-        "support": 7.79,
+        "support": 7.49,
         "resistance": 8.51,
         "support_levels": [
           {
-            "price": 7.634,
+            "price": 7.374,
             "strength": "Strong",
-            "touches": 12
-          },
-          {
-            "price": 7.417,
-            "strength": "Strong",
-            "touches": 7
+            "touches": 8
           },
           {
             "price": 7.049,
@@ -1536,62 +1505,67 @@
             "price": 6.705,
             "strength": "Medium",
             "touches": 2
+          },
+          {
+            "price": 6.54,
+            "strength": "Weak",
+            "touches": 1
           }
         ],
         "resistance_levels": [
           {
-            "price": 7.805,
+            "price": 7.762,
             "strength": "Strong",
-            "touches": 15
+            "touches": 23
           },
           {
-            "price": 8.227,
+            "price": 7.548,
             "strength": "Strong",
-            "touches": 9
+            "touches": 10
           },
           {
-            "price": 8.07,
+            "price": 8.137,
             "strength": "Strong",
             "touches": 7
+          },
+          {
+            "price": 7.92,
+            "strength": "Strong",
+            "touches": 5
           },
           {
             "price": 8.51,
             "strength": "Strong",
             "touches": 3
-          },
-          {
-            "price": 8.915,
-            "strength": "Medium",
-            "touches": 2
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 7.73,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 7.137,
-        "tp1": 7.807,
-        "tp2": 7.885,
-        "tp3": 8.194,
-        "tp1_rr": 0.13,
-        "tp2_rr": 0.26,
-        "tp3_rr": 0.78
+        "entry_price": 6.82,
+        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
+        "entry_source": "Support (Strong)",
+        "stop_loss": 6.651,
+        "tp1": 6.888,
+        "tp2": 6.956,
+        "tp3": 7.229,
+        "tp1_rr": 0.4,
+        "tp2_rr": 0.81,
+        "tp3_rr": 2.42
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 7.0,
-        "medium_price": 7.691,
-        "low_price": 6.97,
-        "high_price": 8.835
+        "confidence": 0.0,
+        "medium_price": 7.288,
+        "low_price": 6.584,
+        "high_price": 8.276
       },
       "intraday": {
-        "score": 44.8,
-        "volume_skew": -0.028,
-        "momentum": 14.6,
-        "vwap_score": 85.4,
-        "ad_signal": "bearish",
-        "ad_score": -0.4
+        "score": null,
+        "volume_skew": null,
+        "momentum": null,
+        "vwap_score": null,
+        "ad_signal": null,
+        "ad_score": null
       },
       "holding": {
         "label": "4-13 days (Time Exit)",
@@ -1602,9 +1576,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
-        "chartscan_signal": "Buy",
-        "chartscan_confidence": 0.4867
+        "candle_signal": "bearish",
+        "chartscan_signal": "Neutral",
+        "chartscan_confidence": 0.4433
       },
       "index": {
         "membership": "EGX70",
@@ -1613,46 +1587,46 @@
     },
     {
       "ticker": "OBRI",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Avoid, ChartScan=Watch",
-      "score": 37.73,
+      "recommendation_basis": "Base=Avoid, ML=Avoid",
+      "score": 27.0,
       "score_breakdown": {
         "trend": 0.0,
-        "macd": 4.75,
+        "macd": 4.3,
         "rsi": 9.0,
-        "volume": 6.28,
+        "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 4.8,
+        "vwap": 0.8,
         "volume_profile": 5.4,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 29.01,
+        "current_egp": 26.28,
         "current_usd": 0.5428,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 48.29,
-        "adx": 26.42,
-        "mfi": 62.97,
-        "macd": -1.0855,
-        "macd_signal": -1.3779,
+        "rsi": 39.2,
+        "adx": 24.75,
+        "mfi": 63.14,
+        "macd": -1.1625,
+        "macd_signal": -1.3348,
         "macd_bullish": true,
-        "sma50": 31.1948,
-        "sma200": 35.2378,
+        "sma50": 31.0724,
+        "sma200": 35.2078,
         "golden_cross": false,
         "death_cross": true,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 693119.0,
-        "last_day": 1435128.0,
-        "multiplier": 2.071
+        "avg_3m": 681450.0,
+        "last_day": 422529.0,
+        "multiplier": 0.62
       },
       "support_resistance": {
         "support": 28.1,
@@ -1661,7 +1635,7 @@
           {
             "price": 25.911,
             "strength": "Strong",
-            "touches": 3
+            "touches": 4
           },
           {
             "price": 22.8,
@@ -1671,19 +1645,9 @@
         ],
         "resistance_levels": [
           {
-            "price": 34.906,
+            "price": 32.45,
             "strength": "Strong",
-            "touches": 13
-          },
-          {
-            "price": 32.588,
-            "strength": "Strong",
-            "touches": 12
-          },
-          {
-            "price": 35.93,
-            "strength": "Strong",
-            "touches": 8
+            "touches": 14
           },
           {
             "price": 29.51,
@@ -1691,30 +1655,40 @@
             "touches": 5
           },
           {
-            "price": 33.923,
+            "price": 30.202,
             "strength": "Strong",
-            "touches": 4
+            "touches": 3
+          },
+          {
+            "price": 31.839,
+            "strength": "Strong",
+            "touches": 2
+          },
+          {
+            "price": 30.77,
+            "strength": "Medium",
+            "touches": 2
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 29.01,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 25.063,
-        "tp1": 29.3,
-        "tp2": 29.59,
-        "tp3": 30.751,
-        "tp1_rr": 0.07,
-        "tp2_rr": 0.15,
-        "tp3_rr": 0.44
+        "entry_price": 26.28,
+        "entry_action": "BUY NOW",
+        "entry_source": "Current Price",
+        "stop_loss": 25.704,
+        "tp1": 26.543,
+        "tp2": 26.806,
+        "tp3": 27.857,
+        "tp1_rr": 0.46,
+        "tp2_rr": 0.91,
+        "tp3_rr": 2.74
       },
       "ml": {
         "signal": "Avoid",
         "confidence": 0.0,
-        "medium_price": 28.465,
-        "low_price": 24.671,
-        "high_price": 30.94
+        "medium_price": 25.688,
+        "low_price": 22.608,
+        "high_price": 27.547
       },
       "intraday": {
         "score": null,
@@ -1733,9 +1707,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bullish",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4612
+        "chartscan_confidence": 0.0
       },
       "index": {
         "membership": "EGX70",
@@ -1744,14 +1718,14 @@
     },
     {
       "ticker": "OCDI",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 30.23,
+      "score": 25.71,
       "score_breakdown": {
-        "trend": 11.13,
+        "trend": 10.21,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
@@ -1760,37 +1734,37 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 26.5,
+        "current_egp": 25.64,
         "current_usd": 0.5229,
         "fair_value_egp": 24.8211,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 36.78,
-        "adx": 25.95,
-        "mfi": 61.69,
-        "macd": -1.1841,
-        "macd_signal": -1.132,
+        "rsi": 33.31,
+        "adx": 26.09,
+        "mfi": 61.64,
+        "macd": -1.2405,
+        "macd_signal": -1.1537,
         "macd_bullish": false,
-        "sma50": 30.6782,
-        "sma200": 23.2108,
+        "sma50": 30.6304,
+        "sma200": 23.2441,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 2805238.0,
-        "last_day": 948875.0,
-        "multiplier": 0.338
+        "avg_3m": 2786960.0,
+        "last_day": 1061287.0,
+        "multiplier": 0.381
       },
       "support_resistance": {
-        "support": 26.6,
+        "support": 26.2,
         "resistance": 28.0,
         "support_levels": [
           {
-            "price": 24.2,
+            "price": 25.468,
             "strength": "Strong",
             "touches": 4
           },
@@ -1800,14 +1774,9 @@
             "touches": 4
           },
           {
-            "price": 26.103,
+            "price": 24.2,
             "strength": "Strong",
-            "touches": 3
-          },
-          {
-            "price": 25.468,
-            "strength": "Strong",
-            "touches": 3
+            "touches": 4
           },
           {
             "price": 20.0,
@@ -1822,12 +1791,12 @@
             "touches": 8
           },
           {
-            "price": 33.01,
+            "price": 29.245,
             "strength": "Strong",
-            "touches": 6
+            "touches": 5
           },
           {
-            "price": 29.245,
+            "price": 26.788,
             "strength": "Strong",
             "touches": 5
           },
@@ -1837,30 +1806,30 @@
             "touches": 5
           },
           {
-            "price": 26.788,
+            "price": 28.7,
             "strength": "Strong",
             "touches": 4
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 24.584,
-        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 24.006,
-        "tp1": 24.83,
-        "tp2": 25.076,
-        "tp3": 26.059,
-        "tp1_rr": 0.43,
-        "tp2_rr": 0.85,
-        "tp3_rr": 2.55
+        "entry_price": 25.64,
+        "entry_action": "BUY NOW",
+        "entry_source": "Current Price",
+        "stop_loss": 25.264,
+        "tp1": 25.896,
+        "tp2": 26.153,
+        "tp3": 26.788,
+        "tp1_rr": 0.68,
+        "tp2_rr": 1.36,
+        "tp3_rr": 3.05
       },
       "ml": {
         "signal": "Buy",
         "confidence": 100.0,
-        "medium_price": 28.583,
-        "low_price": 26.018,
-        "high_price": 28.798
+        "medium_price": 27.718,
+        "low_price": 25.249,
+        "high_price": 28.091
       },
       "intraday": {
         "score": null,
@@ -1890,15 +1859,15 @@
     },
     {
       "ticker": "ORHD",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 40.35,
+      "score": 38.06,
       "score_breakdown": {
-        "trend": 11.25,
+        "trend": 9.66,
         "macd": 0.0,
         "rsi": 5.4,
-        "volume": 10.0,
+        "volume": 9.3,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 0.8,
@@ -1906,71 +1875,71 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 11.55,
+        "current_egp": 10.9,
         "current_usd": 0.2297,
-        "fair_value_egp": 18.8667,
+        "fair_value_egp": 13.9534,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 33.53,
-        "adx": 24.55,
-        "mfi": 62.59,
-        "macd": -0.307,
-        "macd_signal": -0.2249,
+        "rsi": 26.97,
+        "adx": 26.6,
+        "mfi": 62.53,
+        "macd": -0.3809,
+        "macd_signal": -0.2561,
         "macd_bullish": false,
-        "sma50": 12.7937,
-        "sma200": 10.1544,
+        "sma50": 12.7682,
+        "sma200": 10.1695,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 4324421.0,
-        "last_day": 6642785.0,
-        "multiplier": 1.536
+        "avg_3m": 4386823.0,
+        "last_day": 12393151.0,
+        "multiplier": 2.825
       },
       "support_resistance": {
-        "support": 11.5862,
+        "support": null,
         "resistance": 26.1,
         "support_levels": [],
         "resistance_levels": [
           {
-            "price": 12.258,
+            "price": 12.003,
+            "strength": "Strong",
+            "touches": 4
+          },
+          {
+            "price": 11.586,
             "strength": "Strong",
             "touches": 3
           },
           {
-            "price": 11.586,
-            "strength": "Medium",
-            "touches": 2
-          },
-          {
-            "price": 11.891,
-            "strength": "Medium",
-            "touches": 1
+            "price": 12.258,
+            "strength": "Strong",
+            "touches": 3
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 11.55,
+        "entry_price": 10.9,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 8.288,
-        "tp1": 11.666,
-        "tp2": 11.781,
-        "tp3": 12.243,
+        "stop_loss": 7.917,
+        "tp1": 11.009,
+        "tp2": 11.118,
+        "tp3": 11.554,
         "tp1_rr": 0.04,
         "tp2_rr": 0.07,
-        "tp3_rr": 0.21
+        "tp3_rr": 0.22
       },
       "ml": {
         "signal": "Buy",
         "confidence": 84.0,
-        "medium_price": 12.438,
-        "low_price": 11.022,
-        "high_price": 14.012
+        "medium_price": 11.777,
+        "low_price": 10.456,
+        "high_price": 13.245
       },
       "intraday": {
         "score": null,
@@ -1981,11 +1950,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "5-16 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 9,
+        "days_min": 5,
+        "days_max": 16,
+        "days_target": 11,
         "personalized": true
       },
       "patterns": {
@@ -2000,15 +1969,15 @@
     },
     {
       "ticker": "PHDC",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 41.01,
+      "score": 37.24,
       "score_breakdown": {
-        "trend": 10.2,
+        "trend": 10.04,
         "macd": 3.8,
-        "rsi": 9.0,
-        "volume": 0.02,
+        "rsi": 5.4,
+        "volume": 0.0,
         "adi": 3.5,
         "support": 0.0,
         "vwap": 1.6,
@@ -2016,39 +1985,39 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 12.87,
+        "current_egp": 12.8,
         "current_usd": 0.2475,
         "fair_value_egp": 35.2361,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 35.21,
-        "adx": 36.15,
-        "mfi": 61.61,
-        "macd": -0.4074,
-        "macd_signal": -0.4229,
+        "rsi": 34.2,
+        "adx": 37.09,
+        "mfi": 61.64,
+        "macd": -0.4038,
+        "macd_signal": -0.4191,
         "macd_bullish": true,
-        "sma50": 14.3332,
-        "sma200": 11.8909,
+        "sma50": 14.2992,
+        "sma200": 11.9124,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 12219438.0,
-        "last_day": 2134247.0,
-        "multiplier": 0.175
+        "avg_3m": 12013959.0,
+        "last_day": 3431153.0,
+        "multiplier": 0.286
       },
       "support_resistance": {
         "support": 12.36,
         "resistance": 14.99,
         "support_levels": [
           {
-            "price": 12.36,
-            "strength": "Medium",
-            "touches": 1
+            "price": 12.435,
+            "strength": "Weak",
+            "touches": 0
           }
         ],
         "resistance_levels": [
@@ -2070,33 +2039,33 @@
           {
             "price": 15.476,
             "strength": "Strong",
-            "touches": 10
+            "touches": 9
           },
           {
             "price": 12.929,
             "strength": "Strong",
-            "touches": 6
+            "touches": 7
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 12.87,
+        "entry_price": 12.8,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 12.081,
-        "tp1": 12.999,
-        "tp2": 13.127,
-        "tp3": 13.642,
-        "tp1_rr": 0.16,
-        "tp2_rr": 0.33,
-        "tp3_rr": 0.98
+        "stop_loss": 12.037,
+        "tp1": 12.928,
+        "tp2": 13.056,
+        "tp3": 13.568,
+        "tp1_rr": 0.17,
+        "tp2_rr": 0.34,
+        "tp3_rr": 1.01
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 64.0,
-        "medium_price": 13.077,
-        "low_price": 12.268,
-        "high_price": 13.928
+        "confidence": 56.0,
+        "medium_price": 12.887,
+        "low_price": 12.087,
+        "high_price": 13.436
       },
       "intraday": {
         "score": null,
@@ -2126,148 +2095,12 @@
     },
     {
       "ticker": "RREI",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 29.43,
+      "score": 19.4,
       "score_breakdown": {
-        "trend": 10.33,
-        "macd": 0.0,
-        "rsi": 9.0,
-        "volume": 0.0,
-        "adi": 0.0,
-        "support": 0.0,
-        "vwap": 0.8,
-        "volume_profile": 1.8,
-        "intraday": 7.5
-      },
-      "price": {
-        "current_egp": 3.72,
-        "current_usd": 0.0748,
-        "fair_value_egp": 3.9868,
-        "fair_value_method": "USD-Comparison (fallback)",
-        "undervalued": true
-      },
-      "technicals": {
-        "rsi": 35.65,
-        "adx": 24.42,
-        "mfi": 64.1,
-        "macd": -0.1319,
-        "macd_signal": -0.1133,
-        "macd_bullish": false,
-        "sma50": 4.3352,
-        "sma200": 3.4326,
-        "golden_cross": true,
-        "death_cross": false,
-        "bb_squeeze": false,
-        "regime": "trending_down"
-      },
-      "volume": {
-        "avg_3m": 7813509.0,
-        "last_day": 1352448.0,
-        "multiplier": 0.173
-      },
-      "support_resistance": {
-        "support": 3.72,
-        "resistance": 4.11,
-        "support_levels": [
-          {
-            "price": 3.542,
-            "strength": "Strong",
-            "touches": 6
-          },
-          {
-            "price": 3.632,
-            "strength": "Strong",
-            "touches": 6
-          },
-          {
-            "price": 3.345,
-            "strength": "Strong",
-            "touches": 3
-          }
-        ],
-        "resistance_levels": [
-          {
-            "price": 4.39,
-            "strength": "Strong",
-            "touches": 13
-          },
-          {
-            "price": 4.522,
-            "strength": "Strong",
-            "touches": 10
-          },
-          {
-            "price": 3.917,
-            "strength": "Strong",
-            "touches": 7
-          },
-          {
-            "price": 3.838,
-            "strength": "Strong",
-            "touches": 7
-          },
-          {
-            "price": 4.272,
-            "strength": "Strong",
-            "touches": 5
-          }
-        ]
-      },
-      "trade_plan": {
-        "entry_price": 3.72,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 3.328,
-        "tp1": 3.757,
-        "tp2": 3.794,
-        "tp3": 3.943,
-        "tp1_rr": 0.09,
-        "tp2_rr": 0.19,
-        "tp3_rr": 0.57
-      },
-      "ml": {
-        "signal": "Buy",
-        "confidence": 39.0,
-        "medium_price": 3.784,
-        "low_price": 3.537,
-        "high_price": 4.159
-      },
-      "intraday": {
-        "score": null,
-        "volume_skew": null,
-        "momentum": null,
-        "vwap_score": null,
-        "ad_signal": null,
-        "ad_score": null
-      },
-      "holding": {
-        "label": "5-15 days (Trail Stop)",
-        "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 15,
-        "days_target": 10,
-        "personalized": true
-      },
-      "patterns": {
-        "candle_signal": "neutral",
-        "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.0
-      },
-      "index": {
-        "membership": "UNINDEX",
-        "sentiment": "Neutral"
-      }
-    },
-    {
-      "ticker": "ZMID",
-      "run_date": "2026-10-11",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 26.86,
-      "score_breakdown": {
-        "trend": 11.36,
+        "trend": 3.9,
         "macd": 0.0,
         "rsi": 5.4,
         "volume": 0.0,
@@ -2278,107 +2111,87 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 7.31,
-        "current_usd": 0.1441,
-        "fair_value_egp": 7.4063,
-        "fair_value_method": "Blended (Graham+PE)",
-        "undervalued": false
+        "current_egp": 3.47,
+        "current_usd": 0.0748,
+        "fair_value_egp": 3.9868,
+        "fair_value_method": "USD-Comparison (fallback)",
+        "undervalued": true
       },
       "technicals": {
-        "rsi": 31.51,
-        "adx": 32.8,
-        "mfi": 64.55,
-        "macd": -0.3116,
-        "macd_signal": -0.1986,
+        "rsi": 29.86,
+        "adx": 25.52,
+        "mfi": 64.08,
+        "macd": -0.1606,
+        "macd_signal": -0.1227,
         "macd_bullish": false,
-        "sma50": 8.2116,
-        "sma200": 6.4735,
+        "sma50": 4.3126,
+        "sma200": 3.4381,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 25391540.0,
-        "last_day": 6646038.0,
-        "multiplier": 0.262
+        "avg_3m": 7706711.0,
+        "last_day": 1790584.0,
+        "multiplier": 0.232
       },
       "support_resistance": {
-        "support": 7.39,
-        "resistance": 7.79,
+        "support": 3.69,
+        "resistance": 3.74,
         "support_levels": [
           {
-            "price": 6.529,
-            "strength": "Strong",
-            "touches": 6
-          },
-          {
-            "price": 6.198,
-            "strength": "Strong",
-            "touches": 4
-          },
-          {
-            "price": 6.671,
-            "strength": "Strong",
-            "touches": 4
-          },
-          {
-            "price": 6.38,
+            "price": 3.345,
             "strength": "Strong",
             "touches": 3
-          },
-          {
-            "price": 7.094,
-            "strength": "Strong",
-            "touches": 2
           }
         ],
         "resistance_levels": [
           {
-            "price": 7.361,
+            "price": 3.917,
             "strength": "Strong",
-            "touches": 9
+            "touches": 7
           },
           {
-            "price": 7.518,
+            "price": 3.752,
             "strength": "Strong",
             "touches": 6
           },
           {
-            "price": 7.821,
+            "price": 4.272,
             "strength": "Strong",
             "touches": 5
           },
           {
-            "price": 8.344,
-            "strength": "Medium",
-            "touches": 2
+            "price": 3.632,
+            "strength": "Strong",
+            "touches": 6
           },
           {
-            "price": 8.986,
-            "strength": "Medium",
-            "touches": 2
+            "price": 3.542,
+            "strength": "Strong",
+            "touches": 5
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 6.731,
-        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 6.618,
-        "tp1": 6.798,
-        "tp2": 6.866,
-        "tp3": 7.135,
-        "tp1_rr": 0.6,
-        "tp2_rr": 1.19,
-        "tp3_rr": 3.57
+        "entry_price": 3.47,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 3.053,
+        "tp1": 3.505,
+        "tp2": 3.539,
+        "tp3": 3.678,
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.17,
+        "tp3_rr": 0.5
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 59.0,
-        "medium_price": 7.555,
-        "low_price": 6.75,
-        "high_price": 8.218
+        "confidence": 47.0,
+        "medium_price": 3.512,
+        "low_price": 3.359,
+        "high_price": 3.787
       },
       "intraday": {
         "score": null,
@@ -2389,11 +2202,303 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "7-19 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 9,
+        "days_min": 7,
+        "days_max": 19,
+        "days_target": 14,
+        "personalized": true
+      },
+      "patterns": {
+        "candle_signal": "bearish",
+        "chartscan_signal": "Neutral",
+        "chartscan_confidence": 0.0
+      },
+      "index": {
+        "membership": "UNINDEX",
+        "sentiment": "Neutral"
+      }
+    },
+    {
+      "ticker": "ZMID",
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (ML), others disagree",
+      "score": 29.22,
+      "score_breakdown": {
+        "trend": 10.87,
+        "macd": 0.0,
+        "rsi": 5.4,
+        "volume": 0.0,
+        "adi": 0.0,
+        "support": 2.84,
+        "vwap": 0.8,
+        "volume_profile": 1.8,
+        "intraday": 7.5
+      },
+      "price": {
+        "current_egp": 7.19,
+        "current_usd": 0.1441,
+        "fair_value_egp": 7.4063,
+        "fair_value_method": "Blended (Graham+PE)",
+        "undervalued": false
+      },
+      "technicals": {
+        "rsi": 29.82,
+        "adx": 33.08,
+        "mfi": 64.55,
+        "macd": -0.3352,
+        "macd_signal": -0.2259,
+        "macd_bullish": false,
+        "sma50": 8.212,
+        "sma200": 6.4787,
+        "golden_cross": true,
+        "death_cross": false,
+        "bb_squeeze": false,
+        "regime": "trending_down"
+      },
+      "volume": {
+        "avg_3m": 25044702.0,
+        "last_day": 5816498.0,
+        "multiplier": 0.232
+      },
+      "support_resistance": {
+        "support": 7.07,
+        "resistance": 7.79,
+        "support_levels": [
+          {
+            "price": 6.27,
+            "strength": "Strong",
+            "touches": 7
+          },
+          {
+            "price": 6.15,
+            "strength": "Strong",
+            "touches": 5
+          },
+          {
+            "price": 7.096,
+            "strength": "Strong",
+            "touches": 4
+          },
+          {
+            "price": 6.572,
+            "strength": "Strong",
+            "touches": 4
+          },
+          {
+            "price": 6.926,
+            "strength": "Strong",
+            "touches": 3
+          }
+        ],
+        "resistance_levels": [
+          {
+            "price": 7.361,
+            "strength": "Strong",
+            "touches": 10
+          },
+          {
+            "price": 7.808,
+            "strength": "Strong",
+            "touches": 6
+          },
+          {
+            "price": 7.512,
+            "strength": "Strong",
+            "touches": 6
+          },
+          {
+            "price": 8.044,
+            "strength": "Strong",
+            "touches": 4
+          },
+          {
+            "price": 8.398,
+            "strength": "Medium",
+            "touches": 2
+          }
+        ]
+      },
+      "trade_plan": {
+        "entry_price": 6.684,
+        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
+        "entry_source": "BB Lower Band",
+        "stop_loss": 6.519,
+        "tp1": 6.751,
+        "tp2": 6.818,
+        "tp3": 7.085,
+        "tp1_rr": 0.41,
+        "tp2_rr": 0.81,
+        "tp3_rr": 2.43
+      },
+      "ml": {
+        "signal": "Buy",
+        "confidence": 59.0,
+        "medium_price": 7.47,
+        "low_price": 6.711,
+        "high_price": 8.042
+      },
+      "intraday": {
+        "score": null,
+        "volume_skew": null,
+        "momentum": null,
+        "vwap_score": null,
+        "ad_signal": null,
+        "ad_score": null
+      },
+      "holding": {
+        "label": "5-16 days (Trail Stop)",
+        "exit_strategy": "trail_stop",
+        "days_min": 5,
+        "days_max": 16,
+        "days_target": 11,
+        "personalized": true
+      },
+      "patterns": {
+        "candle_signal": "neutral",
+        "chartscan_signal": "Neutral",
+        "chartscan_confidence": 0.0
+      },
+      "index": {
+        "membership": "EGX70",
+        "sentiment": "Neutral"
+      }
+    },
+    {
+      "ticker": "LCSW",
+      "run_date": "2026-10-12",
+      "recommendation": "Avoid",
+      "recommendation_basis": "Base=Avoid, ML=Avoid",
+      "score": 47.81,
+      "score_breakdown": {
+        "trend": 16.18,
+        "macd": 8.23,
+        "rsi": 9.0,
+        "volume": 0.0,
+        "adi": 3.5,
+        "support": 0.0,
+        "vwap": 1.6,
+        "volume_profile": 1.8,
+        "intraday": 7.5
+      },
+      "price": {
+        "current_egp": 32.0,
+        "current_usd": 0.667,
+        "fair_value_egp": 36.7008,
+        "fair_value_method": "Blended (Graham+PE)",
+        "undervalued": true
+      },
+      "technicals": {
+        "rsi": 43.07,
+        "adx": 14.62,
+        "mfi": 64.92,
+        "macd": -0.0274,
+        "macd_signal": -0.1928,
+        "macd_bullish": true,
+        "sma50": 33.9604,
+        "sma200": 28.535,
+        "golden_cross": true,
+        "death_cross": false,
+        "bb_squeeze": false,
+        "regime": "trending_down"
+      },
+      "volume": {
+        "avg_3m": 895568.0,
+        "last_day": 416696.0,
+        "multiplier": 0.465
+      },
+      "support_resistance": {
+        "support": 33.45,
+        "resistance": 36.5,
+        "support_levels": [
+          {
+            "price": 27.02,
+            "strength": "Strong",
+            "touches": 8
+          },
+          {
+            "price": 27.927,
+            "strength": "Strong",
+            "touches": 6
+          },
+          {
+            "price": 31.35,
+            "strength": "Strong",
+            "touches": 5
+          },
+          {
+            "price": 30.311,
+            "strength": "Strong",
+            "touches": 4
+          },
+          {
+            "price": 28.643,
+            "strength": "Strong",
+            "touches": 4
+          }
+        ],
+        "resistance_levels": [
+          {
+            "price": 33.554,
+            "strength": "Strong",
+            "touches": 15
+          },
+          {
+            "price": 34.515,
+            "strength": "Strong",
+            "touches": 9
+          },
+          {
+            "price": 35.494,
+            "strength": "Strong",
+            "touches": 6
+          },
+          {
+            "price": 32.232,
+            "strength": "Strong",
+            "touches": 5
+          },
+          {
+            "price": 37.645,
+            "strength": "Strong",
+            "touches": 3
+          }
+        ]
+      },
+      "trade_plan": {
+        "entry_price": 32.0,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 28.836,
+        "tp1": 32.32,
+        "tp2": 32.64,
+        "tp3": 33.92,
+        "tp1_rr": 0.1,
+        "tp2_rr": 0.2,
+        "tp3_rr": 0.61
+      },
+      "ml": {
+        "signal": "Avoid",
+        "confidence": 5.0,
+        "medium_price": 30.059,
+        "low_price": 28.862,
+        "high_price": 33.59
+      },
+      "intraday": {
+        "score": null,
+        "volume_skew": null,
+        "momentum": null,
+        "vwap_score": null,
+        "ad_signal": null,
+        "ad_score": null
+      },
+      "holding": {
+        "label": "6-17 days (Trail Stop)",
+        "exit_strategy": "trail_stop",
+        "days_min": 6,
+        "days_max": 17,
+        "days_target": 12,
         "personalized": true
       },
       "patterns": {
@@ -2407,192 +2512,51 @@
       }
     },
     {
-      "ticker": "LCSW",
-      "run_date": "2026-10-11",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (Base), others disagree",
-      "score": 69.39,
+      "ticker": "EFIH",
+      "run_date": "2026-10-12",
+      "recommendation": "Buy",
+      "recommendation_basis": "2/3 active agree Buy: Base, ML [EGX30 Bearish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
+      "score": 67.74,
       "score_breakdown": {
-        "trend": 23.51,
+        "trend": 23.2,
         "macd": 9.0,
         "rsi": 9.0,
         "volume": 0.0,
-        "adi": 3.5,
-        "support": 0.0,
-        "vwap": 6.4,
-        "volume_profile": 7.2,
-        "intraday": 10.79
-      },
-      "price": {
-        "current_egp": 34.42,
-        "current_usd": 0.667,
-        "fair_value_egp": 36.2767,
-        "fair_value_method": "Blended (Graham+PE)",
-        "undervalued": true
-      },
-      "technicals": {
-        "rsi": 55.97,
-        "adx": 14.6,
-        "mfi": 65.01,
-        "macd": 0.1049,
-        "macd_signal": -0.2341,
-        "macd_bullish": true,
-        "sma50": 34.0062,
-        "sma200": 28.5068,
-        "golden_cross": true,
-        "death_cross": false,
-        "bb_squeeze": false,
-        "regime": "trending_up"
-      },
-      "volume": {
-        "avg_3m": 912608.0,
-        "last_day": 842028.0,
-        "multiplier": 0.923
-      },
-      "support_resistance": {
-        "support": 33.45,
-        "resistance": 36.5,
-        "support_levels": [
-          {
-            "price": 33.554,
-            "strength": "Strong",
-            "touches": 15
-          },
-          {
-            "price": 27.02,
-            "strength": "Strong",
-            "touches": 9
-          },
-          {
-            "price": 31.47,
-            "strength": "Strong",
-            "touches": 7
-          },
-          {
-            "price": 27.927,
-            "strength": "Strong",
-            "touches": 7
-          },
-          {
-            "price": 32.232,
-            "strength": "Strong",
-            "touches": 5
-          }
-        ],
-        "resistance_levels": [
-          {
-            "price": 34.515,
-            "strength": "Strong",
-            "touches": 8
-          },
-          {
-            "price": 35.494,
-            "strength": "Strong",
-            "touches": 6
-          },
-          {
-            "price": 37.645,
-            "strength": "Strong",
-            "touches": 3
-          },
-          {
-            "price": 36.75,
-            "strength": "Medium",
-            "touches": 1
-          }
-        ]
-      },
-      "trade_plan": {
-        "entry_price": 34.42,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 31.12,
-        "tp1": 34.764,
-        "tp2": 35.108,
-        "tp3": 36.485,
-        "tp1_rr": 0.1,
-        "tp2_rr": 0.21,
-        "tp3_rr": 0.63
-      },
-      "ml": {
-        "signal": "Avoid",
-        "confidence": 5.0,
-        "medium_price": 32.681,
-        "low_price": 31.045,
-        "high_price": 35.713
-      },
-      "intraday": {
-        "score": 71.9,
-        "volume_skew": 0.743,
-        "momentum": 63.3,
-        "vwap_score": 88.9,
-        "ad_signal": "bearish",
-        "ad_score": -0.4
-      },
-      "holding": {
-        "label": "6-17 days (Trail Stop)",
-        "exit_strategy": "trail_stop",
-        "days_min": 6,
-        "days_max": 17,
-        "days_target": 12,
-        "personalized": true
-      },
-      "patterns": {
-        "candle_signal": "neutral",
-        "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.0
-      },
-      "index": {
-        "membership": "EGX70",
-        "sentiment": "Neutral"
-      }
-    },
-    {
-      "ticker": "EFIH",
-      "run_date": "2026-10-11",
-      "recommendation": "Watch",
-      "recommendation_basis": "EGX30 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (Base), no Avoid among active voters — upgraded to Buy",
-      "score": 75.73,
-      "score_breakdown": {
-        "trend": 23.74,
-        "macd": 9.0,
-        "rsi": 9.0,
-        "volume": 7.03,
         "adi": 4.2,
         "support": 0.0,
         "vwap": 6.4,
         "volume_profile": 7.2,
-        "intraday": 9.16
+        "intraday": 8.74
       },
       "price": {
-        "current_egp": 24.5,
+        "current_egp": 24.1,
         "current_usd": 0.4829,
         "fair_value_egp": 7.4144,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 57.08,
-        "adx": 21.42,
-        "mfi": 58.35,
-        "macd": 0.2596,
-        "macd_signal": 0.0268,
+        "rsi": 53.62,
+        "adx": 20.69,
+        "mfi": 58.33,
+        "macd": 0.2571,
+        "macd_signal": 0.0728,
         "macd_bullish": true,
-        "sma50": 23.685,
-        "sma200": 21.4418,
+        "sma50": 23.714,
+        "sma200": 21.4723,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_up"
       },
       "volume": {
-        "avg_3m": 3217048.0,
-        "last_day": 2567207.0,
-        "multiplier": 0.798
+        "avg_3m": 3230445.0,
+        "last_day": 1912643.0,
+        "multiplier": 0.592
       },
       "support_resistance": {
         "support": 23.27,
-        "resistance": 25.4,
+        "resistance": 25.0,
         "support_levels": [
           {
             "price": 23.461,
@@ -2615,50 +2579,50 @@
             "touches": 9
           },
           {
-            "price": 24.4,
+            "price": 21.489,
             "strength": "Strong",
             "touches": 7
           }
         ],
         "resistance_levels": [
           {
-            "price": 25.0,
+            "price": 24.4,
             "strength": "Strong",
-            "touches": 5
+            "touches": 8
           },
           {
-            "price": 25.4,
-            "strength": "Medium",
+            "price": 25.257,
+            "strength": "Strong",
             "touches": 2
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 23.693,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "EMA 20",
-        "stop_loss": 23.273,
-        "tp1": 23.93,
-        "tp2": 24.167,
-        "tp3": 25.0,
-        "tp1_rr": 0.56,
-        "tp2_rr": 1.13,
-        "tp3_rr": 3.11
+        "entry_price": 24.1,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 22.46,
+        "tp1": 24.341,
+        "tp2": 24.582,
+        "tp3": 25.546,
+        "tp1_rr": 0.15,
+        "tp2_rr": 0.29,
+        "tp3_rr": 0.88
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 29.0,
-        "medium_price": 24.602,
-        "low_price": 23.733,
-        "high_price": 26.244
+        "signal": "Buy",
+        "confidence": 47.0,
+        "medium_price": 24.457,
+        "low_price": 23.435,
+        "high_price": 26.012
       },
       "intraday": {
-        "score": 61.1,
-        "volume_skew": 0.164,
-        "momentum": 53.5,
-        "vwap_score": 86.5,
+        "score": 58.3,
+        "volume_skew": 0.129,
+        "momentum": 43.8,
+        "vwap_score": 77.1,
         "ad_signal": "neutral",
-        "ad_score": -0.2
+        "ad_score": 0.2
       },
       "holding": {
         "label": "5-15 days (Trail Stop)",
@@ -2669,9 +2633,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4087
+        "chartscan_confidence": 0.4409
       },
       "index": {
         "membership": "EGX30",
@@ -2680,51 +2644,56 @@
     },
     {
       "ticker": "ETEL",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Buy",
-      "recommendation_basis": "Strong technical base (score=64.4, golden+diamond cross, ADX=37, MACD bullish) — ML=Watch, ChartScan abstain [EGX30 Bearish]; entry: WAIT FOR PULLBACK (EMA 20) — chase/wait risk, direction kept",
-      "score": 64.43,
+      "recommendation_basis": "Strong technical base (score=65.9, golden+diamond cross, ADX=36, MACD bullish) — ML=Buy, ChartScan abstain [EGX30 Bearish]; entry: WAIT — SIGNIFICANT DIP REQUIRED (VP POC) — chase/wait risk, direction kept",
+      "score": 65.86,
       "score_breakdown": {
         "trend": 26.0,
-        "macd": 4.95,
+        "macd": 4.54,
         "rsi": 9.0,
         "volume": 0.0,
         "adi": 3.5,
         "support": 0.0,
-        "vwap": 5.2,
+        "vwap": 6.4,
         "volume_profile": 6.3,
-        "intraday": 9.48
+        "intraday": 10.12
       },
       "price": {
-        "current_egp": 145.0,
+        "current_egp": 142.5,
         "current_usd": 2.8325,
         "fair_value_egp": 523.0583,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 66.06,
-        "adx": 37.25,
-        "mfi": 61.33,
-        "macd": 7.135,
-        "macd_signal": 6.5835,
+        "rsi": 61.38,
+        "adx": 35.75,
+        "mfi": 61.29,
+        "macd": 6.643,
+        "macd_signal": 6.5954,
         "macd_bullish": true,
-        "sma50": 123.8574,
-        "sma200": 96.3996,
+        "sma50": 124.6354,
+        "sma200": 96.7938,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_up"
       },
       "volume": {
-        "avg_3m": 1464434.0,
-        "last_day": 790386.0,
-        "multiplier": 0.54
+        "avg_3m": 1471229.0,
+        "last_day": 865699.0,
+        "multiplier": 0.588
       },
       "support_resistance": {
         "support": 129.0,
         "resistance": null,
         "support_levels": [
+          {
+            "price": 106.95,
+            "strength": "Strong",
+            "touches": 5
+          },
           {
             "price": 115.311,
             "strength": "Strong",
@@ -2744,18 +2713,13 @@
             "price": 129.983,
             "strength": "Strong",
             "touches": 2
-          },
-          {
-            "price": 135.651,
-            "strength": "Medium",
-            "touches": 2
           }
         ],
         "resistance_levels": [
           {
             "price": 147.812,
             "strength": "Strong",
-            "touches": 2
+            "touches": 3
           },
           {
             "price": 156.0,
@@ -2765,31 +2729,31 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 137.724,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "EMA 20",
-        "stop_loss": 135.04,
-        "tp1": 139.101,
-        "tp2": 140.478,
-        "tp3": 145.987,
-        "tp1_rr": 0.51,
-        "tp2_rr": 1.03,
-        "tp3_rr": 3.08
+        "entry_price": 132.808,
+        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
+        "entry_source": "VP POC",
+        "stop_loss": 129.523,
+        "tp1": 134.136,
+        "tp2": 135.464,
+        "tp3": 140.776,
+        "tp1_rr": 0.4,
+        "tp2_rr": 0.81,
+        "tp3_rr": 2.43
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 27.0,
-        "medium_price": 144.451,
-        "low_price": 141.489,
-        "high_price": 150.269
+        "signal": "Buy",
+        "confidence": 63.0,
+        "medium_price": 143.109,
+        "low_price": 140.518,
+        "high_price": 147.777
       },
       "intraday": {
-        "score": 63.2,
-        "volume_skew": 0.662,
-        "momentum": 11.1,
-        "vwap_score": 79.9,
+        "score": 67.5,
+        "volume_skew": 0.553,
+        "momentum": 49.6,
+        "vwap_score": 69.5,
         "ad_signal": "bullish",
-        "ad_score": 1
+        "ad_score": 0.6
       },
       "holding": {
         "label": "6-18 days (Trail Stop)",
@@ -2811,13 +2775,13 @@
     },
     {
       "ticker": "RACC",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
-      "score": 27.6,
+      "score": 23.8,
       "score_breakdown": {
         "trend": 3.9,
-        "macd": 3.8,
+        "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
         "adi": 0.0,
@@ -2827,34 +2791,34 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 9.15,
+        "current_egp": 9.01,
         "current_usd": 0.1784,
         "fair_value_egp": 9.7011,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 41.07,
-        "adx": 23.61,
-        "mfi": 60.43,
-        "macd": -0.1728,
-        "macd_signal": -0.1795,
-        "macd_bullish": true,
-        "sma50": 9.8078,
-        "sma200": 9.2826,
+        "rsi": 38.35,
+        "adx": 24.33,
+        "mfi": 60.41,
+        "macd": -0.1846,
+        "macd_signal": -0.1805,
+        "macd_bullish": false,
+        "sma50": 9.7882,
+        "sma200": 9.2849,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 1698776.0,
-        "last_day": 423449.0,
-        "multiplier": 0.249
+        "avg_3m": 1696057.0,
+        "last_day": 489237.0,
+        "multiplier": 0.288
       },
       "support_resistance": {
         "support": 8.51,
-        "resistance": 10.01,
+        "resistance": 9.18,
         "support_levels": [
           {
             "price": 8.51,
@@ -2864,14 +2828,14 @@
         ],
         "resistance_levels": [
           {
-            "price": 9.908,
+            "price": 9.918,
             "strength": "Strong",
             "touches": 20
           },
           {
             "price": 10.28,
             "strength": "Strong",
-            "touches": 12
+            "touches": 11
           },
           {
             "price": 9.602,
@@ -2884,30 +2848,30 @@
             "touches": 6
           },
           {
-            "price": 9.171,
+            "price": 10.56,
             "strength": "Strong",
-            "touches": 5
+            "touches": 4
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 9.15,
+        "entry_price": 9.01,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 8.559,
-        "tp1": 9.242,
-        "tp2": 9.333,
-        "tp3": 9.699,
-        "tp1_rr": 0.15,
+        "stop_loss": 8.431,
+        "tp1": 9.1,
+        "tp2": 9.19,
+        "tp3": 9.551,
+        "tp1_rr": 0.16,
         "tp2_rr": 0.31,
         "tp3_rr": 0.93
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 18.0,
-        "medium_price": 9.138,
-        "low_price": 8.62,
-        "high_price": 10.068
+        "confidence": 7.0,
+        "medium_price": 8.836,
+        "low_price": 8.208,
+        "high_price": 9.948
       },
       "intraday": {
         "score": null,
@@ -2937,49 +2901,49 @@
     },
     {
       "ticker": "MFPC",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 45.76,
+      "score": 39.07,
       "score_breakdown": {
-        "trend": 23.16,
+        "trend": 17.06,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 3.5,
-        "support": 0.0,
+        "support": 3.01,
         "vwap": 0.8,
         "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 45.01,
+        "current_egp": 43.7,
         "current_usd": 0.8899,
         "fair_value_egp": 51.8724,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 47.15,
-        "adx": 27.82,
-        "mfi": 62.1,
-        "macd": 0.4828,
-        "macd_signal": 0.9542,
+        "rsi": 42.48,
+        "adx": 27.34,
+        "mfi": 62.07,
+        "macd": 0.2446,
+        "macd_signal": 0.8122,
         "macd_bullish": false,
-        "sma50": 43.2668,
-        "sma200": 39.2124,
+        "sma50": 43.4084,
+        "sma200": 39.2889,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_up"
       },
       "volume": {
-        "avg_3m": 2406490.0,
-        "last_day": 802927.0,
-        "multiplier": 0.334
+        "avg_3m": 2367827.0,
+        "last_day": 645556.0,
+        "multiplier": 0.273
       },
       "support_resistance": {
-        "support": 45.2,
+        "support": 43.0,
         "resistance": 47.9444,
         "support_levels": [
           {
@@ -2995,7 +2959,7 @@
           {
             "price": 43.03,
             "strength": "Strong",
-            "touches": 7
+            "touches": 6
           },
           {
             "price": 38.917,
@@ -3037,23 +3001,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 43.245,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "SMA 50",
-        "stop_loss": 42.686,
-        "tp1": 43.677,
-        "tp2": 44.11,
-        "tp3": 45.2,
-        "tp1_rr": 0.77,
-        "tp2_rr": 1.55,
-        "tp3_rr": 3.5
+        "entry_price": 43.7,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 40.161,
+        "tp1": 44.137,
+        "tp2": 44.574,
+        "tp3": 46.322,
+        "tp1_rr": 0.12,
+        "tp2_rr": 0.25,
+        "tp3_rr": 0.74
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 95.0,
-        "medium_price": 46.976,
-        "low_price": 44.222,
-        "high_price": 53.042
+        "confidence": 87.0,
+        "medium_price": 45.433,
+        "low_price": 43.584,
+        "high_price": 51.638
       },
       "intraday": {
         "score": null,
@@ -3072,9 +3036,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4088
+        "chartscan_confidence": 0.436
       },
       "index": {
         "membership": "EGX30",
@@ -3083,12 +3047,12 @@
     },
     {
       "ticker": "EFID",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 32.28,
+      "recommendation_basis": "Price dropped -38.6% since Buy (30.30, last 60d) — momentum filter downgrades Buy to Watch",
+      "score": 31.98,
       "score_breakdown": {
-        "trend": 9.58,
+        "trend": 9.28,
         "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
@@ -3099,30 +3063,30 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 18.81,
+        "current_egp": 18.6,
         "current_usd": 0.365,
         "fair_value_egp": 9.9669,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 39.67,
-        "adx": 21.62,
-        "mfi": 62.52,
-        "macd": -0.4419,
-        "macd_signal": -0.3691,
+        "rsi": 37.88,
+        "adx": 22.56,
+        "mfi": 62.46,
+        "macd": -0.4624,
+        "macd_signal": -0.3878,
         "macd_bullish": false,
-        "sma50": 20.4029,
-        "sma200": 19.1247,
+        "sma50": 20.4117,
+        "sma200": 19.1333,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 2270294.0,
-        "last_day": 860155.0,
-        "multiplier": 0.379
+        "avg_3m": 2255112.0,
+        "last_day": 1514744.0,
+        "multiplier": 0.672
       },
       "support_resistance": {
         "support": 18.1,
@@ -3153,23 +3117,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 18.81,
+        "entry_price": 18.6,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 17.312,
-        "tp1": 18.998,
-        "tp2": 19.186,
-        "tp3": 19.939,
+        "stop_loss": 17.179,
+        "tp1": 18.786,
+        "tp2": 18.972,
+        "tp3": 19.716,
         "tp1_rr": 0.13,
-        "tp2_rr": 0.25,
-        "tp3_rr": 0.75
+        "tp2_rr": 0.26,
+        "tp3_rr": 0.79
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 93.0,
-        "medium_price": 19.441,
-        "low_price": 18.19,
-        "high_price": 20.532
+        "confidence": 96.0,
+        "medium_price": 19.435,
+        "low_price": 17.898,
+        "high_price": 20.427
       },
       "intraday": {
         "score": null,
@@ -3188,9 +3152,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
-        "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4916
+        "candle_signal": "neutral",
+        "chartscan_signal": "Buy",
+        "chartscan_confidence": 0.5032
       },
       "index": {
         "membership": "EGX30",
@@ -3199,46 +3163,46 @@
     },
     {
       "ticker": "JUFO",
-      "run_date": "2026-10-11",
-      "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Watch, ChartScan=Watch",
-      "score": 38.38,
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (ML), others disagree",
+      "score": 33.64,
       "score_breakdown": {
-        "trend": 10.59,
+        "trend": 10.23,
         "macd": 0.0,
         "rsi": 9.0,
-        "volume": 0.0,
+        "volume": 3.51,
         "adi": 0.0,
-        "support": 4.29,
+        "support": 0.0,
         "vwap": 1.6,
-        "volume_profile": 5.4,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 25,
+        "current_egp": 24.68,
         "current_usd": 0.4785,
         "fair_value_egp": 20.3178,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 38.47,
-        "adx": 29.78,
-        "mfi": 58.76,
-        "macd": -0.424,
-        "macd_signal": -0.3026,
+        "rsi": 35.72,
+        "adx": 30.24,
+        "mfi": 58.82,
+        "macd": -0.4598,
+        "macd_signal": -0.334,
         "macd_bullish": false,
-        "sma50": 26.4492,
-        "sma200": 23.3232,
+        "sma50": 26.484,
+        "sma200": 23.3509,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 1158407.0,
-        "last_day": 922206.0,
-        "multiplier": 0.796
+        "avg_3m": 1166993.0,
+        "last_day": 479606.0,
+        "multiplier": 0.411
       },
       "support_resistance": {
         "support": 24.727,
@@ -3247,7 +3211,7 @@
           {
             "price": 24.4,
             "strength": "Strong",
-            "touches": 4
+            "touches": 5
           },
           {
             "price": 23.514,
@@ -3272,6 +3236,11 @@
             "touches": 9
           },
           {
+            "price": 25.183,
+            "strength": "Strong",
+            "touches": 7
+          },
+          {
             "price": 30.609,
             "strength": "Strong",
             "touches": 8
@@ -3280,32 +3249,27 @@
             "price": 28.839,
             "strength": "Strong",
             "touches": 7
-          },
-          {
-            "price": 25.183,
-            "strength": "Strong",
-            "touches": 6
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 25.0,
+        "entry_price": 24.68,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 23.616,
-        "tp1": 25.25,
-        "tp2": 25.5,
-        "tp3": 26.5,
+        "stop_loss": 23.344,
+        "tp1": 24.927,
+        "tp2": 25.174,
+        "tp3": 26.161,
         "tp1_rr": 0.18,
-        "tp2_rr": 0.36,
-        "tp3_rr": 1.08
+        "tp2_rr": 0.37,
+        "tp3_rr": 1.11
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 21.0,
-        "medium_price": 24.982,
-        "low_price": 24.261,
-        "high_price": 26.137
+        "signal": "Buy",
+        "confidence": 40.0,
+        "medium_price": 24.743,
+        "low_price": 24.283,
+        "high_price": 26.056
       },
       "intraday": {
         "score": null,
@@ -3324,9 +3288,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
-        "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4813
+        "candle_signal": "bearish",
+        "chartscan_signal": "Sell",
+        "chartscan_confidence": 0.5556
       },
       "index": {
         "membership": "EGX30",
@@ -3335,46 +3299,46 @@
     },
     {
       "ticker": "EGAL",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 45.73,
+      "score": 32.53,
       "score_breakdown": {
-        "trend": 17.82,
+        "trend": 17.03,
         "macd": 0.0,
-        "rsi": 9.0,
-        "volume": 0.04,
+        "rsi": 5.4,
+        "volume": 0.0,
         "adi": 0.0,
-        "support": 4.37,
-        "vwap": 1.6,
-        "volume_profile": 5.4,
+        "support": 0.0,
+        "vwap": 0.8,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 335.06,
+        "current_egp": 326.5,
         "current_usd": 6.4957,
         "fair_value_egp": 981.1136,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 38.03,
-        "adx": 25.18,
-        "mfi": 63.29,
-        "macd": -3.6738,
-        "macd_signal": -0.5699,
+        "rsi": 33.2,
+        "adx": 25.52,
+        "mfi": 63.24,
+        "macd": -4.9223,
+        "macd_signal": -1.4404,
         "macd_bullish": false,
-        "sma50": 345.1268,
-        "sma200": 294.6752,
+        "sma50": 345.733,
+        "sma200": 295.2828,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 243940.0,
-        "last_day": 105058.0,
-        "multiplier": 0.431
+        "avg_3m": 244419.0,
+        "last_day": 123484.0,
+        "multiplier": 0.505
       },
       "support_resistance": {
         "support": 331.5,
@@ -3396,14 +3360,14 @@
             "touches": 4
           },
           {
-            "price": 332.57,
+            "price": 313.62,
             "strength": "Strong",
             "touches": 4
           },
           {
-            "price": 313.62,
-            "strength": "Strong",
-            "touches": 4
+            "price": 323.234,
+            "strength": "Medium",
+            "touches": 2
           }
         ],
         "resistance_levels": [
@@ -3435,23 +3399,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 335.06,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 315.343,
-        "tp1": 338.411,
-        "tp2": 341.761,
-        "tp3": 355.164,
-        "tp1_rr": 0.17,
-        "tp2_rr": 0.34,
-        "tp3_rr": 1.02
+        "entry_price": 324.655,
+        "entry_action": "BUY NOW",
+        "entry_source": "BB Lower Band",
+        "stop_loss": 320.648,
+        "tp1": 327.902,
+        "tp2": 331.148,
+        "tp3": 342.274,
+        "tp1_rr": 0.81,
+        "tp2_rr": 1.62,
+        "tp3_rr": 4.4
       },
       "ml": {
         "signal": "Buy",
         "confidence": 100.0,
-        "medium_price": 357.934,
-        "low_price": 338.057,
-        "high_price": 392.375
+        "medium_price": 350.549,
+        "low_price": 329.45,
+        "high_price": 379.976
       },
       "intraday": {
         "score": null,
@@ -3470,7 +3434,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -3481,12 +3445,12 @@
     },
     {
       "ticker": "SWDY",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 41.9,
+      "score": 41.7,
       "score_breakdown": {
-        "trend": 18.4,
+        "trend": 18.2,
         "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
@@ -3497,39 +3461,39 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 112.6,
+        "current_egp": 112.0,
         "current_usd": 2.2201,
         "fair_value_egp": 169.5747,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 41.66,
-        "adx": 27.6,
-        "mfi": 58.99,
-        "macd": -1.7351,
-        "macd_signal": -0.9132,
+        "rsi": 41.0,
+        "adx": 27.17,
+        "mfi": 59.03,
+        "macd": -2.0088,
+        "macd_signal": -1.1323,
         "macd_bullish": false,
-        "sma50": 119.0578,
-        "sma200": 91.8359,
+        "sma50": 119.4378,
+        "sma200": 92.0196,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 593730.0,
-        "last_day": 261960.0,
-        "multiplier": 0.441
+        "avg_3m": 596400.0,
+        "last_day": 427817.0,
+        "multiplier": 0.717
       },
       "support_resistance": {
         "support": 102.31,
-        "resistance": 133.98,
+        "resistance": 114.5,
         "support_levels": [
           {
             "price": 87.663,
             "strength": "Strong",
-            "touches": 18
+            "touches": 17
           },
           {
             "price": 106.51,
@@ -3559,14 +3523,14 @@
             "touches": 6
           },
           {
-            "price": 124.924,
+            "price": 114.75,
             "strength": "Strong",
             "touches": 5
           },
           {
-            "price": 114.75,
+            "price": 124.924,
             "strength": "Strong",
-            "touches": 4
+            "touches": 5
           },
           {
             "price": 118.043,
@@ -3581,23 +3545,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 106.906,
+        "entry_price": 107.846,
         "entry_action": "WAIT FOR PULLBACK",
         "entry_source": "VP VA Low",
         "stop_loss": 105.658,
-        "tp1": 107.975,
-        "tp2": 109.044,
-        "tp3": 113.32,
-        "tp1_rr": 0.86,
-        "tp2_rr": 1.71,
-        "tp3_rr": 5.14
+        "tp1": 108.924,
+        "tp2": 110.003,
+        "tp3": 114.75,
+        "tp1_rr": 0.49,
+        "tp2_rr": 0.99,
+        "tp3_rr": 3.16
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 77.0,
-        "medium_price": 115.472,
-        "low_price": 109.536,
-        "high_price": 122.891
+        "confidence": 89.0,
+        "medium_price": 116.187,
+        "low_price": 112.22,
+        "high_price": 125.729
       },
       "intraday": {
         "score": null,
@@ -3617,8 +3581,8 @@
       },
       "patterns": {
         "candle_signal": "neutral",
-        "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4761
+        "chartscan_signal": "Sell",
+        "chartscan_confidence": 0.5329
       },
       "index": {
         "membership": "EGX70",
@@ -3627,60 +3591,55 @@
     },
     {
       "ticker": "AMOC",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "EGX30 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (ML), no Avoid among active voters — upgraded to Buy",
-      "score": 59.53,
+      "score": 58.84,
       "score_breakdown": {
         "trend": 26.0,
         "macd": 0.0,
         "rsi": 9.0,
-        "volume": 0.95,
+        "volume": 0.0,
         "adi": 4.2,
         "support": 0.0,
-        "vwap": 4.8,
-        "volume_profile": 5.4,
-        "intraday": 9.18
+        "vwap": 3.2,
+        "volume_profile": 7.2,
+        "intraday": 9.24
       },
       "price": {
-        "current_egp": 13.74,
+        "current_egp": 13.51,
         "current_usd": 0.2771,
         "fair_value_egp": 25.2138,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 55.6,
-        "adx": 33.58,
-        "mfi": 57.73,
-        "macd": 0.4811,
-        "macd_signal": 0.5343,
+        "rsi": 52.69,
+        "adx": 31.7,
+        "mfi": 57.55,
+        "macd": 0.4227,
+        "macd_signal": 0.5119,
         "macd_bullish": false,
-        "sma50": 12.1806,
-        "sma200": 8.9105,
+        "sma50": 12.2726,
+        "sma200": 8.9428,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "transitioning"
+        "regime": "ranging"
       },
       "volume": {
-        "avg_3m": 11631920.0,
-        "last_day": 11602975.0,
-        "multiplier": 0.998
+        "avg_3m": 11632247.0,
+        "last_day": 7787090.0,
+        "multiplier": 0.669
       },
       "support_resistance": {
         "support": 12.81,
-        "resistance": 14.63,
+        "resistance": 14.27,
         "support_levels": [
-          {
-            "price": 13.52,
-            "strength": "Strong",
-            "touches": 5
-          },
           {
             "price": 13.195,
             "strength": "Strong",
-            "touches": 4
+            "touches": 5
           },
           {
             "price": 12.216,
@@ -3696,65 +3655,70 @@
             "price": 11.08,
             "strength": "Medium",
             "touches": 2
+          },
+          {
+            "price": 10.65,
+            "strength": "Weak",
+            "touches": 1
           }
         ],
         "resistance_levels": [
           {
-            "price": 13.845,
+            "price": 13.52,
             "strength": "Strong",
-            "touches": 4
+            "touches": 5
+          },
+          {
+            "price": 14.613,
+            "strength": "Strong",
+            "touches": 3
           },
           {
             "price": 14.2,
             "strength": "Strong",
             "touches": 3
-          },
-          {
-            "price": 14.55,
-            "strength": "Medium",
-            "touches": 1
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 13.74,
+        "entry_price": 13.51,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 12.554,
-        "tp1": 13.877,
-        "tp2": 14.015,
-        "tp3": 14.564,
+        "stop_loss": 12.347,
+        "tp1": 13.645,
+        "tp2": 13.78,
+        "tp3": 14.321,
         "tp1_rr": 0.12,
         "tp2_rr": 0.23,
         "tp3_rr": 0.7
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 48.0,
-        "medium_price": 14.046,
-        "low_price": 13.0,
-        "high_price": 14.679
+        "confidence": 94.0,
+        "medium_price": 14.222,
+        "low_price": 13.463,
+        "high_price": 14.943
       },
       "intraday": {
-        "score": 61.2,
-        "volume_skew": 0.702,
-        "momentum": 36.5,
-        "vwap_score": 74.9,
+        "score": 61.6,
+        "volume_skew": 0.708,
+        "momentum": 45.1,
+        "vwap_score": 65.7,
         "ad_signal": "neutral",
         "ad_score": -0.2
       },
       "holding": {
-        "label": "4-13 days (Quick Exit)",
+        "label": "3-10 days (Quick Exit)",
         "exit_strategy": "quick_exit",
-        "days_min": 4,
-        "days_max": 13,
-        "days_target": 9,
+        "days_min": 3,
+        "days_max": 10,
+        "days_target": 7,
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.0
+        "chartscan_confidence": 0.4214
       },
       "index": {
         "membership": "EGX30",
@@ -3763,75 +3727,65 @@
     },
     {
       "ticker": "EGAS",
-      "run_date": "2026-10-11",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 36.51,
+      "run_date": "2026-10-12",
+      "recommendation": "Avoid",
+      "recommendation_basis": "Base=Avoid, ML=Watch",
+      "score": 24.89,
       "score_breakdown": {
-        "trend": 16.61,
+        "trend": 9.39,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 1.6,
+        "vwap": 0.8,
         "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 55.01,
+        "current_egp": 51.1,
         "current_usd": 1.0746,
-        "fair_value_egp": 60.054,
+        "fair_value_egp": 60.002,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 42.63,
-        "adx": 8.16,
-        "mfi": 63.37,
-        "macd": -0.3927,
-        "macd_signal": -0.2988,
+        "rsi": 31.92,
+        "adx": 9.94,
+        "mfi": 63.35,
+        "macd": -0.7805,
+        "macd_signal": -0.3951,
         "macd_bullish": false,
-        "sma50": 57.8036,
-        "sma200": 48.7562,
+        "sma50": 57.7702,
+        "sma200": 48.7836,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "ranging"
       },
       "volume": {
-        "avg_3m": 272166.0,
-        "last_day": 90460.0,
-        "multiplier": 0.332
+        "avg_3m": 270007.0,
+        "last_day": 110287.0,
+        "multiplier": 0.408
       },
       "support_resistance": {
-        "support": 55.21,
+        "support": 55.0,
         "resistance": 60.45,
         "support_levels": [
           {
             "price": 50.021,
             "strength": "Strong",
-            "touches": 11
-          },
-          {
-            "price": 51.374,
-            "strength": "Strong",
             "touches": 10
           },
           {
-            "price": 52.789,
+            "price": 48.573,
             "strength": "Strong",
-            "touches": 8
+            "touches": 3
           },
           {
-            "price": 54.875,
-            "strength": "Strong",
-            "touches": 5
-          },
-          {
-            "price": 53.62,
-            "strength": "Strong",
-            "touches": 5
+            "price": 46.51,
+            "strength": "Weak",
+            "touches": 1
           }
         ],
         "resistance_levels": [
@@ -3841,45 +3795,45 @@
             "touches": 11
           },
           {
+            "price": 51.374,
+            "strength": "Strong",
+            "touches": 10
+          },
+          {
             "price": 59.885,
             "strength": "Strong",
             "touches": 9
           },
           {
+            "price": 52.789,
+            "strength": "Strong",
+            "touches": 8
+          },
+          {
             "price": 56.317,
             "strength": "Strong",
-            "touches": 5
-          },
-          {
-            "price": 61.498,
-            "strength": "Strong",
-            "touches": 3
-          },
-          {
-            "price": 63.0,
-            "strength": "Weak",
-            "touches": 1
+            "touches": 6
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 55.01,
+        "entry_price": 51.1,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 51.021,
-        "tp1": 55.56,
-        "tp2": 56.11,
-        "tp3": 58.311,
-        "tp1_rr": 0.14,
-        "tp2_rr": 0.28,
-        "tp3_rr": 0.83
+        "stop_loss": 46.342,
+        "tp1": 51.611,
+        "tp2": 52.122,
+        "tp3": 54.166,
+        "tp1_rr": 0.11,
+        "tp2_rr": 0.21,
+        "tp3_rr": 0.64
       },
       "ml": {
-        "signal": "Buy",
-        "confidence": 52.0,
-        "medium_price": 55.258,
-        "low_price": 53.652,
-        "high_price": 59.104
+        "signal": "Watch",
+        "confidence": 30.0,
+        "medium_price": 51.213,
+        "low_price": 47.239,
+        "high_price": 53.525
       },
       "intraday": {
         "score": null,
@@ -3898,9 +3852,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4592
+        "chartscan_confidence": 0.0
       },
       "index": {
         "membership": "UNINDEX",
@@ -3909,51 +3863,78 @@
     },
     {
       "ticker": "ZEOT",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 40.48,
+      "score": 26.55,
       "score_breakdown": {
-        "trend": 13.79,
-        "macd": 3.99,
-        "rsi": 9.0,
+        "trend": 11.05,
+        "macd": 0.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 0.8,
-        "volume_profile": 5.4,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 12.09,
+        "current_egp": 11.02,
         "current_usd": 0.2411,
         "fair_value_egp": 13.0769,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 42.23,
-        "adx": 23.09,
-        "mfi": 68.11,
-        "macd": -0.2298,
-        "macd_signal": -0.2478,
-        "macd_bullish": true,
-        "sma50": 13.1994,
-        "sma200": 10.0518,
+        "rsi": 33.91,
+        "adx": 23.71,
+        "mfi": 68.07,
+        "macd": -0.3332,
+        "macd_signal": -0.2649,
+        "macd_bullish": false,
+        "sma50": 13.1762,
+        "sma200": 10.0783,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "transitioning"
+        "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 1253695.0,
-        "last_day": 182424.0,
-        "multiplier": 0.146
+        "avg_3m": 1241295.0,
+        "last_day": 502351.0,
+        "multiplier": 0.405
       },
       "support_resistance": {
         "support": 10.6,
-        "resistance": 13.77,
+        "resistance": 12.3,
         "support_levels": [
+          {
+            "price": 9.214,
+            "strength": "Strong",
+            "touches": 5
+          },
+          {
+            "price": 10.6,
+            "strength": "Medium",
+            "touches": 2
+          },
+          {
+            "price": 10.91,
+            "strength": "Medium",
+            "touches": 2
+          },
+          {
+            "price": 9.5,
+            "strength": "Medium",
+            "touches": 2
+          },
+          {
+            "price": 10.4,
+            "strength": "Weak",
+            "touches": 1
+          }
+        ],
+        "resistance_levels": [
           {
             "price": 11.516,
             "strength": "Strong",
@@ -3965,23 +3946,6 @@
             "touches": 7
           },
           {
-            "price": 11.115,
-            "strength": "Strong",
-            "touches": 6
-          },
-          {
-            "price": 9.214,
-            "strength": "Strong",
-            "touches": 5
-          },
-          {
-            "price": 10.6,
-            "strength": "Medium",
-            "touches": 2
-          }
-        ],
-        "resistance_levels": [
-          {
             "price": 12.247,
             "strength": "Strong",
             "touches": 6
@@ -3992,40 +3956,30 @@
             "touches": 6
           },
           {
-            "price": 12.963,
+            "price": 11.115,
             "strength": "Strong",
-            "touches": 4
-          },
-          {
-            "price": 13.685,
-            "strength": "Strong",
-            "touches": 4
-          },
-          {
-            "price": 13.893,
-            "strength": "Strong",
-            "touches": 4
+            "touches": 6
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 11.575,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "VP VA Low",
-        "stop_loss": 11.424,
-        "tp1": 11.691,
-        "tp2": 11.806,
-        "tp3": 12.247,
-        "tp1_rr": 0.77,
-        "tp2_rr": 1.53,
-        "tp3_rr": 4.45
+        "entry_price": 11.02,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 9.635,
+        "tp1": 11.13,
+        "tp2": 11.24,
+        "tp3": 11.681,
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.16,
+        "tp3_rr": 0.48
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 73.0,
-        "medium_price": 12.372,
-        "low_price": 11.652,
-        "high_price": 13.116
+        "confidence": 60.0,
+        "medium_price": 11.324,
+        "low_price": 10.345,
+        "high_price": 12.495
       },
       "intraday": {
         "score": null,
@@ -4036,11 +3990,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-8 days (Quick Exit)",
-        "exit_strategy": "quick_exit",
-        "days_min": 3,
-        "days_max": 8,
-        "days_target": 6,
+        "label": "4-12 days (Trail Stop)",
+        "exit_strategy": "trail_stop",
+        "days_min": 4,
+        "days_max": 12,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -4055,60 +4009,60 @@
     },
     {
       "ticker": "AXPH",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 43.5,
+      "score": 39.44,
       "score_breakdown": {
-        "trend": 20.8,
+        "trend": 20.34,
         "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 0.8,
-        "volume_profile": 5.4,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 1499.67,
+        "current_egp": 1433.1,
         "current_usd": 28.6245,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 41.9,
-        "adx": 29.09,
-        "mfi": 63.98,
-        "macd": -20.485,
-        "macd_signal": 1.9254,
+        "rsi": 35.58,
+        "adx": 29.13,
+        "mfi": 64.12,
+        "macd": -27.5579,
+        "macd_signal": -3.9713,
         "macd_bullish": false,
-        "sma50": 1525.2082,
-        "sma200": 1082.0661,
+        "sma50": 1529.5904,
+        "sma200": 1085.1576,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 4858.0,
-        "last_day": 3625.0,
-        "multiplier": 0.746
+        "avg_3m": 4886.0,
+        "last_day": 2910.0,
+        "multiplier": 0.596
       },
       "support_resistance": {
         "support": 1334.35,
         "resistance": 1768.0,
         "support_levels": [
           {
+            "price": 1121.572,
+            "strength": "Strong",
+            "touches": 14
+          },
+          {
             "price": 1232.662,
             "strength": "Strong",
             "touches": 9
-          },
-          {
-            "price": 1129.95,
-            "strength": "Strong",
-            "touches": 8
           },
           {
             "price": 1341.483,
@@ -4144,7 +4098,7 @@
           },
           {
             "price": 1509.689,
-            "strength": "Strong",
+            "strength": "Medium",
             "touches": 2
           },
           {
@@ -4155,23 +4109,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 1499.67,
+        "entry_price": 1433.1,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 1355.897,
-        "tp1": 1514.667,
-        "tp2": 1529.663,
-        "tp3": 1589.65,
+        "stop_loss": 1284.979,
+        "tp1": 1447.431,
+        "tp2": 1461.762,
+        "tp3": 1519.086,
         "tp1_rr": 0.1,
-        "tp2_rr": 0.21,
-        "tp3_rr": 0.63
+        "tp2_rr": 0.19,
+        "tp3_rr": 0.58
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 86.0,
-        "medium_price": 1532.224,
-        "low_price": 1493.435,
-        "high_price": 1595.09
+        "confidence": 90.0,
+        "medium_price": 1461.183,
+        "low_price": 1425.563,
+        "high_price": 1513.039
       },
       "intraday": {
         "score": null,
@@ -4190,7 +4144,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bullish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -4201,55 +4155,55 @@
     },
     {
       "ticker": "CPCI",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Buy",
-      "recommendation_basis": "Strong technical base (score=62.4, golden+diamond cross, ADX=67, MACD bullish) — ML=Watch, ChartScan abstain [EGX100 Neutral]; entry: WAIT FOR PULLBACK (EMA 20) — chase/wait risk, direction kept",
-      "score": 62.39,
+      "recommendation_basis": "Strong technical base (score=62.2, golden+diamond cross, ADX=67, MACD bullish) — ML=Watch, ChartScan abstain [EGX100 Neutral]; entry: WAIT FOR PULLBACK (VWAP) — chase/wait risk, direction kept",
+      "score": 62.18,
       "score_breakdown": {
         "trend": 26.0,
-        "macd": 5.22,
+        "macd": 4.87,
         "rsi": 9.0,
-        "volume": 0.26,
+        "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 6.4,
         "volume_profile": 7.2,
-        "intraday": 8.31
+        "intraday": 8.71
       },
       "price": {
-        "current_egp": 596.05,
+        "current_egp": 592.61,
         "current_usd": 11.5387,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 70.17,
-        "adx": 66.89,
-        "mfi": 67.58,
-        "macd": 18.1239,
-        "macd_signal": 15.9848,
+        "rsi": 67.07,
+        "adx": 66.9,
+        "mfi": 67.47,
+        "macd": 17.3623,
+        "macd_signal": 16.2603,
         "macd_bullish": true,
-        "sma50": 545.1386,
-        "sma200": 369.4115,
+        "sma50": 547.731,
+        "sma200": 371.0196,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_up"
       },
       "volume": {
-        "avg_3m": 14903.0,
-        "last_day": 4047.0,
-        "multiplier": 0.272
+        "avg_3m": 14945.0,
+        "last_day": 3749.0,
+        "multiplier": 0.251
       },
       "support_resistance": {
         "support": 550.2,
         "resistance": 644.0,
         "support_levels": [
           {
-            "price": 536.57,
+            "price": 540.374,
             "strength": "Strong",
-            "touches": 9
+            "touches": 13
           },
           {
             "price": 567.445,
@@ -4257,58 +4211,58 @@
             "touches": 8
           },
           {
-            "price": 549.268,
+            "price": 484.0,
             "strength": "Strong",
-            "touches": 7
+            "touches": 8
           },
           {
-            "price": 483.453,
+            "price": 550.2,
             "strength": "Strong",
-            "touches": 7
+            "touches": 6
           },
           {
-            "price": 469.165,
+            "price": 464.358,
             "strength": "Strong",
-            "touches": 3
+            "touches": 4
           }
         ],
         "resistance_levels": [
           {
-            "price": 613.5,
-            "strength": "Medium",
-            "touches": 2
-          },
-          {
             "price": 644.0,
             "strength": "Weak",
             "touches": 1
+          },
+          {
+            "price": 616.7,
+            "strength": "Weak",
+            "touches": 0
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 574.399,
+        "entry_price": 571.89,
         "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "EMA 20",
+        "entry_source": "VWAP",
         "stop_loss": 562.905,
-        "tp1": 580.143,
-        "tp2": 585.887,
-        "tp3": 611.311,
-        "tp1_rr": 0.5,
-        "tp2_rr": 1.0,
-        "tp3_rr": 3.21
+        "tp1": 577.609,
+        "tp2": 583.328,
+        "tp3": 606.203,
+        "tp1_rr": 0.64,
+        "tp2_rr": 1.27,
+        "tp3_rr": 3.82
       },
       "ml": {
         "signal": "Watch",
         "confidence": 25.0,
-        "medium_price": 586.334,
-        "low_price": 573.961,
-        "high_price": 611.311
+        "medium_price": 590.352,
+        "low_price": 569.242,
+        "high_price": 624.753
       },
       "intraday": {
-        "score": 55.4,
-        "volume_skew": 0.137,
-        "momentum": 32.5,
-        "vwap_score": 78.3,
+        "score": 58.1,
+        "volume_skew": -0.02,
+        "momentum": 50.8,
+        "vwap_score": 76.7,
         "ad_signal": "neutral",
         "ad_score": 0.2
       },
@@ -4332,103 +4286,103 @@
     },
     {
       "ticker": "ISPH",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 32.13,
+      "score": 28.75,
       "score_breakdown": {
         "trend": 3.9,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 3.5,
-        "support": 4.83,
+        "support": 5.05,
         "vwap": 1.6,
         "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 11.4,
-        "current_usd": 0.2239,
-        "fair_value_egp": 27.7068,
+        "current_egp": 11.26,
+        "current_usd": 0.2214,
+        "fair_value_egp": 27.4343,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 35.11,
-        "adx": 25.53,
-        "mfi": 61.75,
-        "macd": -0.2913,
-        "macd_signal": -0.276,
+        "rsi": 33.15,
+        "adx": 25.83,
+        "mfi": 61.66,
+        "macd": -0.3128,
+        "macd_signal": -0.2834,
         "macd_bullish": false,
-        "sma50": 12.6952,
-        "sma200": 11.6833,
+        "sma50": 12.693,
+        "sma200": 11.6846,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 7763150.0,
-        "last_day": 3280885.0,
-        "multiplier": 0.423
+        "avg_3m": 7753049.0,
+        "last_day": 2552686.0,
+        "multiplier": 0.329
       },
       "support_resistance": {
-        "support": 11.3,
-        "resistance": 11.87,
+        "support": 11.1711,
+        "resistance": 11.7346,
         "support_levels": [
           {
-            "price": 11.25,
+            "price": 11.122,
             "strength": "Strong",
             "touches": 8
           }
         ],
         "resistance_levels": [
           {
-            "price": 11.819,
+            "price": 11.684,
             "strength": "Strong",
             "touches": 13
           },
           {
-            "price": 13.108,
+            "price": 12.959,
             "strength": "Strong",
             "touches": 14
           },
           {
-            "price": 12.222,
+            "price": 12.082,
             "strength": "Strong",
             "touches": 9
           },
           {
-            "price": 12.76,
+            "price": 12.614,
             "strength": "Strong",
             "touches": 8
           },
           {
-            "price": 13.649,
+            "price": 13.443,
             "strength": "Strong",
-            "touches": 5
+            "touches": 6
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 11.4,
+        "entry_price": 11.26,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 10.747,
-        "tp1": 11.514,
-        "tp2": 11.628,
-        "tp3": 12.084,
-        "tp1_rr": 0.17,
-        "tp2_rr": 0.35,
-        "tp3_rr": 1.05
+        "stop_loss": 10.664,
+        "tp1": 11.373,
+        "tp2": 11.485,
+        "tp3": 11.936,
+        "tp1_rr": 0.19,
+        "tp2_rr": 0.38,
+        "tp3_rr": 1.13
       },
       "ml": {
         "signal": "Buy",
         "confidence": 100.0,
-        "medium_price": 12.437,
-        "low_price": 11.308,
-        "high_price": 12.703
+        "medium_price": 12.199,
+        "low_price": 11.169,
+        "high_price": 12.327
       },
       "intraday": {
         "score": null,
@@ -4458,14 +4412,14 @@
     },
     {
       "ticker": "MCRO",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 36.5,
+      "score": 32.08,
       "score_breakdown": {
-        "trend": 17.4,
+        "trend": 16.58,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
@@ -4474,30 +4428,30 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 1.47,
+        "current_egp": 1.43,
         "current_usd": 0.0291,
-        "fair_value_egp": 1.4479,
+        "fair_value_egp": 1.3822,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 40.43,
-        "adx": 22.8,
-        "mfi": 64.91,
-        "macd": -0.0215,
-        "macd_signal": -0.0061,
+        "rsi": 37.36,
+        "adx": 22.44,
+        "mfi": 64.85,
+        "macd": -0.0288,
+        "macd_signal": -0.0106,
         "macd_bullish": false,
-        "sma50": 1.5698,
-        "sma200": 1.3453,
+        "sma50": 1.5686,
+        "sma200": 1.3466,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "transitioning"
       },
       "volume": {
-        "avg_3m": 78637691.0,
-        "last_day": 14513255.0,
-        "multiplier": 0.185
+        "avg_3m": 78452540.0,
+        "last_day": 19972719.0,
+        "multiplier": 0.255
       },
       "support_resistance": {
         "support": 1.44,
@@ -4507,11 +4461,6 @@
             "price": 1.235,
             "strength": "Strong",
             "touches": 16
-          },
-          {
-            "price": 1.445,
-            "strength": "Strong",
-            "touches": 6
           },
           {
             "price": 1.203,
@@ -4524,9 +4473,14 @@
             "touches": 3
           },
           {
-            "price": 1.405,
+            "price": 1.3,
             "strength": "Strong",
             "touches": 3
+          },
+          {
+            "price": 1.41,
+            "strength": "Strong",
+            "touches": 2
           }
         ],
         "resistance_levels": [
@@ -4546,35 +4500,35 @@
             "touches": 6
           },
           {
-            "price": 1.565,
+            "price": 1.445,
             "strength": "Strong",
-            "touches": 5
+            "touches": 6
           },
           {
-            "price": 1.645,
+            "price": 1.565,
             "strength": "Strong",
             "touches": 5
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 1.407,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 1.394,
-        "tp1": 1.421,
-        "tp2": 1.435,
-        "tp3": 1.475,
-        "tp1_rr": 1.08,
-        "tp2_rr": 2.16,
-        "tp3_rr": 5.23
+        "entry_price": 1.43,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 1.296,
+        "tp1": 1.444,
+        "tp2": 1.459,
+        "tp3": 1.516,
+        "tp1_rr": 0.11,
+        "tp2_rr": 0.21,
+        "tp3_rr": 0.64
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 94.0,
-        "medium_price": 1.523,
-        "low_price": 1.441,
-        "high_price": 1.561
+        "confidence": 88.0,
+        "medium_price": 1.491,
+        "low_price": 1.404,
+        "high_price": 1.503
       },
       "intraday": {
         "score": null,
@@ -4593,9 +4547,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4645
+        "chartscan_confidence": 0.0
       },
       "index": {
         "membership": "EGX70",
@@ -4604,12 +4558,12 @@
     },
     {
       "ticker": "RMDA",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
-      "score": 26.3,
+      "score": 25.5,
       "score_breakdown": {
-        "trend": 10.8,
+        "trend": 10.0,
         "macd": 0.0,
         "rsi": 5.4,
         "volume": 0.0,
@@ -4620,40 +4574,35 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 5.24,
+        "current_egp": 5.09,
         "current_usd": 0.1035,
         "fair_value_egp": 3.6383,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 33.09,
-        "adx": 35.34,
-        "mfi": 66.27,
-        "macd": -0.1888,
-        "macd_signal": -0.1473,
+        "rsi": 29.83,
+        "adx": 36.38,
+        "mfi": 66.31,
+        "macd": -0.2081,
+        "macd_signal": -0.1594,
         "macd_bullish": false,
-        "sma50": 5.9946,
-        "sma200": 4.7198,
+        "sma50": 5.9908,
+        "sma200": 4.7294,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 10958939.0,
-        "last_day": 2188536.0,
-        "multiplier": 0.2
+        "avg_3m": 10962749.0,
+        "last_day": 2974294.0,
+        "multiplier": 0.271
       },
       "support_resistance": {
         "support": 4.94,
-        "resistance": 6.55,
+        "resistance": 5.38,
         "support_levels": [
-          {
-            "price": 5.113,
-            "strength": "Strong",
-            "touches": 12
-          },
           {
             "price": 4.93,
             "strength": "Strong",
@@ -4667,6 +4616,11 @@
         ],
         "resistance_levels": [
           {
+            "price": 5.099,
+            "strength": "Strong",
+            "touches": 13
+          },
+          {
             "price": 6.1,
             "strength": "Strong",
             "touches": 9
@@ -4677,40 +4631,35 @@
             "touches": 7
           },
           {
+            "price": 5.299,
+            "strength": "Strong",
+            "touches": 6
+          },
+          {
             "price": 5.602,
             "strength": "Strong",
             "touches": 5
-          },
-          {
-            "price": 5.299,
-            "strength": "Strong",
-            "touches": 5
-          },
-          {
-            "price": 5.974,
-            "strength": "Strong",
-            "touches": 3
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 4.993,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 4.891,
-        "tp1": 5.043,
-        "tp2": 5.093,
-        "tp3": 5.293,
-        "tp1_rr": 0.49,
-        "tp2_rr": 0.98,
-        "tp3_rr": 2.94
+        "entry_price": 5.09,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 4.626,
+        "tp1": 5.141,
+        "tp2": 5.192,
+        "tp3": 5.395,
+        "tp1_rr": 0.11,
+        "tp2_rr": 0.22,
+        "tp3_rr": 0.66
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 0.0,
-        "medium_price": 4.759,
-        "low_price": 4.505,
-        "high_price": 5.32
+        "confidence": 10.0,
+        "medium_price": 4.719,
+        "low_price": 4.395,
+        "high_price": 5.225
       },
       "intraday": {
         "score": null,
@@ -4721,15 +4670,15 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "5-16 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 9,
+        "days_min": 5,
+        "days_max": 16,
+        "days_target": 11,
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -4740,15 +4689,15 @@
     },
     {
       "ticker": "POUL",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 43.27,
+      "score": 39.27,
       "score_breakdown": {
-        "trend": 10.57,
+        "trend": 10.25,
         "macd": 0.0,
         "rsi": 9.0,
-        "volume": 10.0,
+        "volume": 6.32,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 0.8,
@@ -4756,30 +4705,30 @@
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 9.7,
+        "current_egp": 9.59,
         "current_usd": 0.1912,
         "fair_value_egp": 54.5234,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 38.45,
-        "adx": 30.3,
-        "mfi": 61.43,
-        "macd": -0.1517,
-        "macd_signal": -0.1172,
+        "rsi": 36.62,
+        "adx": 29.82,
+        "mfi": 61.42,
+        "macd": -0.1771,
+        "macd_signal": -0.1292,
         "macd_bullish": false,
-        "sma50": 10.3579,
-        "sma200": 9.1217,
+        "sma50": 10.343,
+        "sma200": 9.137,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 995812.0,
-        "last_day": 1518615.0,
-        "multiplier": 1.525
+        "avg_3m": 1003042.0,
+        "last_day": 2086207.0,
+        "multiplier": 2.08
       },
       "support_resistance": {
         "support": 9.12,
@@ -4805,23 +4754,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 9.7,
+        "entry_price": 9.59,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 6.598,
-        "tp1": 9.797,
-        "tp2": 9.894,
-        "tp3": 10.282,
+        "stop_loss": 6.808,
+        "tp1": 9.686,
+        "tp2": 9.782,
+        "tp3": 10.165,
         "tp1_rr": 0.03,
-        "tp2_rr": 0.06,
-        "tp3_rr": 0.19
+        "tp2_rr": 0.07,
+        "tp3_rr": 0.21
       },
       "ml": {
         "signal": "Buy",
         "confidence": 39.0,
-        "medium_price": 9.762,
-        "low_price": 9.176,
-        "high_price": 10.317
+        "medium_price": 9.651,
+        "low_price": 9.072,
+        "high_price": 10.2
       },
       "intraday": {
         "score": null,
@@ -4851,46 +4800,46 @@
     },
     {
       "ticker": "ORWE",
-      "run_date": "2026-10-11",
-      "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Watch",
-      "score": 49.61,
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "No Buy votes, no Avoid — Watch",
+      "score": 50.14,
       "score_breakdown": {
-        "trend": 21.79,
+        "trend": 21.97,
         "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
-        "adi": 4.2,
-        "support": 6.54,
-        "vwap": 1.6,
-        "volume_profile": 1.8,
-        "intraday": 4.68
+        "adi": 0.0,
+        "support": 4.78,
+        "vwap": 3.2,
+        "volume_profile": 5.4,
+        "intraday": 5.79
       },
       "price": {
-        "current_egp": 26.55,
+        "current_egp": 26.74,
         "current_usd": 0.5194,
         "fair_value_egp": 43.1261,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 45.77,
-        "adx": 14.36,
-        "mfi": 59.35,
-        "macd": 0.1116,
-        "macd_signal": 0.2443,
+        "rsi": 47.58,
+        "adx": 13.74,
+        "mfi": 59.34,
+        "macd": 0.0709,
+        "macd_signal": 0.2096,
         "macd_bullish": false,
-        "sma50": 26.5812,
-        "sma200": 23.7738,
+        "sma50": 26.664,
+        "sma200": 23.79,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "ranging"
       },
       "volume": {
-        "avg_3m": 2025508.0,
-        "last_day": 593396.0,
-        "multiplier": 0.293
+        "avg_3m": 2027690.0,
+        "last_day": 1518017.0,
+        "multiplier": 0.749
       },
       "support_resistance": {
         "support": 26.5,
@@ -4900,6 +4849,11 @@
             "price": 23.049,
             "strength": "Strong",
             "touches": 21
+          },
+          {
+            "price": 26.669,
+            "strength": "Strong",
+            "touches": 11
           },
           {
             "price": 25.912,
@@ -4915,19 +4869,9 @@
             "price": 23.688,
             "strength": "Strong",
             "touches": 2
-          },
-          {
-            "price": 25.07,
-            "strength": "Medium",
-            "touches": 2
           }
         ],
         "resistance_levels": [
-          {
-            "price": 26.669,
-            "strength": "Strong",
-            "touches": 11
-          },
           {
             "price": 27.582,
             "strength": "Strong",
@@ -4951,16 +4895,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 26.55,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 25.141,
-        "tp1": 26.816,
-        "tp2": 27.081,
-        "tp3": 28.143,
-        "tp1_rr": 0.19,
-        "tp2_rr": 0.38,
-        "tp3_rr": 1.13
+        "entry_price": 26.174,
+        "entry_action": "WAIT FOR PULLBACK",
+        "entry_source": "BB Lower Band",
+        "stop_loss": 25.705,
+        "tp1": 26.436,
+        "tp2": 26.697,
+        "tp3": 27.582,
+        "tp1_rr": 0.56,
+        "tp2_rr": 1.12,
+        "tp3_rr": 3.0
       },
       "ml": {
         "signal": "Watch",
@@ -4970,10 +4914,10 @@
         "high_price": null
       },
       "intraday": {
-        "score": 31.2,
-        "volume_skew": -0.805,
-        "momentum": 10.5,
-        "vwap_score": 58.5,
+        "score": 38.6,
+        "volume_skew": -0.812,
+        "momentum": 41.8,
+        "vwap_score": 50.8,
         "ad_signal": "bullish",
         "ad_score": 0.4
       },
@@ -4986,7 +4930,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "bullish",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -4997,10 +4941,10 @@
     },
     {
       "ticker": "AMIA",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
-      "score": 53.45,
+      "score": 51.85,
       "score_breakdown": {
         "trend": 26.0,
         "macd": 0.0,
@@ -5008,35 +4952,35 @@
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 4.8,
+        "vwap": 3.2,
         "volume_profile": 5.4,
         "intraday": 8.25
       },
       "price": {
-        "current_egp": 19.01,
+        "current_egp": 18.71,
         "current_usd": 0.3671,
         "fair_value_egp": 19.509,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 59.08,
-        "adx": 40.6,
-        "mfi": 65.64,
-        "macd": 0.5192,
-        "macd_signal": 0.5868,
+        "rsi": 54.96,
+        "adx": 38.86,
+        "mfi": 65.57,
+        "macd": 0.4692,
+        "macd_signal": 0.5633,
         "macd_bullish": false,
-        "sma50": 17.1212,
-        "sma200": 9.31,
+        "sma50": 17.2702,
+        "sma200": 9.38,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_up"
       },
       "volume": {
-        "avg_3m": 2071976.0,
-        "last_day": 650042.0,
-        "multiplier": 0.314
+        "avg_3m": 2068973.0,
+        "last_day": 1748830.0,
+        "multiplier": 0.845
       },
       "support_resistance": {
         "support": 17.12,
@@ -5065,9 +5009,14 @@
         ],
         "resistance_levels": [
           {
-            "price": 19.143,
+            "price": 19.27,
             "strength": "Strong",
-            "touches": 7
+            "touches": 11
+          },
+          {
+            "price": 18.861,
+            "strength": "Strong",
+            "touches": 9
           },
           {
             "price": 20.055,
@@ -5087,29 +5036,29 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 18.114,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "VP VA Low",
-        "stop_loss": 17.772,
-        "tp1": 18.295,
-        "tp2": 18.476,
-        "tp3": 19.143,
-        "tp1_rr": 0.53,
-        "tp2_rr": 1.06,
-        "tp3_rr": 3.01
+        "entry_price": 17.273,
+        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
+        "entry_source": "SMA 50",
+        "stop_loss": 16.983,
+        "tp1": 17.446,
+        "tp2": 17.618,
+        "tp3": 18.296,
+        "tp1_rr": 0.6,
+        "tp2_rr": 1.19,
+        "tp3_rr": 3.53
       },
       "ml": {
         "signal": "Avoid",
         "confidence": 0.0,
-        "medium_price": 18.617,
-        "low_price": 15.644,
-        "high_price": 22.038
+        "medium_price": 18.296,
+        "low_price": 15.726,
+        "high_price": 20.824
       },
       "intraday": {
         "score": 55.0,
-        "volume_skew": 0.388,
-        "momentum": 17.8,
-        "vwap_score": 54.3,
+        "volume_skew": 0.259,
+        "momentum": 45.7,
+        "vwap_score": 46.5,
         "ad_signal": "neutral",
         "ad_score": -0.2
       },
@@ -5133,51 +5082,88 @@
     },
     {
       "ticker": "ETRS",
-      "run_date": "2026-10-11",
-      "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Watch, ChartScan=Watch",
-      "score": 49.07,
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (ML), others disagree",
+      "score": 39.61,
       "score_breakdown": {
-        "trend": 18.28,
-        "macd": 5.69,
+        "trend": 11.4,
+        "macd": 0.0,
         "rsi": 9.0,
-        "volume": 0.0,
+        "volume": 5.51,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 3.2,
+        "vwap": 0.8,
         "volume_profile": 5.4,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 10.65,
+        "current_egp": 10.06,
         "current_usd": 0.2067,
         "fair_value_egp": 11.0011,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 47.38,
-        "adx": 17.56,
-        "mfi": 66.78,
-        "macd": -0.0598,
-        "macd_signal": -0.0976,
-        "macd_bullish": true,
-        "sma50": 10.8838,
-        "sma200": 8.9455,
+        "rsi": 37.43,
+        "adx": 18.34,
+        "mfi": 66.76,
+        "macd": -0.1067,
+        "macd_signal": -0.0994,
+        "macd_bullish": false,
+        "sma50": 10.8714,
+        "sma200": 8.9623,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "trending"
+        "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 1781293.0,
-        "last_day": 501105.0,
-        "multiplier": 0.281
+        "avg_3m": 1637509.0,
+        "last_day": 3142225.0,
+        "multiplier": 1.919
       },
       "support_resistance": {
-        "support": 10.7,
-        "resistance": 11.34,
+        "support": 10.21,
+        "resistance": 10.6802,
         "support_levels": [
+          {
+            "price": 9.805,
+            "strength": "Strong",
+            "touches": 4
+          },
+          {
+            "price": 8.872,
+            "strength": "Strong",
+            "touches": 3
+          },
+          {
+            "price": 8.719,
+            "strength": "Strong",
+            "touches": 3
+          },
+          {
+            "price": 8.48,
+            "strength": "Medium",
+            "touches": 2
+          },
+          {
+            "price": 9.434,
+            "strength": "Medium",
+            "touches": 2
+          }
+        ],
+        "resistance_levels": [
+          {
+            "price": 11.149,
+            "strength": "Strong",
+            "touches": 17
+          },
+          {
+            "price": 10.725,
+            "strength": "Strong",
+            "touches": 15
+          },
           {
             "price": 10.39,
             "strength": "Strong",
@@ -5189,62 +5175,30 @@
             "touches": 4
           },
           {
-            "price": 9.805,
-            "strength": "Strong",
-            "touches": 4
-          },
-          {
-            "price": 8.835,
-            "strength": "Strong",
-            "touches": 3
-          },
-          {
-            "price": 8.475,
-            "strength": "Medium",
-            "touches": 2
-          }
-        ],
-        "resistance_levels": [
-          {
-            "price": 10.727,
-            "strength": "Strong",
-            "touches": 15
-          },
-          {
-            "price": 11.127,
-            "strength": "Strong",
-            "touches": 11
-          },
-          {
             "price": 11.415,
             "strength": "Strong",
             "touches": 4
-          },
-          {
-            "price": 11.66,
-            "strength": "Strong",
-            "touches": 3
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 10.2,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "VP VA Low",
-        "stop_loss": 10.113,
-        "tp1": 10.302,
-        "tp2": 10.404,
-        "tp3": 10.667,
-        "tp1_rr": 1.17,
-        "tp2_rr": 2.34,
-        "tp3_rr": 5.37
+        "entry_price": 10.06,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 9.352,
+        "tp1": 10.161,
+        "tp2": 10.261,
+        "tp3": 10.664,
+        "tp1_rr": 0.14,
+        "tp2_rr": 0.28,
+        "tp3_rr": 0.85
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 20.0,
-        "medium_price": 10.667,
-        "low_price": 9.961,
-        "high_price": 11.701
+        "signal": "Buy",
+        "confidence": 42.0,
+        "medium_price": 10.14,
+        "low_price": 9.434,
+        "high_price": 11.095
       },
       "intraday": {
         "score": null,
@@ -5255,17 +5209,17 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-11 days (Time Exit)",
-        "exit_strategy": "time_exit",
-        "days_min": 4,
-        "days_max": 11,
-        "days_target": 8,
+        "label": "5-15 days (Trail Stop)",
+        "exit_strategy": "trail_stop",
+        "days_min": 5,
+        "days_max": 15,
+        "days_target": 11,
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4035
+        "chartscan_confidence": 0.0
       },
       "index": {
         "membership": "EGX70",
@@ -5274,67 +5228,67 @@
     },
     {
       "ticker": "MTIE",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch, ChartScan=Watch",
-      "score": 30.41,
+      "score": 29.53,
       "score_breakdown": {
-        "trend": 10.51,
+        "trend": 9.64,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
-        "support": 0.0,
-        "vwap": 1.6,
+        "support": 4.39,
+        "vwap": 0.8,
         "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 7.85,
+        "current_egp": 7.6,
         "current_usd": 0.1543,
         "fair_value_egp": 4.7689,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 37.26,
-        "adx": 28.4,
-        "mfi": 61.24,
-        "macd": -0.1443,
-        "macd_signal": -0.1359,
+        "rsi": 31.86,
+        "adx": 29.95,
+        "mfi": 61.22,
+        "macd": -0.1714,
+        "macd_signal": -0.143,
         "macd_bullish": false,
-        "sma50": 8.5474,
-        "sma200": 7.2815,
+        "sma50": 8.5427,
+        "sma200": 7.2895,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 3942096.0,
-        "last_day": 1868309.0,
-        "multiplier": 0.474
+        "avg_3m": 3948069.0,
+        "last_day": 1646725.0,
+        "multiplier": 0.417
       },
       "support_resistance": {
-        "support": 8.0083,
-        "resistance": 8.97,
+        "support": 7.52,
+        "resistance": 7.95,
         "support_levels": [
           {
             "price": 7.5,
-            "strength": "Medium",
-            "touches": 2
+            "strength": "Strong",
+            "touches": 3
           }
         ],
         "resistance_levels": [
           {
             "price": 9.14,
             "strength": "Strong",
-            "touches": 15
+            "touches": 14
           },
           {
             "price": 9.322,
             "strength": "Strong",
-            "touches": 14
+            "touches": 13
           },
           {
             "price": 8.06,
@@ -5342,28 +5296,28 @@
             "touches": 10
           },
           {
-            "price": 9.603,
-            "strength": "Strong",
-            "touches": 11
-          },
-          {
             "price": 8.919,
             "strength": "Strong",
             "touches": 10
+          },
+          {
+            "price": 8.578,
+            "strength": "Strong",
+            "touches": 9
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 7.85,
+        "entry_price": 7.6,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 7.441,
-        "tp1": 7.928,
-        "tp2": 8.007,
-        "tp3": 8.321,
-        "tp1_rr": 0.19,
-        "tp2_rr": 0.38,
-        "tp3_rr": 1.15
+        "stop_loss": 7.152,
+        "tp1": 7.676,
+        "tp2": 7.752,
+        "tp3": 8.056,
+        "tp1_rr": 0.17,
+        "tp2_rr": 0.34,
+        "tp3_rr": 1.02
       },
       "ml": {
         "signal": "Watch",
@@ -5389,9 +5343,9 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4463
+        "chartscan_confidence": 0.4764
       },
       "index": {
         "membership": "EGX70",
@@ -5400,56 +5354,51 @@
     },
     {
       "ticker": "TALM",
-      "run_date": "2026-10-11",
-      "recommendation": "Buy",
-      "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: WAIT FOR PULLBACK (Support (Strong)) — chase/wait risk, direction kept",
-      "score": 60.33,
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (Base), others disagree",
+      "score": 61.18,
       "score_breakdown": {
         "trend": 26.0,
-        "macd": 5.06,
+        "macd": 5.02,
         "rsi": 9.0,
-        "volume": 0.0,
+        "volume": 0.98,
         "adi": 0.0,
         "support": 0.0,
         "vwap": 3.2,
         "volume_profile": 7.2,
-        "intraday": 9.87
+        "intraday": 9.78
       },
       "price": {
-        "current_egp": 21.5,
+        "current_egp": 21.69,
         "current_usd": 0.4155,
         "fair_value_egp": 19.7512,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 58.66,
-        "adx": 26.11,
-        "mfi": 70.51,
-        "macd": 0.5827,
-        "macd_signal": 0.528,
+        "rsi": 59.86,
+        "adx": 24.68,
+        "mfi": 70.35,
+        "macd": 0.5935,
+        "macd_signal": 0.5411,
         "macd_bullish": true,
-        "sma50": 19.6104,
-        "sma200": 16.5377,
+        "sma50": 19.6952,
+        "sma200": 16.5667,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "transitioning"
       },
       "volume": {
-        "avg_3m": 2178064.0,
-        "last_day": 1114621.0,
-        "multiplier": 0.512
+        "avg_3m": 2188061.0,
+        "last_day": 3258859.0,
+        "multiplier": 1.489
       },
       "support_resistance": {
         "support": 17.61,
         "resistance": 25.7,
         "support_levels": [
-          {
-            "price": 16.276,
-            "strength": "Strong",
-            "touches": 8
-          },
           {
             "price": 19.377,
             "strength": "Strong",
@@ -5462,6 +5411,11 @@
           },
           {
             "price": 19.8,
+            "strength": "Strong",
+            "touches": 5
+          },
+          {
+            "price": 16.43,
             "strength": "Strong",
             "touches": 5
           },
@@ -5495,29 +5449,29 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 19.8,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "Support (Strong)",
-        "stop_loss": 19.309,
-        "tp1": 19.998,
-        "tp2": 20.196,
-        "tp3": 20.988,
-        "tp1_rr": 0.4,
-        "tp2_rr": 0.81,
-        "tp3_rr": 2.42
+        "entry_price": 21.69,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 19.33,
+        "tp1": 21.907,
+        "tp2": 22.124,
+        "tp3": 22.991,
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.18,
+        "tp3_rr": 0.55
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 25.0,
-        "medium_price": 21.135,
-        "low_price": 20.182,
-        "high_price": 22.909
+        "signal": "Avoid",
+        "confidence": 14.0,
+        "medium_price": 21.686,
+        "low_price": 20.617,
+        "high_price": 23.202
       },
       "intraday": {
-        "score": 65.8,
-        "volume_skew": 0.672,
-        "momentum": 24.9,
-        "vwap_score": 79.2,
+        "score": 65.2,
+        "volume_skew": 0.417,
+        "momentum": 36.8,
+        "vwap_score": 77.8,
         "ad_signal": "bullish",
         "ad_score": 0.8
       },
@@ -5532,7 +5486,7 @@
       "patterns": {
         "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4084
+        "chartscan_confidence": 0.0
       },
       "index": {
         "membership": "EGX70",
@@ -5541,103 +5495,97 @@
     },
     {
       "ticker": "OLFI",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 29.52,
+      "score": 20.2,
       "score_breakdown": {
         "trend": 3.9,
         "macd": 0.0,
         "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
-        "support": 5.72,
+        "support": 0.0,
         "vwap": 1.6,
-        "volume_profile": 5.4,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 21.11,
+        "current_egp": 20.81,
         "current_usd": 0.4036,
         "fair_value_egp": 31.8609,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 32.67,
-        "adx": 31.18,
-        "mfi": 56.78,
-        "macd": -0.5169,
-        "macd_signal": -0.4248,
+        "rsi": 29.77,
+        "adx": 32.41,
+        "mfi": 56.86,
+        "macd": -0.5441,
+        "macd_signal": -0.4487,
         "macd_bullish": false,
-        "sma50": 23.0922,
-        "sma200": 22.7789,
+        "sma50": 23.053,
+        "sma200": 22.765,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 1415560.0,
-        "last_day": 519544.0,
-        "multiplier": 0.367
+        "avg_3m": 1405102.0,
+        "last_day": 688575.0,
+        "multiplier": 0.49
       },
       "support_resistance": {
         "support": 21.0,
         "resistance": 21.5,
-        "support_levels": [
+        "support_levels": [],
+        "resistance_levels": [
+          {
+            "price": 23.079,
+            "strength": "Strong",
+            "touches": 13
+          },
+          {
+            "price": 22.33,
+            "strength": "Strong",
+            "touches": 11
+          },
+          {
+            "price": 23.792,
+            "strength": "Strong",
+            "touches": 7
+          },
           {
             "price": 21.007,
             "strength": "Strong",
             "touches": 4
-          }
-        ],
-        "resistance_levels": [
-          {
-            "price": 22.682,
-            "strength": "Strong",
-            "touches": 17
           },
           {
-            "price": 22.036,
+            "price": 24.588,
             "strength": "Strong",
-            "touches": 14
-          },
-          {
-            "price": 21.455,
-            "strength": "Strong",
-            "touches": 14
-          },
-          {
-            "price": 23.288,
-            "strength": "Strong",
-            "touches": 10
-          },
-          {
-            "price": 23.857,
-            "strength": "Strong",
-            "touches": 7
+            "touches": 4
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 21.11,
+        "entry_price": 20.81,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 20.14,
-        "tp1": 21.321,
-        "tp2": 21.532,
-        "tp3": 22.377,
-        "tp1_rr": 0.22,
-        "tp2_rr": 0.44,
-        "tp3_rr": 1.31
+        "stop_loss": 19.833,
+        "tp1": 21.018,
+        "tp2": 21.226,
+        "tp3": 22.059,
+        "tp1_rr": 0.21,
+        "tp2_rr": 0.43,
+        "tp3_rr": 1.28
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 58.0,
-        "medium_price": 21.612,
-        "low_price": 20.302,
-        "high_price": 23.077
+        "confidence": 57.0,
+        "medium_price": 21.14,
+        "low_price": 20.038,
+        "high_price": 22.598
       },
       "intraday": {
         "score": null,
@@ -5648,17 +5596,17 @@
         "ad_score": null
       },
       "holding": {
-        "label": "6-18 days (Trail Stop)",
+        "label": "8-24 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 6,
-        "days_max": 18,
-        "days_target": 13,
+        "days_min": 8,
+        "days_max": 24,
+        "days_target": 17,
         "personalized": true
       },
       "patterns": {
         "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4076
+        "chartscan_confidence": 0.4082
       },
       "index": {
         "membership": "UNINDEX",
@@ -5667,60 +5615,55 @@
     },
     {
       "ticker": "SIPC",
-      "run_date": "2026-10-11",
-      "recommendation": "Watch",
-      "recommendation_basis": "Price dropped -6.9% since Buy (6.20, last 60d) — momentum filter downgrades Buy to Watch",
-      "score": 73.67,
+      "run_date": "2026-10-12",
+      "recommendation": "Avoid",
+      "recommendation_basis": "Base=Watch, ML=Avoid",
+      "score": 50.24,
       "score_breakdown": {
         "trend": 26.0,
-        "macd": 9.0,
+        "macd": 6.61,
         "rsi": 9.0,
-        "volume": 10.0,
+        "volume": 0.29,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 4.8,
-        "volume_profile": 5.4,
-        "intraday": 9.46
+        "vwap": 0.8,
+        "volume_profile": 1.8,
+        "intraday": 5.74
       },
       "price": {
-        "current_egp": 5.77,
+        "current_egp": 5.34,
         "current_usd": 0.1187,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 55.99,
-        "adx": 25.48,
-        "mfi": 70.14,
-        "macd": 0.1122,
-        "macd_signal": 0.0588,
+        "rsi": 49.4,
+        "adx": 24.87,
+        "mfi": 69.38,
+        "macd": 0.0907,
+        "macd_signal": 0.0652,
         "macd_bullish": true,
-        "sma50": 5.226,
-        "sma200": 3.8919,
+        "sma50": 5.253,
+        "sma200": 3.9042,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_up"
       },
       "volume": {
-        "avg_3m": 10455719.0,
-        "last_day": 16316996.0,
-        "multiplier": 1.561
+        "avg_3m": 10699529.0,
+        "last_day": 12241083.0,
+        "multiplier": 1.144
       },
       "support_resistance": {
         "support": 4.22,
         "resistance": 7.28,
         "support_levels": [
           {
-            "price": 5.75,
-            "strength": "Strong",
-            "touches": 5
-          },
-          {
             "price": 5.32,
             "strength": "Strong",
-            "touches": 4
+            "touches": 5
           },
           {
             "price": 5.123,
@@ -5728,50 +5671,65 @@
             "touches": 3
           },
           {
-            "price": 5.485,
-            "strength": "Medium",
-            "touches": 2
+            "price": 4.1,
+            "strength": "Strong",
+            "touches": 3
           },
           {
             "price": 4.51,
             "strength": "Medium",
             "touches": 2
+          },
+          {
+            "price": 4.699,
+            "strength": "Medium",
+            "touches": 1
           }
         ],
         "resistance_levels": [
           {
-            "price": 5.981,
+            "price": 5.892,
+            "strength": "Strong",
+            "touches": 6
+          },
+          {
+            "price": 5.75,
+            "strength": "Strong",
+            "touches": 5
+          },
+          {
+            "price": 5.485,
             "strength": "Medium",
             "touches": 2
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 5.77,
-        "entry_action": "BUY NOW",
-        "entry_source": "Current Price",
-        "stop_loss": 5.704,
-        "tp1": 5.828,
-        "tp2": 5.885,
-        "tp3": 5.981,
-        "tp1_rr": 0.87,
-        "tp2_rr": 1.75,
-        "tp3_rr": 3.2
+        "entry_price": 5.34,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 4.246,
+        "tp1": 5.393,
+        "tp2": 5.447,
+        "tp3": 5.66,
+        "tp1_rr": 0.05,
+        "tp2_rr": 0.1,
+        "tp3_rr": 0.29
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 22.0,
-        "medium_price": 5.425,
-        "low_price": 5.37,
-        "high_price": 5.877
+        "signal": "Avoid",
+        "confidence": 17.0,
+        "medium_price": 5.098,
+        "low_price": 4.936,
+        "high_price": 5.615
       },
       "intraday": {
-        "score": 63.1,
-        "volume_skew": 0.72,
-        "momentum": 23.3,
-        "vwap_score": 91.3,
-        "ad_signal": "neutral",
-        "ad_score": 0.0
+        "score": 38.3,
+        "volume_skew": -0.124,
+        "momentum": 11.7,
+        "vwap_score": 68.7,
+        "ad_signal": "bearish",
+        "ad_score": -0.4
       },
       "holding": {
         "label": "4-12 days (Trail Stop)",
@@ -5793,61 +5751,51 @@
     },
     {
       "ticker": "MBSC",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
-      "recommendation_basis": "Price dropped -9.0% since Buy (404.75, last 60d) — momentum filter downgrades Buy to Watch",
-      "score": 68.62,
+      "recommendation_basis": "1 Buy (ML), others disagree",
+      "score": 57.19,
       "score_breakdown": {
-        "trend": 26.0,
-        "macd": 8.34,
+        "trend": 25.44,
+        "macd": 7.5,
         "rsi": 9.0,
-        "volume": 6.84,
+        "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 4.8,
+        "vwap": 1.6,
         "volume_profile": 5.4,
         "intraday": 8.25
       },
       "price": {
-        "current_egp": 368.5,
+        "current_egp": 348.02,
         "current_usd": 7.2153,
         "fair_value_egp": 952.5264,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 52.93,
-        "adx": 30.02,
-        "mfi": 55.85,
-        "macd": -0.634,
-        "macd_signal": -5.16,
+        "rsi": 48.16,
+        "adx": 28.64,
+        "mfi": 55.08,
+        "macd": -1.2158,
+        "macd_signal": -4.3711,
         "macd_bullish": true,
-        "sma50": 355.5692,
-        "sma200": 284.8688,
+        "sma50": 357.6518,
+        "sma200": 285.4775,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "trending_up"
+        "regime": "trending"
       },
       "volume": {
-        "avg_3m": 181243.0,
-        "last_day": 400433.0,
-        "multiplier": 2.209
+        "avg_3m": 186471.0,
+        "last_day": 170695.0,
+        "multiplier": 0.915
       },
       "support_resistance": {
         "support": 288.0,
         "resistance": 434.99,
         "support_levels": [
-          {
-            "price": 363.0,
-            "strength": "Strong",
-            "touches": 4
-          },
-          {
-            "price": 355.04,
-            "strength": "Strong",
-            "touches": 3
-          },
           {
             "price": 288.0,
             "strength": "Medium",
@@ -5862,6 +5810,11 @@
             "price": 335.337,
             "strength": "Weak",
             "touches": 1
+          },
+          {
+            "price": 313.351,
+            "strength": "Weak",
+            "touches": 0
           }
         ],
         "resistance_levels": [
@@ -5871,66 +5824,66 @@
             "touches": 6
           },
           {
-            "price": 379.309,
+            "price": 363.0,
             "strength": "Strong",
             "touches": 4
+          },
+          {
+            "price": 355.04,
+            "strength": "Strong",
+            "touches": 3
+          },
+          {
+            "price": 373.812,
+            "strength": "Strong",
+            "touches": 3
           },
           {
             "price": 428.48,
             "strength": "Strong",
             "touches": 3
-          },
-          {
-            "price": 414.99,
-            "strength": "Medium",
-            "touches": 2
-          },
-          {
-            "price": 434.99,
-            "strength": "Weak",
-            "touches": 1
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 356.474,
-        "entry_action": "BUY NOW",
-        "entry_source": "EMA 20",
-        "stop_loss": 352.2,
-        "tp1": 360.039,
-        "tp2": 363.603,
-        "tp3": 372.045,
-        "tp1_rr": 0.83,
-        "tp2_rr": 1.67,
-        "tp3_rr": 3.64
+        "entry_price": 348.02,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 292.713,
+        "tp1": 351.5,
+        "tp2": 354.98,
+        "tp3": 368.901,
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.13,
+        "tp3_rr": 0.38
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 72.0,
-        "medium_price": 372.045,
-        "low_price": 356.593,
-        "high_price": 410.885
+        "confidence": 81.0,
+        "medium_price": 356.762,
+        "low_price": 336.898,
+        "high_price": 379.389
       },
       "intraday": {
         "score": 55.0,
-        "volume_skew": -0.284,
-        "momentum": 57.5,
-        "vwap_score": 65.3,
+        "volume_skew": -0.286,
+        "momentum": 26.1,
+        "vwap_score": 55.9,
         "ad_signal": "neutral",
-        "ad_score": 0.2
+        "ad_score": -0.2
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
-        "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 9,
+        "label": "3-9 days (Quick Exit)",
+        "exit_strategy": "quick_exit",
+        "days_min": 3,
+        "days_max": 9,
+        "days_target": 7,
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
-        "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.0
+        "candle_signal": "bearish",
+        "chartscan_signal": "Sell",
+        "chartscan_confidence": 0.5575
       },
       "index": {
         "membership": "EGX70",
@@ -5939,46 +5892,46 @@
     },
     {
       "ticker": "ATQA",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 45.85,
+      "score": 43.27,
       "score_breakdown": {
-        "trend": 23.25,
+        "trend": 17.07,
         "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
         "adi": 3.5,
         "support": 0.0,
         "vwap": 0.8,
-        "volume_profile": 1.8,
+        "volume_profile": 5.4,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 11.88,
+        "current_egp": 11.5,
         "current_usd": 0.2344,
         "fair_value_egp": 12.6733,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 47.59,
-        "adx": 29.56,
-        "mfi": 64.9,
-        "macd": -0.0099,
-        "macd_signal": 0.0864,
+        "rsi": 42.82,
+        "adx": 28.52,
+        "mfi": 64.88,
+        "macd": -0.0527,
+        "macd_signal": 0.0586,
         "macd_bullish": false,
-        "sma50": 11.6932,
-        "sma200": 9.9936,
+        "sma50": 11.7276,
+        "sma200": 10.0041,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "transitioning"
+        "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 6387790.0,
-        "last_day": 1315411.0,
-        "multiplier": 0.206
+        "avg_3m": 6388477.0,
+        "last_day": 4508328.0,
+        "multiplier": 0.706
       },
       "support_resistance": {
         "support": 10.91,
@@ -6012,14 +5965,14 @@
         ],
         "resistance_levels": [
           {
-            "price": 12.256,
+            "price": 12.271,
             "strength": "Strong",
-            "touches": 5
+            "touches": 8
           },
           {
             "price": 11.95,
             "strength": "Strong",
-            "touches": 5
+            "touches": 6
           },
           {
             "price": 12.92,
@@ -6039,23 +5992,23 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 11.061,
-        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 10.96,
-        "tp1": 11.172,
-        "tp2": 11.282,
-        "tp3": 11.725,
-        "tp1_rr": 1.1,
-        "tp2_rr": 2.19,
-        "tp3_rr": 6.57
+        "entry_price": 11.5,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 10.552,
+        "tp1": 11.615,
+        "tp2": 11.73,
+        "tp3": 12.19,
+        "tp1_rr": 0.12,
+        "tp2_rr": 0.24,
+        "tp3_rr": 0.73
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 100.0,
-        "medium_price": 13.088,
-        "low_price": 11.81,
-        "high_price": 12.945
+        "confidence": 91.0,
+        "medium_price": 12.667,
+        "low_price": 11.365,
+        "high_price": 13.249
       },
       "intraday": {
         "score": null,
@@ -6066,17 +6019,17 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-10 days (Quick Exit)",
-        "exit_strategy": "quick_exit",
-        "days_min": 3,
-        "days_max": 10,
-        "days_target": 7,
+        "label": "5-15 days (Trail Stop)",
+        "exit_strategy": "trail_stop",
+        "days_min": 5,
+        "days_max": 15,
+        "days_target": 10,
         "personalized": true
       },
       "patterns": {
         "candle_signal": "bearish",
-        "chartscan_signal": "Neutral",
-        "chartscan_confidence": 0.4603
+        "chartscan_signal": "Sell",
+        "chartscan_confidence": 0.5241
       },
       "index": {
         "membership": "EGX70",
@@ -6085,61 +6038,51 @@
     },
     {
       "ticker": "ISMQ",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
-      "score": 33.19,
+      "score": 19.4,
       "score_breakdown": {
-        "trend": 9.57,
-        "macd": 3.72,
+        "trend": 3.9,
+        "macd": 0.0,
         "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 1.6,
-        "volume_profile": 5.4,
+        "vwap": 0.8,
+        "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 8.16,
+        "current_egp": 7.82,
         "current_usd": 0.1579,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 39.79,
-        "adx": 24.36,
-        "mfi": 65.14,
-        "macd": -0.2472,
-        "macd_signal": -0.2529,
-        "macd_bullish": true,
-        "sma50": 8.9506,
-        "sma200": 7.9798,
+        "rsi": 33.84,
+        "adx": 24.6,
+        "mfi": 65.15,
+        "macd": -0.2667,
+        "macd_signal": -0.2557,
+        "macd_bullish": false,
+        "sma50": 8.9256,
+        "sma200": 7.9877,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "trending"
+        "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 4355701.0,
-        "last_day": 2685617.0,
-        "multiplier": 0.617
+        "avg_3m": 4275166.0,
+        "last_day": 2104673.0,
+        "multiplier": 0.492
       },
       "support_resistance": {
         "support": 7.6,
         "resistance": 8.62,
         "support_levels": [
-          {
-            "price": 8.096,
-            "strength": "Strong",
-            "touches": 11
-          },
-          {
-            "price": 7.855,
-            "strength": "Strong",
-            "touches": 5
-          },
           {
             "price": 7.61,
             "strength": "Strong",
@@ -6148,50 +6091,50 @@
         ],
         "resistance_levels": [
           {
-            "price": 9.044,
+            "price": 9.267,
+            "strength": "Strong",
+            "touches": 15
+          },
+          {
+            "price": 9.045,
             "strength": "Strong",
             "touches": 14
           },
           {
-            "price": 9.252,
+            "price": 9.45,
             "strength": "Strong",
-            "touches": 14
+            "touches": 12
           },
           {
-            "price": 9.593,
+            "price": 8.091,
             "strength": "Strong",
-            "touches": 7
+            "touches": 11
           },
           {
-            "price": 8.46,
+            "price": 9.652,
             "strength": "Strong",
-            "touches": 5
-          },
-          {
-            "price": 8.289,
-            "strength": "Strong",
-            "touches": 5
+            "touches": 11
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 7.619,
-        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 7.549,
-        "tp1": 7.695,
-        "tp2": 7.771,
-        "tp3": 7.963,
-        "tp1_rr": 1.09,
-        "tp2_rr": 2.18,
-        "tp3_rr": 4.91
+        "entry_price": 7.82,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 7.275,
+        "tp1": 7.898,
+        "tp2": 7.976,
+        "tp3": 8.289,
+        "tp1_rr": 0.14,
+        "tp2_rr": 0.29,
+        "tp3_rr": 0.86
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 60.0,
-        "medium_price": 8.299,
-        "low_price": 7.963,
-        "high_price": 8.527
+        "confidence": 65.0,
+        "medium_price": 8.041,
+        "low_price": 7.563,
+        "high_price": 8.374
       },
       "intraday": {
         "score": null,
@@ -6202,11 +6145,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-11 days (Time Exit)",
-        "exit_strategy": "time_exit",
-        "days_min": 4,
-        "days_max": 11,
-        "days_target": 8,
+        "label": "5-15 days (Trail Stop)",
+        "exit_strategy": "trail_stop",
+        "days_min": 5,
+        "days_max": 15,
+        "days_target": 11,
         "personalized": true
       },
       "patterns": {
@@ -6221,46 +6164,46 @@
     },
     {
       "ticker": "ADCI",
-      "run_date": "2026-10-11",
+      "run_date": "2026-10-12",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
-      "score": 44.48,
+      "score": 27.87,
       "score_breakdown": {
-        "trend": 18.85,
+        "trend": 12.37,
         "macd": 0.0,
-        "rsi": 9.0,
+        "rsi": 5.4,
         "volume": 0.0,
         "adi": 0.0,
-        "support": 5.74,
-        "vwap": 1.6,
+        "support": 0.0,
+        "vwap": 0.8,
         "volume_profile": 1.8,
         "intraday": 7.5
       },
       "price": {
-        "current_egp": 269.04,
+        "current_egp": 258.1,
         "current_usd": 5.2059,
         "fair_value_egp": null,
         "fair_value_method": "N/A",
         "undervalued": false
       },
       "technicals": {
-        "rsi": 41.58,
-        "adx": 24.22,
-        "mfi": 68.37,
-        "macd": -4.3725,
-        "macd_signal": -3.7303,
+        "rsi": 34.7,
+        "adx": 24.63,
+        "mfi": 68.34,
+        "macd": -5.3031,
+        "macd_signal": -4.0448,
         "macd_bullish": false,
-        "sma50": 288.1494,
-        "sma200": 218.3317,
+        "sma50": 288.2774,
+        "sma200": 218.4972,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
         "regime": "trending_down"
       },
       "volume": {
-        "avg_3m": 36069.0,
-        "last_day": 3415.0,
-        "multiplier": 0.095
+        "avg_3m": 35877.0,
+        "last_day": 7325.0,
+        "multiplier": 0.204
       },
       "support_resistance": {
         "support": 267.66,
@@ -6287,9 +6230,9 @@
             "touches": 4
           },
           {
-            "price": 267.553,
-            "strength": "Strong",
-            "touches": 3
+            "price": 247.457,
+            "strength": "Medium",
+            "touches": 2
           }
         ],
         "resistance_levels": [
@@ -6314,30 +6257,30 @@
             "touches": 6
           },
           {
-            "price": 306.736,
-            "strength": "Medium",
-            "touches": 2
+            "price": 267.553,
+            "strength": "Strong",
+            "touches": 3
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 269.04,
-        "entry_action": "CHASE — NO CLEAN PULLBACK",
-        "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 253.14,
-        "tp1": 271.73,
-        "tp2": 274.421,
-        "tp3": 285.182,
-        "tp1_rr": 0.17,
-        "tp2_rr": 0.34,
-        "tp3_rr": 1.02
+        "entry_price": 242.766,
+        "entry_action": "WAIT — SIGNIFICANT DIP REQUIRED",
+        "entry_source": "Fib 38.2%",
+        "stop_loss": 238.905,
+        "tp1": 245.194,
+        "tp2": 247.621,
+        "tp3": 257.332,
+        "tp1_rr": 0.63,
+        "tp2_rr": 1.26,
+        "tp3_rr": 3.77
       },
       "ml": {
         "signal": "Avoid",
         "confidence": 15.0,
-        "medium_price": 271.75,
-        "low_price": 211.84,
-        "high_price": 292.63
+        "medium_price": 260.22,
+        "low_price": 218.867,
+        "high_price": 277.083
       },
       "intraday": {
         "score": null,
@@ -6356,7 +6299,7 @@
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "neutral",
+        "candle_signal": "bearish",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
@@ -6367,61 +6310,51 @@
     },
     {
       "ticker": "ICFC",
-      "run_date": "2026-10-11",
-      "recommendation": "Buy",
-      "recommendation_basis": "1 Buy (ML), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: WAIT FOR PULLBACK (VP VA Low) — chase/wait risk, direction kept",
-      "score": 53.64,
+      "run_date": "2026-10-12",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (ML), others disagree",
+      "score": 44.68,
       "score_breakdown": {
-        "trend": 26.0,
+        "trend": 25.58,
         "macd": 0.0,
         "rsi": 9.0,
         "volume": 0.0,
         "adi": 0.0,
         "support": 0.0,
-        "vwap": 3.2,
-        "volume_profile": 5.4,
-        "intraday": 10.04
+        "vwap": 0.8,
+        "volume_profile": 1.8,
+        "intraday": 7.5
       },
       "price": {
-        "current_egp": 22.57,
+        "current_egp": 21.45,
         "current_usd": 0.444,
         "fair_value_egp": 24.0485,
         "fair_value_method": "USD-Comparison (fallback)",
         "undervalued": true
       },
       "technicals": {
-        "rsi": 52.58,
-        "adx": 16.14,
-        "mfi": 64.47,
-        "macd": 0.3993,
-        "macd_signal": 0.5114,
+        "rsi": 45.68,
+        "adx": 16.56,
+        "mfi": 64.41,
+        "macd": 0.2753,
+        "macd_signal": 0.4642,
         "macd_bullish": false,
-        "sma50": 20.8182,
-        "sma200": 16.6728,
+        "sma50": 20.9372,
+        "sma200": 16.708,
         "golden_cross": true,
         "death_cross": false,
         "bb_squeeze": false,
-        "regime": "ranging"
+        "regime": "transitioning"
       },
       "volume": {
-        "avg_3m": 1884328.0,
-        "last_day": 395475.0,
-        "multiplier": 0.21
+        "avg_3m": 1884818.0,
+        "last_day": 384578.0,
+        "multiplier": 0.204
       },
       "support_resistance": {
         "support": 20.77,
         "resistance": 24.35,
         "support_levels": [
-          {
-            "price": 22.556,
-            "strength": "Strong",
-            "touches": 8
-          },
-          {
-            "price": 21.79,
-            "strength": "Strong",
-            "touches": 2
-          },
           {
             "price": 20.619,
             "strength": "Medium",
@@ -6436,9 +6369,24 @@
             "price": 21.16,
             "strength": "Medium",
             "touches": 2
+          },
+          {
+            "price": 16.292,
+            "strength": "Medium",
+            "touches": 2
+          },
+          {
+            "price": 19.545,
+            "strength": "Medium",
+            "touches": 1
           }
         ],
         "resistance_levels": [
+          {
+            "price": 22.556,
+            "strength": "Strong",
+            "touches": 8
+          },
           {
             "price": 23.803,
             "strength": "Strong",
@@ -6453,46 +6401,51 @@
             "price": 24.57,
             "strength": "Strong",
             "touches": 3
+          },
+          {
+            "price": 21.79,
+            "strength": "Strong",
+            "touches": 2
           }
         ]
       },
       "trade_plan": {
-        "entry_price": 21.95,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "VP VA Low",
-        "stop_loss": 21.616,
-        "tp1": 22.169,
-        "tp2": 22.389,
-        "tp3": 23.02,
-        "tp1_rr": 0.66,
-        "tp2_rr": 1.31,
-        "tp3_rr": 3.2
+        "entry_price": 21.45,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 19.258,
+        "tp1": 21.665,
+        "tp2": 21.879,
+        "tp3": 22.737,
+        "tp1_rr": 0.1,
+        "tp2_rr": 0.2,
+        "tp3_rr": 0.59
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 66.0,
-        "medium_price": 23.567,
-        "low_price": 20.435,
-        "high_price": 27.15
+        "confidence": 68.0,
+        "medium_price": 22.329,
+        "low_price": 20.192,
+        "high_price": 24.468
       },
       "intraday": {
-        "score": 66.9,
-        "volume_skew": 0.657,
-        "momentum": 56.1,
-        "vwap_score": 71.0,
-        "ad_signal": "neutral",
-        "ad_score": 0.0
+        "score": null,
+        "volume_skew": null,
+        "momentum": null,
+        "vwap_score": null,
+        "ad_signal": null,
+        "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "3-8 days (Quick Exit)",
         "exit_strategy": "quick_exit",
-        "days_min": 2,
-        "days_max": 7,
-        "days_target": 5,
+        "days_min": 3,
+        "days_max": 8,
+        "days_target": 6,
         "personalized": true
       },
       "patterns": {
-        "candle_signal": "bearish",
+        "candle_signal": "neutral",
         "chartscan_signal": "Neutral",
         "chartscan_confidence": 0.0
       },
