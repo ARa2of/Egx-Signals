@@ -73,10 +73,24 @@ jobs:
             ml-models-${{ github.run_date }}-
             ml-models-
 
+      - name: Dedup — skip if signals already committed today
+        id: dedup
+        run: |
+          TODAY=$(date -u +%Y-%m-%d)
+          if git log --since="${TODAY}T00:00:00Z" --oneline --grep="Daily signals" | grep -q .; then
+            echo "already_ran=true" >> "$GITHUB_OUTPUT"
+            echo "Signals already committed today — skipping pipeline."
+          else
+            echo "already_ran=false" >> "$GITHUB_OUTPUT"
+            echo "No signals yet today — running pipeline."
+          fi
+
       - name: Update fundamentals cache
+        if: steps.dedup.outputs.already_ran != 'true'
         run: python scripts/update_fundamentals.py --force
 
       - name: Run daily analysis
+        if: steps.dedup.outputs.already_ran != 'true'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -85,6 +99,7 @@ jobs:
           python scripts/daily_run.py config/tickers.xlsx -o output
 
       - name: Update trade outcomes
+        if: steps.dedup.outputs.already_ran != 'true'
         run: python scripts/update_outcomes.py
 
       - name: Commit signal store & report updates
