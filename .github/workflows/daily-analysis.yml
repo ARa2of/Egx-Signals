@@ -3,7 +3,8 @@ name: Daily EGX Analysis
 on:
   schedule:
     # 5:00 PM UK time = 16:00 UTC (winter) / 17:00 UTC (summer)
-    - cron: '0 16 * * *'  # Daily 16:00 UTC
+    - cron: '0 14 * * *'  # Safety catch: 14:00 UTC (2h before main)
+    - cron: '0 16 * * *'  # Main: 16:00 UTC
   workflow_dispatch:  # Manual trigger
 
 permissions:
