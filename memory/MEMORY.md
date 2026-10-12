@@ -4,7 +4,7 @@ This file stores important information that should persist across sessions.
 
 ## Project Context
 
-**EGX-Signals V2** (params.yaml version **v2.3**, 2026-10-07) — daily Buy/Watch/Avoid signal engine for the Egyptian Exchange. Root `D:\Stocks\EGX Project`; repo `https://github.com/ARa2of/Egx-Signals` (main; CI `daily-analysis.yml` deploys the HTML report to gh-pages). Pipeline `scripts\daily_run.py`; config `config\params.yaml`; universe `config\tickers.xlsx`; signal history `data\signals.parquet` (Git LFS).
+**EGX-Signals V2** (params.yaml version **v2.3**, 2026-10-07) — daily Buy/Watch/Avoid signal engine for the Egyptian Exchange. Root `D:\Stocks\EGX Project`; repo `https://github.com/ARa2of/Egx-Signals` (main; CI `daily-analysis.yml` deploys the HTML report to gh-pages; workflow cron `0 16 * * *` = 16:00 UTC, and GitHub Actions runner queue delays explain apparent time discrepancies). Pipeline `scripts\daily_run.py`; config `config\params.yaml`; universe `config\tickers.xlsx`; signal history `data\signals.parquet` (Git LFS).
 
 ### Architecture
 
