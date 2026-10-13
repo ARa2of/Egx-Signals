@@ -4,7 +4,7 @@ This file stores important information that should persist across sessions.
 
 ## Project Context
 
-**EGX-Signals V2** (params.yaml version **v2.3**, 2026-10-07) — daily Buy/Watch/Avoid signal engine for the Egyptian Exchange. Root `D:\Stocks\EGX Project`; repo `https://github.com/ARa2of/Egx-Signals` (main; CI `daily-analysis.yml` deploys the HTML report to gh-pages; workflow cron `0 16 * * *` = 16:00 UTC, and GitHub Actions runner queue delays explain apparent time discrepancies). Pipeline `scripts\daily_run.py`; config `config\params.yaml`; universe `config\tickers.xlsx`; signal history `data\signals.parquet` (Git LFS).
+**EGX-Signals V2** (params.yaml version **v2.3**, 2026-10-07) — daily Buy/Watch/Avoid signal engine for the Egyptian Exchange. Root `D:\Stocks\EGX Project`; repo `https://github.com/ARa2of/Egx-Signals` (main; CI `daily-analysis.yml` deploys the HTML report to gh-pages; crons `0 14 * * *` safety + `0 16 * * *` main, UTC, with a git-log dedup step gating double runs). Pipeline `scripts\daily_run.py`; config `config\params.yaml`; universe `config\tickers.xlsx`; signal history `data\signals.parquet` (Git LFS).
 
 ### Architecture
 
@@ -38,3 +38,4 @@ This file stores important information that should persist across sessions.
 - `verify_etel_fix.py` live-replay FAIL (ETEL → Avoid, score 57.84) is pre-existing data drift (replay has no intraday data + a partial last bar), identical on clean HEAD. The old "ETEL must end Buy" gate was **waived by the user** — not a blocker.
 - `scripts\test_consensus_cases.py` contains a local mirror of the consensus function — update the mirror whenever consensus rules change.
 - Git commit-graph rename/write warnings on this machine are harmless (Windows file locking); pushes succeed regardless.
+- GitHub Actions cron is best-effort: scheduled runs can be skipped entirely under high load (observed 2026-10-12, complete miss). Typical queue delay is 3–4 h past the scheduled time; the safety cron + dedup step exist to survive misses.
