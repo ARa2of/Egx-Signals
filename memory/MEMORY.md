@@ -13,6 +13,7 @@ This file stores important information that should persist across sessions.
 - `src\signals\ml.py` — ML ensemble + conviction
 - `src\trade\planner.py` — ATR entries/stops/targets, `compute_signal_score`, `compute_ml_conviction`
 - `src\signals\chartscan.py` — YOLOv8 chart-pattern votes; `src\output\html_report.py` / `agent_json.py` — outputs
+- `src\store\signal_store.py` — signal history store; trade-outcome updates (`update_outcomes`, `simulate_outcomes`)
 - Consensus ladder, ChartScan gates, verification and git runbooks: `skills\egx-signals\SKILL.md`
 
 ### v2.3 engine decisions (landed 2026-10-07/08, supersede v2.2)
@@ -25,6 +26,11 @@ This file stores important information that should persist across sessions.
 - `compute_signal_score` RSI band is regime-sourced (was hardcoded 35–65).
 - Market-context gate: Bearish index (via `ticker_index_map`) downgrades a single-Buy upgrade to Watch; exempt: strong_technicals and 2+ Buy votes; toggle `market_context.use_index_sentiment`; Buys annotated `[<index> <sentiment>]`.
 - `agent_json.py` meta version reads `params.yaml` via `load_params().get("version")` (was hardcoded).
+
+### Trade-outcome fixes (landed 2026-10-20, `src\store\signal_store.py`)
+
+- `update_outcomes` closure gate lowered from `run_date <= today-(horizon_days+5)` (~26d) to 2d, so SL/TP hits close as soon as observed instead of every signal staying pending for the full horizon.
+- `simulate_outcomes` rewritten as a first-touch bar-by-bar walk: TP or SL closes on first touch; SL wins only on a same-bar tie (previously SL always won even if TP was hit first); outcome stays `pending` until a level is touched.
 
 ### ChartScan infrastructure
 
