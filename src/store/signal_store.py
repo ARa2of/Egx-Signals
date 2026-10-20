@@ -282,7 +282,11 @@ def get_signal_stats() -> Dict[str, Any]:
 
 def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
                       cost_bps: float = 10.0, slippage_bps: float = 5.0) -> pd.DataFrame:
-    """Simulate outcomes for closed trades using historical price data."""
+    """Simulate outcomes for closed trades using historical price data.
+
+    Downloads one OHLCV window per ticker (not per trade) so a large pending
+    backlog stays within CI time limits.
+    """
     if trades.empty:
         return trades
 
@@ -290,6 +294,32 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
 
     trades = trades.copy()
     cost_pct = (cost_bps + slippage_bps) / 10000.0
+    today = date.today()
+
+    def _flatten(df):
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
+        return df
+
+    # One download per ticker spanning the union of all its trade windows.
+    price_cache = {}
+    for ticker in trades["ticker"].unique():
+        starts, ends = [], []
+        for _, r in trades[trades["ticker"] == ticker].iterrows():
+            rd = r["run_date"]
+            rd = rd.date() if hasattr(rd, "date") else rd
+            starts.append(rd + timedelta(days=1))
+            ends.append(rd + timedelta(days=horizon_days + 10))
+        if not starts:
+            continue
+        yf_ticker = ticker if ticker.endswith(".CA") else f"{ticker}.CA"
+        try:
+            raw = yf.download(yf_ticker, start=str(min(starts)), end=str(max(ends)),
+                              progress=False, auto_adjust=True)
+            price_cache[ticker] = _flatten(raw) if raw is not None else pd.DataFrame()
+        except Exception as e:
+            log.warning("Price fetch failed for %s: %s", ticker, e)
+            price_cache[ticker] = None  # distinct from empty: fetch error
 
     for idx, row in trades.iterrows():
         ticker = row["ticker"]
@@ -308,17 +338,28 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
             # Entry happens next trading day (not same day as recommendation)
             start = run_dt + timedelta(days=1)
             end = run_dt + timedelta(days=horizon_days + 10)
-            # Ensure ticker has .CA suffix for EGX stocks
-            yf_ticker = ticker if ticker.endswith(".CA") else f"{ticker}.CA"
-            df = yf.download(yf_ticker, start=str(start), end=str(end),
-                             progress=False, auto_adjust=True)
-            if df.empty:
-                trades.at[idx, "outcome"] = "no_data"
+
+            cached = price_cache.get(ticker)
+            if cached is None:
+                # Fetch error for this ticker -> retryable pending
+                trades.at[idx, "outcome"] = "pending"
                 continue
 
-            # Flatten MultiIndex columns if present
-            if isinstance(df.columns, pd.MultiIndex):
-                df.columns = df.columns.get_level_values(0)
+            # Slice the cached window down to this trade's own window
+            if cached.empty:
+                df = cached
+            else:
+                df = cached[(cached.index.date >= start) & (cached.index.date <= end)]
+
+            if df.empty:
+                # Transient empty result (holiday / network blip). Only lock in
+                # no_data once the horizon has fully elapsed; otherwise keep it
+                # pending so a later run can retry.
+                if (today - run_dt).days >= horizon_days:
+                    trades.at[idx, "outcome"] = "no_data"
+                else:
+                    trades.at[idx, "outcome"] = "pending"
+                continue
 
             # Use next day's OPEN as entry price (more realistic)
             # Fall back to recommended entry if open not available
@@ -335,29 +376,40 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
             max_p = float(df["High"].max())
             min_p = float(df["Low"].min())
 
+            # First-touch walk: SL and TPs are checked bar-by-bar in time
+            # order. Whichever level is touched first determines the outcome.
+            # If both are touched inside the same bar, SL wins (worst case).
             for _, bar in df.iterrows():
                 low = float(bar["Low"])
                 high = float(bar["High"])
-                close = float(bar["Close"])
 
-                # Check stop loss first (worst case)
-                if low <= sl:
+                sl_hit = sl > 0 and low <= sl
+                tp_hit_idx = None
+                for i in range(len(tps) - 1, -1, -1):  # highest TP first
+                    tp = tps[i]
+                    if tp and high >= tp:
+                        tp_hit_idx = i
+                        break
+
+                if sl_hit:
                     outcome = "stop_loss"
                     exit_price = sl
                     break
+                if tp_hit_idx is not None:
+                    outcome = f"tp{tp_hit_idx+1}_hit"
+                    exit_price = tps[tp_hit_idx]
+                    break
 
-            # If no stop loss, determine highest TP hit from max price
+            # No touch at all: still open if horizon hasn't fully elapsed yet.
             if outcome == "expired":
-                # Check TPs in reverse order (highest first)
-                for i in range(len(tps) - 1, -1, -1):
-                    tp = tps[i]
-                    if tp and max_p >= tp:
-                        outcome = f"tp{i+1}_hit"
-                        exit_price = tp
-                        break
-
-            if outcome == "expired":
-                exit_price = float(df["Close"].iloc[-1])
+                entry_ref = entry_date if isinstance(entry_date, date) else pd.Timestamp(entry_date).date()
+                if (today - entry_ref).days >= horizon_days:
+                    outcome = "expired"
+                    exit_price = float(df["Close"].iloc[-1])
+                else:
+                    # Horizon not elapsed -> keep it open for a later run.
+                    outcome = "pending"
+                    exit_price = float(df["Close"].iloc[-1])
 
             # Use actual entry price for PnL calculations
             risk = abs(actual_entry - sl) if sl > 0 else actual_entry * 0.02
@@ -400,13 +452,17 @@ def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
         log.info("No pending outcomes to evaluate")
         return 0
 
-    # Only evaluate signals old enough to have outcomes
-    eval_cutoff = today - timedelta(days=horizon_days + 5)
-    pending = pd.to_datetime(pending["run_date"]).dt.date
+    # Evaluate any pending signal that has at least one post-entry bar.
+    # We no longer wait the full horizon: SL/TP hits are detected as soon as
+    # they occur, so a trade that already hit its stop is closed immediately
+    # instead of staying "pending" for horizon_days. Trades with no touch yet
+    # are returned as "pending" by simulate_outcomes (still open) and will be
+    # re-evaluated on a later run.
+    eval_cutoff = today - timedelta(days=2)
     evaluable = df[pending_mask & (pd.to_datetime(df["run_date"]).dt.date <= eval_cutoff)].copy()
 
     if evaluable.empty:
-        log.info("No signals old enough for outcome evaluation (need %d+ days)", horizon_days)
+        log.info("No pending signals with post-entry data to evaluate yet")
         return 0
 
     log.info("Evaluating outcomes for %d signals...", len(evaluable))

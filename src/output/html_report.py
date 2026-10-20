@@ -1685,9 +1685,14 @@ def _build_dashboard_html(signal_store) -> str:
                     </tr>"""
 
                 if monthly_rows_html:
-                    # Calculate totals
+                    # Average row must compare the SAME months on both sides.
+                    # total_strat averages the strategy's months; total_bench
+                    # must average the benchmark over exactly those months (not
+                    # every month TradingView returned), else excess is skewed.
+                    strat_months = strategy_monthly["month"].tolist()
                     total_strat = strategy_monthly["avg_pnl"].mean()
-                    total_bench = np.mean(list(benchmark_monthly.values())) if benchmark_monthly else 0
+                    matched_bench = [benchmark_monthly.get(m, 0.0) for m in strat_months]
+                    total_bench = np.mean(matched_bench) if matched_bench else 0
                     total_excess = total_strat - total_bench
 
                     monthly_perf_html = f"""
