@@ -979,6 +979,15 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
     # Generate HTML report for GitHub Pages
     from src.output.html_report import generate_html_report
     from src.store.signal_store import load_store as _load_store_for_report
+    # Refresh trade outcomes BEFORE building the report so the Trade Outcomes
+    # table reflects the latest SL/TP/time-exit evaluation (CI used to run
+    # update_outcomes after daily_run, leaving the report one day stale).
+    try:
+        from src.store.signal_store import update_outcomes as _upd_outcomes
+        _n_upd = _upd_outcomes()
+        log.info("Outcome refresh: %d pending signals updated", _n_upd)
+    except Exception as _e:
+        log.warning("Outcome refresh skipped (will report stale outcomes): %s", _e)
     html_path = Path(output_dir).parent / "docs" / "index.html"
     _store_df = _load_store_for_report()
     generate_html_report(rows, str(html_path), signal_store=_store_df)

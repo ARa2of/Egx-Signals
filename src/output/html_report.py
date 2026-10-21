@@ -1351,81 +1351,82 @@ def _build_dashboard_html(signal_store) -> str:
             if actual_entry > 0:
                 entry = actual_entry
 
-            # Get all signals for this ticker on or after entry date
+            # Prefer the evaluated outcome from the signal store (intraday
+            # first-touch walk in simulate_outcomes). The legacy simulation
+            # below only sees daily closes and misses intraday TP/SL touches,
+            # which produced wrong "OPEN" rows for already-closed trades.
+            stored_outcome = sig.get("outcome")
+            stored_outcome = stored_outcome if isinstance(stored_outcome, str) else ""
+            _omap = {"tp1_hit": "tp1", "tp2_hit": "tp2", "tp3_hit": "tp3",
+                     "stop_loss": "stop_loss", "expired": "time_exit"}
+            if stored_outcome in _omap:
+                exit_reason = _omap[stored_outcome]
+                tp2 = sig.get("tp2") or 0
+                tp3 = sig.get("tp3") or 0
+                if exit_reason == "tp1":
+                    exit_price = tp1
+                elif exit_reason == "tp2":
+                    exit_price = tp2
+                elif exit_reason == "tp3":
+                    exit_price = tp3
+                elif exit_reason == "stop_loss":
+                    exit_price = sl
+                else:  # time exit: reconstruct exit price from stored pnl
+                    exit_price = entry * (1 + float(sig.get("pnl_pct") or 0) / 100)
+                od = sig.get("outcome_date")
+                if od is not None and not pd.isna(od):
+                    exit_date = od.date() if hasattr(od, "date") else od
+                else:
+                    exit_date = entry_date
+                pnl_pct = float(sig.get("pnl_pct") or 0)
+                r_multiple = float(sig.get("r_multiple") or 0)
+                hold_days = int(sig.get("hold_days") or 0)
+                if hold_days <= 0 and hasattr(exit_date, "sub"):
+                    hold_days = (exit_date - entry_date).days
+                perf_rows.append({
+                    "ticker": ticker,
+                    "rec_date": run_date,
+                    "entry_date": entry_date,
+                    "exit_date": exit_date,
+                    "entry": entry,
+                    "exit_price": exit_price,
+                    "exit_reason": exit_reason,
+                    "pnl_pct": pnl_pct,
+                    "r_multiple": r_multiple,
+                    "hold_days": hold_days,
+                    "score": score,
+                    "tp1": tp1,
+                    "sl": sl,
+                })
+                continue
+
+            # Not closed yet (pending / no_data in store): mark-to-market
+            # OPEN row. Use the latest known close for this ticker at or after
+            # the entry date; fall back to the signal's own close. The old
+            # close-only TP/SL walk is gone — those exits are decided by the
+            # intraday first-touch simulation in simulate_outcomes, and this
+            # walk both missed them and silently dropped trades with no later
+            # store rows.
             t_all = signal_store[
                 (signal_store["ticker"] == ticker) &
                 (signal_store["run_date"] >= entry_date)
             ].sort_values("run_date")
 
-            if len(t_all) < 1:
-                continue
-
-            # Simulate trade outcome
-            exit_price = entry
-            exit_reason = "open"
-            hold_days = 0
-            exit_date = entry_date  # Default to entry date
-
-            # Get TP2 and TP3 if available
-            tp2 = sig.get("tp2") or 0
-            tp3 = sig.get("tp3") or 0
-
-            for _, future in t_all.iterrows():
-                future_date = future["run_date"]
-                if hasattr(future_date, "date"):
-                    future_date = future_date.date()
-                future_close = future.get("close") or 0
-                if future_close <= 0:
-                    continue
-
-                hold_days = (future_date - entry_date).days
-
-                # Check TP3 first (highest)
-                if tp3 > 0 and future_close >= tp3:
-                    exit_price = tp3
-                    exit_reason = "tp3"
-                    exit_date = future_date
-                    break
-                # Check TP2
-                if tp2 > 0 and future_close >= tp2:
-                    exit_price = tp2
-                    exit_reason = "tp2"
-                    exit_date = future_date
-                    break
-                # Check TP1
-                if tp1 > 0 and future_close >= tp1:
-                    exit_price = tp1
-                    exit_reason = "tp1"
-                    exit_date = future_date
-                    break
-                # Check stop loss hit
-                if sl > 0 and future_close <= sl:
-                    exit_price = sl
-                    exit_reason = "stop_loss"
-                    exit_date = future_date
-                    break
-                # Check time exit
-                if hold_days >= HOLDING_DAYS:
-                    exit_price = future_close
-                    exit_reason = "time_exit"
-                    exit_date = future_date
-                    break
-
-            # If still open after all data, use last available price
-            if exit_reason == "open":
+            if len(t_all) >= 1:
                 last_close = t_all.iloc[-1].get("close") or entry
-                exit_price = last_close
                 last_date = t_all.iloc[-1]["run_date"]
                 if hasattr(last_date, "date"):
                     last_date = last_date.date()
-                hold_days = (last_date - entry_date).days
-                exit_date = last_date
-                if hold_days >= HOLDING_DAYS:
-                    exit_reason = "time_exit"
-                else:
-                    exit_reason = "open"
+            else:
+                last_close = sig.get("close") or entry
+                last_date = run_date
 
-            pnl_pct = (exit_price - entry) / entry * 100
+            exit_price = last_close
+            exit_reason = "open"
+            hold_days = max((last_date - entry_date).days, 0)
+            exit_date = entry_date
+
+            pnl_pct = (exit_price - entry) / entry * 100 if entry else 0
             risk_pct = (entry - sl) / entry * 100 if sl > 0 and entry > sl else 0
             r_multiple = pnl_pct / risk_pct if risk_pct > 0 else 0
 

@@ -469,7 +469,8 @@ def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
     updated = simulate_outcomes(evaluable, horizon_days, cost_bps, slippage_bps)
 
     # Merge outcomes back into main DataFrame
-    outcome_cols = ["outcome", "outcome_date", "r_multiple", "hold_days",
+    outcome_cols = ["outcome", "outcome_date", "entry_date", "entry_price_actual",
+                    "r_multiple", "hold_days",
                     "mfe_pct", "mae_pct", "max_price", "min_price", "pnl_pct"]
     for col in outcome_cols:
         if col in updated.columns:
