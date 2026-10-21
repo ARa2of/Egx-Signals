@@ -27,10 +27,13 @@ This file stores important information that should persist across sessions.
 - Market-context gate: Bearish index (via `ticker_index_map`) downgrades a single-Buy upgrade to Watch; exempt: strong_technicals and 2+ Buy votes; toggle `market_context.use_index_sentiment`; Buys annotated `[<index> <sentiment>]`.
 - `agent_json.py` meta version reads `params.yaml` via `load_params().get("version")` (was hardcoded).
 
-### Trade-outcome fixes (landed 2026-10-20, `src\store\signal_store.py`)
+### Trade-outcome & report fixes (2026-10-20/21, `signal_store.py` + `html_report.py` + `daily_run.py`)
 
-- `update_outcomes` closure gate lowered from `run_date <= today-(horizon_days+5)` (~26d) to 2d, so SL/TP hits close as soon as observed instead of every signal staying pending for the full horizon.
-- `simulate_outcomes` rewritten as a first-touch bar-by-bar walk: TP or SL closes on first touch; SL wins only on a same-bar tie (previously SL always won even if TP was hit first); outcome stays `pending` until a level is touched.
+- `update_outcomes` closure gate lowered from `run_date <= today-(horizon_days+5)` (~26d) to 2d so SL/TP hits close as soon as observed; its `outcome_cols` merge must include `entry_date` and `entry_price_actual` (store rows feed the report's entry/exit columns).
+- `simulate_outcomes` is a first-touch bar-by-bar walk: TP/SL closes on first touch, SL wins only a same-bar tie, outcome stays `pending` until a level is touched (no premature `expired`); transient empty fetch → retryable `no_data`; price downloads batched per ticker to stay within CI timeout.
+- Trade Outcomes table in `html_report.py` reads the store outcome first (`tp1_hit`/`tp2_hit`/`tp3_hit`/`stop_loss`/`expired` → TP1/TP2/TP3/SL/TIME badges, exit/entry from store); pending renders mark-to-market OPEN. The old close-only re-simulation (missed intraday first-touches; dropped pending rows with no later store rows) was deleted — do not reintroduce.
+- `daily_run.py` calls `update_outcomes()` (try/except) just before `generate_html_report` so the report is fresh in-run; the workflow's separate `update_outcomes.py` step no longer leaves the report a day stale. Regression test: `scripts\test_report_outcomes.py`.
+- Report monthly Average row: average the benchmark over the same months as the strategy (mixed month sets produced a negative average); `load_store()` returns `run_date` as object-dtype dates — compare date-to-date in report code.
 
 ### ChartScan infrastructure
 
@@ -41,8 +44,5 @@ This file stores important information that should persist across sessions.
 ## Important Notes
 
 - Engine is ticker-agnostic: no ticker-specific logic anywhere (ETEL appears only in test fixtures).
-- `verify_etel_fix.py` live-replay FAIL (ETEL → Avoid, score 57.84) is pre-existing data drift (replay has no intraday data + a partial last bar), identical on clean HEAD. The old "ETEL must end Buy" gate was **waived by the user** — not a blocker.
-- `scripts\test_consensus_cases.py` contains a local mirror of the consensus function — update the mirror whenever consensus rules change.
-- Git commit-graph rename/write warnings on this machine are harmless (Windows file locking); pushes succeed regardless.
+- Keep the dual crons (14:00 UTC safety + 16:00 UTC main) and the git-log dedup step in `daily-analysis.yml` — they mitigate GitHub Actions' best-effort cron skips (runbook details live in the egx-signals skill).
 - No separate local VCS needed: git (root `D:\Stocks\EGX Project` → `ARa2of/Egx-Signals`) covers code/config history; this file + `memory\history.jsonl` cover session context. Intentionally untracked in git: `skills\`, `prompts\`, `cron\`, `check_today.py` / `check_consensus.py` / `check_zeot.py`, `AGENTS.md`, `HEARTBEAT.md`, `.nanobot\`, and the duplicate `egx-signals\` / `egx-portfolio-manager\` folders.
-- GitHub Actions cron is best-effort: scheduled runs can be skipped entirely under high load; typical queue delay is 3–4 h past the scheduled time. The dual crons (14:00 UTC safety + 16:00 UTC main) and the git-log dedup step (skips the pipeline when a "Daily signals" commit already exists that day) mitigate this — keep them in `daily-analysis.yml`.
