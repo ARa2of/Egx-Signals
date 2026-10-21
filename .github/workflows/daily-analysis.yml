@@ -75,6 +75,7 @@ jobs:
 
       - name: Dedup — skip if signals already committed today
         id: dedup
+        if: github.event_name == 'schedule'  # manual dispatch always runs
         run: |
           TODAY=$(date -u +%Y-%m-%d)
           if git log --since="${TODAY}T00:00:00Z" --oneline --grep="Daily signals" | grep -q .; then
