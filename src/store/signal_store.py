@@ -134,6 +134,7 @@ SIGNAL_SCHEMA = pa.schema([
     ("max_price", pa.float64()),
     ("min_price", pa.float64()),
     ("pnl_pct", pa.float64()),
+    ("exit_price", pa.float64()),
 ])
 
 # ─────────────────────────────────────────────────────────────
@@ -309,7 +310,7 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
             rd = r["run_date"]
             rd = rd.date() if hasattr(rd, "date") else rd
             starts.append(rd + timedelta(days=1))
-            ends.append(rd + timedelta(days=horizon_days + 10))
+            ends.append(rd + timedelta(days=horizon_days * 2 + 10))
         if not starts:
             continue
         yf_ticker = ticker if ticker.endswith(".CA") else f"{ticker}.CA"
@@ -337,7 +338,7 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
         try:
             # Entry happens next trading day (not same day as recommendation)
             start = run_dt + timedelta(days=1)
-            end = run_dt + timedelta(days=horizon_days + 10)
+            end = run_dt + timedelta(days=horizon_days * 2 + 10)
 
             cached = price_cache.get(ticker)
             if cached is None:
@@ -361,66 +362,98 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
                     trades.at[idx, "outcome"] = "pending"
                 continue
 
-            # Use next day's OPEN as entry price (more realistic)
-            # Fall back to recommended entry if open not available
-            if "Open" in df.columns and not df["Open"].isna().iloc[0]:
-                actual_entry = float(df["Open"].iloc[0])
-                entry_date = df.index[0].date()
+            # Limit-entry model: the recommended entry is a resting buy limit
+            # below market and only fills when price trades at or through it.
+            # (Taking next-day open unconditionally made gapped-up opens "fill"
+            # above the TP levels and produced impossible negative-PnL "TP wins".)
+            fill_i = None
+            for i in range(len(df)):
+                if float(df["Low"].iloc[i]) <= entry:
+                    fill_i = i
+                    break
+
+            if fill_i is None:
+                # Limit never filled inside the horizon window.
+                if (today - run_dt).days >= horizon_days:
+                    trades.at[idx, "outcome"] = "no_entry"
+                    trades.at[idx, "hold_days"] = 0
+                    trades.at[idx, "pnl_pct"] = 0.0
+                    trades.at[idx, "r_multiple"] = 0.0
+                else:
+                    trades.at[idx, "outcome"] = "pending"
+                continue
+
+            fill_bar = df.iloc[fill_i]
+            if "Open" in df.columns and not pd.isna(fill_bar["Open"]):
+                open_px = float(fill_bar["Open"])
+                # Gap-down through the limit fills at the market open
+                actual_entry = min(open_px, entry)
             else:
                 actual_entry = entry
-                entry_date = start
+            entry_date = df.index[fill_i].date()
+
+            # Walk at most horizon_days trading bars from the fill
+            trade_df = df.iloc[fill_i:fill_i + horizon_days]
 
             outcome = "expired"
-            exit_price = actual_entry
-            hold = len(df)
-            max_p = float(df["High"].max())
-            min_p = float(df["Low"].min())
+            exit_i = len(trade_df) - 1
+            exit_price = float(trade_df["Close"].iloc[-1])
+            max_p = float(trade_df["High"].max())
+            min_p = float(trade_df["Low"].min())
 
             # First-touch walk: SL and TPs are checked bar-by-bar in time
             # order. Whichever level is touched first determines the outcome.
             # If both are touched inside the same bar, SL wins (worst case).
-            for _, bar in df.iterrows():
-                low = float(bar["Low"])
-                high = float(bar["High"])
+            for i in range(len(trade_df)):
+                low = float(trade_df["Low"].iloc[i])
+                high = float(trade_df["High"].iloc[i])
 
                 sl_hit = sl > 0 and low <= sl
                 tp_hit_idx = None
-                for i in range(len(tps) - 1, -1, -1):  # highest TP first
-                    tp = tps[i]
+                for j in range(len(tps) - 1, -1, -1):  # highest TP first
+                    tp = tps[j]
                     if tp and high >= tp:
-                        tp_hit_idx = i
+                        tp_hit_idx = j
                         break
 
                 if sl_hit:
                     outcome = "stop_loss"
-                    exit_price = sl
+                    # A gap straight through the stop fills at the market
+                    # (the open), not at the stop price itself
+                    stop_open = trade_df["Open"].iloc[i]
+                    exit_price = min(sl, float(stop_open)) if not pd.isna(stop_open) else sl
+                    exit_i = i
                     break
                 if tp_hit_idx is not None:
                     outcome = f"tp{tp_hit_idx+1}_hit"
                     exit_price = tps[tp_hit_idx]
+                    exit_i = i
                     break
 
-            # No touch at all: still open if horizon hasn't fully elapsed yet.
-            if outcome == "expired":
-                entry_ref = entry_date if isinstance(entry_date, date) else pd.Timestamp(entry_date).date()
-                if (today - entry_ref).days >= horizon_days:
-                    outcome = "expired"
-                    exit_price = float(df["Close"].iloc[-1])
-                else:
-                    # Horizon not elapsed -> keep it open for a later run.
-                    outcome = "pending"
-                    exit_price = float(df["Close"].iloc[-1])
+            # No touch at all: still open if the horizon hasn't elapsed yet.
+            horizon_elapsed = (len(trade_df) >= horizon_days or
+                               (today - entry_date).days >= horizon_days)
+            if outcome == "expired" and not horizon_elapsed:
+                outcome = "pending"
+
+            # outcome_date is the actual touch (or time-exit) bar, not the
+            # last bar of the download window; hold is bars held from fill.
+            outcome_date = trade_df.index[exit_i].date()
+            hold = exit_i
 
             # Use actual entry price for PnL calculations
             risk = abs(actual_entry - sl) if sl > 0 else actual_entry * 0.02
-            r_mult = (exit_price - actual_entry) / risk if risk > 0 else 0
-            r_mult -= cost_pct
+            if risk <= 0:
+                risk = actual_entry * 0.02
+            r_mult = (exit_price - actual_entry) / risk
             pnl = (exit_price - actual_entry) / actual_entry * 100 if actual_entry else 0
+            pnl -= cost_pct * 100  # round-trip costs + slippage
 
             trades.at[idx, "outcome"] = outcome
-            trades.at[idx, "outcome_date"] = df.index[-1].date() if len(df) > 0 else run_dt + timedelta(days=horizon_days)
+            trades.at[idx, "outcome_date"] = outcome_date
             trades.at[idx, "entry_date"] = entry_date
             trades.at[idx, "entry_price_actual"] = round(actual_entry, 3)
+            trades.at[idx, "exit_price"] = round(exit_price, 3)
             trades.at[idx, "r_multiple"] = round(r_mult, 3)
             trades.at[idx, "hold_days"] = hold
             trades.at[idx, "mfe_pct"] = round((max_p - actual_entry) / actual_entry * 100, 2) if actual_entry else 0
@@ -446,11 +479,18 @@ def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
 
     today = date.today()
     pending_mask = df["outcome"].isna() | (df["outcome"] == "pending")
-    pending = df[pending_mask].copy()
 
-    if pending.empty:
-        log.info("No pending outcomes to evaluate")
-        return 0
+    # Backfill: rows closed before the entry/exit fields existed carry no
+    # entry_date/entry_price_actual, which makes the report fall back to the
+    # planned entry while PnL is measured against the real fill — visibly
+    # inconsistent rows (negative-PnL "TP wins", exit dates all clamped to
+    # one day). Re-evaluate recent closed rows once; afterwards entry_date
+    # is set and the row drops out of the mask (self-limiting).
+    backfill_mask = (
+        df["outcome"].isin(["tp1_hit", "tp2_hit", "tp3_hit", "stop_loss", "expired"])
+        & df["entry_date"].isna()
+        & (pd.to_datetime(df["run_date"]).dt.date >= today - timedelta(days=45))
+    )
 
     # Evaluate any pending signal that has at least one post-entry bar.
     # We no longer wait the full horizon: SL/TP hits are detected as soon as
@@ -459,19 +499,22 @@ def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
     # are returned as "pending" by simulate_outcomes (still open) and will be
     # re-evaluated on a later run.
     eval_cutoff = today - timedelta(days=2)
-    evaluable = df[pending_mask & (pd.to_datetime(df["run_date"]).dt.date <= eval_cutoff)].copy()
+    evaluable = df[(pending_mask | backfill_mask) &
+                   (pd.to_datetime(df["run_date"]).dt.date <= eval_cutoff)].copy()
 
     if evaluable.empty:
         log.info("No pending signals with post-entry data to evaluate yet")
         return 0
 
-    log.info("Evaluating outcomes for %d signals...", len(evaluable))
+    log.info("Evaluating outcomes for %d signals (%d backfill)...",
+             len(evaluable), int(backfill_mask.sum()))
     updated = simulate_outcomes(evaluable, horizon_days, cost_bps, slippage_bps)
 
     # Merge outcomes back into main DataFrame
     outcome_cols = ["outcome", "outcome_date", "entry_date", "entry_price_actual",
                     "r_multiple", "hold_days",
-                    "mfe_pct", "mae_pct", "max_price", "min_price", "pnl_pct"]
+                    "mfe_pct", "mae_pct", "max_price", "min_price", "pnl_pct",
+                    "exit_price"]
     for col in outcome_cols:
         if col in updated.columns:
             df.loc[updated.index, col] = updated[col]

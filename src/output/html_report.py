@@ -1322,7 +1322,7 @@ def _build_dashboard_html(signal_store) -> str:
     HOLDING_DAYS = 21  # Max holding period before time exit (backtest optimal)
 
     if not buys.empty:
-        from datetime import timedelta
+        from datetime import timedelta, date as _date
         perf_rows = []
         for _, sig in buys.iterrows():
             ticker = sig["ticker"]
@@ -1359,11 +1359,34 @@ def _build_dashboard_html(signal_store) -> str:
             stored_outcome = stored_outcome if isinstance(stored_outcome, str) else ""
             _omap = {"tp1_hit": "tp1", "tp2_hit": "tp2", "tp3_hit": "tp3",
                      "stop_loss": "stop_loss", "expired": "time_exit"}
+            if stored_outcome == "no_entry":
+                # Limit entry never filled inside the horizon — not a trade.
+                perf_rows.append({
+                    "ticker": ticker,
+                    "rec_date": run_date,
+                    "entry_date": entry_date,
+                    "exit_date": None,
+                    "entry": entry,
+                    "exit_price": 0.0,
+                    "exit_reason": "no_entry",
+                    "pnl_pct": 0.0,
+                    "r_multiple": 0.0,
+                    "hold_days": 0,
+                    "score": score,
+                    "tp1": tp1,
+                    "sl": sl,
+                })
+                continue
             if stored_outcome in _omap:
                 exit_reason = _omap[stored_outcome]
                 tp2 = sig.get("tp2") or 0
                 tp3 = sig.get("tp3") or 0
-                if exit_reason == "tp1":
+                # Prefer the actual recorded exit fill; older rows predate
+                # the exit_price column and fall back to the level price.
+                stored_exit = sig.get("exit_price") or 0
+                if stored_exit > 0:
+                    exit_price = stored_exit
+                elif exit_reason == "tp1":
                     exit_price = tp1
                 elif exit_reason == "tp2":
                     exit_price = tp2
@@ -1430,6 +1453,15 @@ def _build_dashboard_html(signal_store) -> str:
             risk_pct = (entry - sl) / entry * 100 if sl > 0 and entry > sl else 0
             r_multiple = pnl_pct / risk_pct if risk_pct > 0 else 0
 
+            # Entry date still in the future (recommendation is fresh): the
+            # limit has not been placed in the market yet — not an open trade.
+            if entry_date > _date.today():
+                exit_reason = "pending_entry"
+                pnl_pct = 0.0
+                r_multiple = 0.0
+                hold_days = 0
+                exit_price = 0.0
+
             perf_rows.append({
                 "ticker": ticker,
                 "rec_date": run_date,
@@ -1449,19 +1481,22 @@ def _build_dashboard_html(signal_store) -> str:
         if perf_rows:
             perf_df = pd.DataFrame(perf_rows)
 
-            # Summary stats
-            total = len(perf_df)
-            tp1_hits = (perf_df["exit_reason"] == "tp1").sum()
-            tp2_hits = (perf_df["exit_reason"] == "tp2").sum()
-            tp3_hits = (perf_df["exit_reason"] == "tp3").sum()
+            # Summary stats over real positions only — NO-ENTRY rows (limit
+            # never filled) and PENDING rows (entry date still in the future)
+            # are not trades and must not dilute win rate / averages.
+            traded = perf_df[~perf_df["exit_reason"].isin(["no_entry", "pending_entry"])]
+            total = len(traded)
+            tp1_hits = (traded["exit_reason"] == "tp1").sum()
+            tp2_hits = (traded["exit_reason"] == "tp2").sum()
+            tp3_hits = (traded["exit_reason"] == "tp3").sum()
             tp_hits = tp1_hits + tp2_hits + tp3_hits
-            sl_hits = (perf_df["exit_reason"] == "stop_loss").sum()
-            time_exits = (perf_df["exit_reason"] == "time_exit").sum()
-            open_trades = (perf_df["exit_reason"] == "open").sum()
+            sl_hits = (traded["exit_reason"] == "stop_loss").sum()
+            time_exits = (traded["exit_reason"] == "time_exit").sum()
+            open_trades = (traded["exit_reason"] == "open").sum()
             win_rate = tp_hits / total if total > 0 else 0
-            avg_pnl = perf_df["pnl_pct"].mean()
-            avg_r = perf_df["r_multiple"].mean()
-            avg_hold = perf_df["hold_days"].mean()
+            avg_pnl = traded["pnl_pct"].mean() if total > 0 else 0
+            avg_r = traded["r_multiple"].mean() if total > 0 else 0
+            avg_hold = traded["hold_days"].mean() if total > 0 else 0
 
             pnl_class = "green" if avg_pnl > 0 else "red"
             wr_class = "green" if win_rate >= 0.5 else "red"
@@ -1499,6 +1534,12 @@ def _build_dashboard_html(signal_store) -> str:
                 elif r["exit_reason"] == "time_exit":
                     badge = '<span class="outcome-badge expired">TIME</span>'
                     cls = "yellow" if r["pnl_pct"] < 0 else "green"
+                elif r["exit_reason"] == "no_entry":
+                    badge = '<span class="outcome-badge" style="background:#64748b">NO-ENTRY</span>'
+                    cls = ""
+                elif r["exit_reason"] == "pending_entry":
+                    badge = '<span class="outcome-badge" style="background:#8b5cf6">PENDING</span>'
+                    cls = "blue"
                 else:
                     badge = '<span class="outcome-badge" style="background:#3b82f6">OPEN</span>'
                     cls = "blue"
@@ -1508,13 +1549,25 @@ def _build_dashboard_html(signal_store) -> str:
 
                 rec_date_str = fmt_date(r["rec_date"])
                 entry_date_str = fmt_date(r["entry_date"])
-                # Show exit date only if trade is closed
+                # Show exit date/price and P&L only for real positions
                 if r["exit_reason"] == "open":
+                    exit_date_str = "—"
+                    exit_price_str = "—"
+                elif r["exit_reason"] in ("no_entry", "pending_entry"):
                     exit_date_str = "—"
                     exit_price_str = "—"
                 else:
                     exit_date_str = fmt_date(r["exit_date"])
                     exit_price_str = f"{r['exit_price']:.2f}"
+
+                if r["exit_reason"] in ("no_entry", "pending_entry"):
+                    pnl_str = "—"
+                    r_str = "—"
+                    hold_str = "—"
+                else:
+                    pnl_str = f"{r['pnl_pct']:+.1f}%"
+                    r_str = f"{r['r_multiple']:+.2f}R"
+                    hold_str = f"{r['hold_days']}d"
 
                 perf_rows_html += f"""<tr>
                   <td>{rec_date_str}</td>
@@ -1524,9 +1577,9 @@ def _build_dashboard_html(signal_store) -> str:
                   <td>{r['entry']:.2f}</td>
                   <td>{exit_price_str}</td>
                   <td>{badge}</td>
-                  <td class="{cls}">{r['pnl_pct']:+.1f}%</td>
-                  <td>{r['r_multiple']:+.2f}R</td>
-                  <td>{r['hold_days']}d</td>
+                  <td class="{cls}">{pnl_str}</td>
+                  <td>{r_str}</td>
+                  <td>{hold_str}</td>
                   <td>{r['score']:.0f}</td>
                 </tr>"""
 

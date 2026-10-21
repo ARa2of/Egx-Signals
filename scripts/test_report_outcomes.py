@@ -53,6 +53,24 @@ store = pd.DataFrame([
          score=55.0, outcome="expired", outcome_date=d(8),
          entry_date=d(29), entry_price_actual=20.1,
          pnl_pct=2.0, r_multiple=0.9, hold_days=21),
+    # E) no_entry — limit never filled; not a trade
+    dict(run_date=d(12), ticker="EEE", close=44.0, recommendation="Buy",
+         entry_price=40.0, stop_loss=38.0, tp1=41.0, tp2=42.0, tp3=44.0,
+         score=61.0, outcome="no_entry", outcome_date=None,
+         entry_date=None, entry_price_actual=None,
+         pnl_pct=0.0, r_multiple=0.0, hold_days=0),
+    # F) fresh rec — entry date is tomorrow; not an open trade
+    dict(run_date=d(0), ticker="FFF", close=30.0, recommendation="Buy",
+         entry_price=30.0, stop_loss=28.0, tp1=31.0, tp2=32.0, tp3=34.0,
+         score=62.0, outcome=None, outcome_date=None,
+         entry_date=None, entry_price_actual=None,
+         pnl_pct=None, r_multiple=None, hold_days=None),
+    # G) tp3_hit with a stored exit fill different from the planned tp3 level
+    dict(run_date=d(6), ticker="GGG", close=50.0, recommendation="Buy",
+         entry_price=50.0, stop_loss=48.0, tp1=51.0, tp2=52.0, tp3=54.0,
+         score=68.0, outcome="tp3_hit", outcome_date=d(4),
+         entry_date=d(5), entry_price_actual=50.0, exit_price=55.25,
+         pnl_pct=10.5, r_multiple=2.7, hold_days=1),
 ], columns=None)
 store["regime"] = "uptrend"
 
@@ -68,7 +86,7 @@ import re
 checks = []
 
 def badge_for(ticker):
-    m = re.search(rf"<b>{ticker}</b></td>.*?outcome-badge[^>]*>([A-Z0-9]+)<", html, re.S)
+    m = re.search(rf"<b>{ticker}</b></td>.*?outcome-badge[^>]*>([A-Z0-9-]+)<", html, re.S)
     return m.group(1) if m else None
 
 def row_for(ticker):
@@ -96,6 +114,24 @@ checks.append(("B exit price = 48.00", rowB is not None and "48.00" in rowB, row
 # Row C: exit date and price shown as em-dash (OPEN)
 rowC = row_for("CCC")
 checks.append(("C shows open dashes", rowC is not None and "—" in rowC, rowC))
+
+# Row E: no_entry -> NO-ENTRY badge with dashes, no P&L
+rowE = row_for("EEE")
+e_b = badge_for("EEE")
+checks.append(("E no_entry -> NO-ENTRY badge", e_b == "NO-ENTRY", e_b))
+checks.append(("E shows dashes", rowE is not None and "—" in rowE, rowE))
+
+# Row F: fresh rec (entry tomorrow) -> PENDING badge, no OPEN P&L numbers
+rowF = row_for("FFF")
+f_b = badge_for("FFF")
+checks.append(("F fresh rec -> PENDING badge", f_b == "PENDING", f_b))
+checks.append(("F shows dashes", rowF is not None and "—" in rowF, rowF))
+
+# Row G: stored exit_price (55.25) must win over planned tp3 (54.0)
+rowG = row_for("GGG")
+g_b = badge_for("GGG")
+checks.append(("G tp3_hit -> TP3 badge", g_b == "TP3", g_b))
+checks.append(("G exit = stored 55.25", rowG is not None and "55.25" in rowG, rowG))
 
 ok = True
 for name, passed, detail in checks:
