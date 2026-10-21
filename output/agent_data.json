@@ -192,11 +192,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "5-14 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 14,
-        "days_target": 10,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -328,11 +328,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -474,10 +474,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -605,10 +605,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -751,10 +751,10 @@
         "ad_score": -0.4
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -892,11 +892,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-10 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 10,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -1021,18 +1021,18 @@
       },
       "intraday": {
         "score": 26.1,
-        "volume_skew": -0.069,
+        "volume_skew": -0.068,
         "momentum": 11.4,
         "vwap_score": 16.8,
         "ad_signal": "bearish",
         "ad_score": -0.4
       },
       "holding": {
-        "label": "3-10 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 10,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -1174,11 +1174,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -1305,11 +1305,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-11 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 11,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -1441,10 +1441,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -1572,10 +1572,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -1708,10 +1708,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -1849,11 +1849,11 @@
         "ad_score": 0.0
       },
       "holding": {
-        "label": "3-10 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 10,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -1970,11 +1970,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "5-14 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 14,
-        "days_target": 10,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -2106,10 +2106,10 @@
         "ad_score": 0.0
       },
       "holding": {
-        "label": "2-7 days (Time Exit)",
+        "label": "2-5 days (Time Exit)",
         "exit_strategy": "time_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -2226,11 +2226,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "5-14 days (Trail Stop)",
+        "label": "3-13 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 14,
-        "days_target": 10,
+        "days_min": 3,
+        "days_max": 13,
+        "days_target": 11,
         "personalized": true
       },
       "patterns": {
@@ -2372,10 +2372,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -2518,11 +2518,11 @@
         "ad_score": -0.4
       },
       "holding": {
-        "label": "3-8 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
-        "days_min": 3,
-        "days_max": 8,
-        "days_target": 6,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -2654,10 +2654,10 @@
         "ad_score": 0.0
       },
       "holding": {
-        "label": "2-7 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -2790,11 +2790,11 @@
         "ad_score": 0.4
       },
       "holding": {
-        "label": "5-14 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 14,
-        "days_target": 10,
+        "days_min": 2,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -2916,11 +2916,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-9 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 9,
-        "days_target": 6,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -3047,11 +3047,11 @@
         "ad_score": 0.2
       },
       "holding": {
-        "label": "4-11 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 11,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -3168,11 +3168,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-8 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 8,
-        "days_target": 6,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -3304,11 +3304,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -3450,10 +3450,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
+        "days_min": 2,
+        "days_max": 10,
         "days_target": 9,
         "personalized": true
       },
@@ -3596,11 +3596,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-10 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 10,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -3727,10 +3727,10 @@
         "ad_score": 0.0
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -3863,11 +3863,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -4009,11 +4009,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-10 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 10,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -4155,11 +4155,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -4286,11 +4286,11 @@
         "ad_score": 0.2
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -4417,11 +4417,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "5-16 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 16,
-        "days_target": 11,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -4563,11 +4563,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-10 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
+        "days_min": 2,
         "days_max": 10,
-        "days_target": 7,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -4699,11 +4699,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-8 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 8,
-        "days_target": 6,
+        "days_min": 2,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -4820,11 +4820,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-9 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 9,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -4966,10 +4966,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -5102,10 +5102,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-12 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 12,
+        "days_min": 2,
+        "days_max": 10,
         "days_target": 9,
         "personalized": true
       },
@@ -5238,11 +5238,11 @@
         "ad_score": -0.4
       },
       "holding": {
-        "label": "3-10 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 10,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -5374,11 +5374,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 7,
-        "days_target": 5,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -5520,11 +5520,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "4-11 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 4,
-        "days_max": 11,
-        "days_target": 8,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -5651,11 +5651,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "5-15 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 5,
-        "days_max": 15,
-        "days_target": 11,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -5790,17 +5790,17 @@
       },
       "intraday": {
         "score": 46.3,
-        "volume_skew": 0.132,
+        "volume_skew": 0.133,
         "momentum": 55.6,
         "vwap_score": 32.7,
         "ad_signal": "bearish",
         "ad_score": -0.4
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -5943,10 +5943,10 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-7 days (Quick Exit)",
+        "label": "2-5 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 7,
+        "days_max": 5,
         "days_target": 5,
         "personalized": true
       },
@@ -6089,11 +6089,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-9 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 9,
-        "days_target": 7,
+        "days_min": 2,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -6220,11 +6220,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "3-9 days (Trail Stop)",
+        "label": "2-5 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 3,
-        "days_max": 9,
-        "days_target": 6,
+        "days_min": 2,
+        "days_max": 5,
+        "days_target": 5,
         "personalized": true
       },
       "patterns": {
@@ -6361,11 +6361,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Trail Stop)",
+        "label": "3-12 days (Trail Stop)",
         "exit_strategy": "trail_stop",
-        "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_min": 3,
+        "days_max": 12,
+        "days_target": 11,
         "personalized": true
       },
       "patterns": {
@@ -6502,11 +6502,11 @@
         "ad_score": 0
       },
       "holding": {
-        "label": "2-5 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -6618,7 +6618,7 @@
       "run_date": "2026-10-21",
       "recommendation": "Watch",
       "recommendation_basis": "No Buy votes, no Avoid — Watch",
-      "score": 50.44,
+      "score": 50.43,
       "score_breakdown": {
         "trend": 19.3,
         "macd": 0.0,
@@ -6628,7 +6628,7 @@
         "support": 0.0,
         "vwap": 0.8,
         "volume_profile": 5.4,
-        "intraday": 5.94
+        "intraday": 5.93
       },
       "price": {
         "current_egp": 5.8,
@@ -6729,10 +6729,10 @@
         "high_price": 6.422
       },
       "intraday": {
-        "score": 39.6,
-        "volume_skew": 0.139,
+        "score": 39.5,
+        "volume_skew": 0.134,
         "momentum": 27.4,
-        "vwap_score": 3.0,
+        "vwap_score": 2.9,
         "ad_signal": "bullish",
         "ad_score": 0.8
       },
