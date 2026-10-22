@@ -35,6 +35,15 @@ This file stores important information that should persist across sessions.
 - `daily_run.py` calls `update_outcomes()` (try/except) just before `generate_html_report` so the report is fresh in-run; the workflow's separate `update_outcomes.py` step no longer leaves the report a day stale. Regression test: `scripts\test_report_outcomes.py`.
 - Report monthly Average row: average the benchmark over the same months as the strategy (mixed month sets produced a negative average); `load_store()` returns `run_date` as object-dtype dates — compare date-to-date in report code.
 
+### Trade-outcome engine rewrite — limit-entry first-touch model (landed 2026-10-21, deployed & verified on gh-pages)
+
+- **Root bugs fixed** (were corrupting the deployed table): `outcome_date` clamped to the download-window end (all backlog exits dated the same day); `hold_days=len(df)`; next-day-open entry let a gapped-up open "fill" above TP levels → impossible negative-PnL "TP wins"; null `entry_date`/`entry_price_actual` on older closed rows mixed planned-entry display with real-fill PnL; `exit_price` never persisted; fresh recs with future entry dates rendered OPEN with fake P&L.
+- **New `simulate_outcomes`** (`signal_store.py`): limit-entry first-touch walk — a fill happens only when bar Low ≤ planned entry; fill price = `min(open, limit)`; a gap straight through the stop exits at market open; `outcome_date` = the touch/time-exit bar; `hold_days` counted from the fill; walk capped at `horizon_days` bars with fetch window `horizon_days*2+10` calendar days; pnl deducts `-(cost_bps+slippage)`. New `no_entry` outcome (limit never filled) and `pending` rows get MTM `exit_price`/pnl.
+- **Schema**: new `exit_price` column in `SIGNAL_SCHEMA` (auto-migrates in `load_store`); `update_outcomes` `outcome_cols` merge now includes `exit_price`; its backfill mask re-evaluates only closed rows with null `entry_date` within 45d (self-limiting, rewrites real fill/exit for history).
+- **Report** (`html_report.py`): prefers stored `exit_price` over the planned TP level (legacy fallback kept); `no_entry` → grey NO-ENTRY badge with dashes; `pending_entry` (entry_date > today) → purple PENDING badge with dashes; summary stats (total/win-rate/avg PnL/R/hold) computed over traded rows only, excluding `no_entry`/`pending_entry`.
+- **Tests**: `scripts\test_outcome_sim.py` (25 cases, fake-yfinance: gap-up no-fill→fill+TP1, SL −1R, gap-through-SL exit at open, TP2 later bar, expired horizon, no_entry, pending MTM) and `scripts\test_report_outcomes.py` (14 cases incl. no_entry/pending_entry/stored-exit_price). Re-run after any outcome/report change.
+- **Store heal + deploy**: after touching these files, run `scripts\update_outcomes.py` locally (heals `data\signals.parquet`) and commit the store together with the code; the pipeline triggers only on schedule + `workflow_dispatch` (not push). Parquet-rebase-conflict and REST-dispatch runbooks: egx-signals skill.
+
 ### ChartScan infrastructure
 
 - Real 52MB YOLOv8 checkpoint `weights\custom_yolov8.pt` (Git LFS); CI loads it with `lfs: true` + a `YOLO()` load check that fails loudly.
