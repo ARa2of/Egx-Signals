@@ -71,7 +71,7 @@ User’s core complaint historically: **strong uptrends (e.g. ETEL) were labeled
 ### Tests / diagnostics (run these after any scoring/consensus change)
 | Path | Role |
 |------|------|
-| `scripts/verify_etel_fix.py` | Live ETEL replay → expect **Buy** |
+| `scripts/verify_etel_fix.py` | Live ETEL replay — state-aware: strong-uptrend state → **Buy**; broken trend must not force Buy |
 | `scripts/test_scoring_fixes.py` | Unit checks: regime map, VWAP/VP, weights sum=100 |
 | `scripts/test_ml_v3.py` | Conviction v3, direction classifiers, ChartScan load |
 | `scripts/test_consensus_cases.py` | ETEL/EFIH/MBSC/ARCC consensus expectations |
@@ -153,7 +153,7 @@ python -c "from src.config import reload_configs; reload_configs()"
 python scripts/test_scoring_fixes.py
 python scripts/test_ml_v3.py
 python scripts/test_consensus_cases.py
-python scripts/verify_etel_fix.py   # ETEL must end Buy
+python scripts/verify_etel_fix.py   # state-aware: strong-uptrend state -> Buy; no ETEL-always-Buy gate
 
 # Store diagnostics
 python check_today.py
@@ -172,19 +172,23 @@ python check_consensus.py
 
 ## 6. Current expected behavior (post v2.2 consistency fix)
 
-| Ticker | Score | ML display | ChartScan | Final |
-|--------|------:|------------|-----------|-------|
-| ETEL | ~64–66 Buy band | Watch/Avoid allowed | Buy (low conf OK) | **Buy** via strong_technicals; basis notes chase entry |
-| EFIH | high | **Watch** at conf 30 (not Avoid) | Neutral | **Buy** if 1 Buy + 0 Avoid |
-| MBSC | high | Buy | Sell + bullish candle → **Neutral** | **Buy** if Base+ML |
-| ARCC | ~80 | Buy | Neutral | Buy unless **momentum filter** (price drop since first Buy) |
+**No ticker-always-Buy assumption.** Expected behavior depends on the *state*:
 
-If ETEL returns to Watch, check in order:
+| State | Expected final |
+|--------|----------------|
+| Strong uptrend (score ≥60 + golden+diamond+ADX≥30+MACD bullish, base Buy) | **Buy** via strong_technicals (ML/ChartScan cautious OK); basis notes chase entry |
+| Trend broke (MACD bearish, base Watch/Avoid, etc.) | Follow the votes — **Watch/Avoid is correct output** |
+
+Other fixtures (unchanged): EFIH **Buy** if 1 Buy + 0 Avoid (ML shows Watch at conf 30, not Avoid); MBSC **Buy** if Base+ML (ChartScan Sell + bullish candle → Neutral); ARCC Buy unless **momentum filter** fires.
+
+If a name is in the strong-uptrend state but shows Watch/Avoid, check in order:
 1. `regime` still `trending_up`?  
 2. Base score ≥ 60?  
 3. `strong_technicals` true (golden+diamond+ADX≥30+MACD)?  
 4. Entry override still vetoing? (should not for chase)  
 5. Momentum filter / RSI hard-cap firing?
+
+If the state itself has broken (MACD bearish, price lost EMA50, base &lt;60), a non-Buy result is the engine working as intended — do not force it green.
 
 ---
 
@@ -213,4 +217,4 @@ If ETEL returns to Watch, check in order:
 
 ## 9. One-paragraph context for a fresh agent
 
-EGX Signals is a daily Egypt-market Buy/Watch/Avoid engine. In Oct 2026 the user correctly identified that **uptrending names like ETEL were mislabeled Avoid** because (a) regime labels didn’t match RSI config keys, (b) scoring punished extension/VWAP/intraday distribution the way mean-reversion tools do, (c) ML conviction collapsed on overbought features, (d) consensus let ML/ChartScan/planner entry-veto block technical Buys, and (e) ChartScan YOLO had no weights and later produced contradictory Sell signals. **v2.2 fixed regime mapping, weight balance, trend-aware VWAP/VP/intraday, strong-technical consensus path, ML exp() cache bug + conviction v3 + direction classifiers, committed YOLO weights via LFS, and stopped “no clean pullback” from vetoing direction.** ETEL-class setups should now show **Buy** even if ML is cautious, with chase risk noted on the trade plan. Keep that invariant when changing anything in scoring, consensus, ML, or the planner.
+EGX Signals is a daily Egypt-market Buy/Watch/Avoid engine. In Oct 2026 the user correctly identified that **uptrending names like ETEL were mislabeled Avoid** because (a) regime labels didn’t match RSI config keys, (b) scoring punished extension/VWAP/intraday distribution the way mean-reversion tools do, (c) ML conviction collapsed on overbought features, (d) consensus let ML/ChartScan/planner entry-veto block technical Buys, and (e) ChartScan YOLO had no weights and later produced contradictory Sell signals. **v2.2 fixed regime mapping, weight balance, trend-aware VWAP/VP/intraday, strong-technical consensus path, ML exp() cache bug + conviction v3 + direction classifiers, committed YOLO weights via LFS, and stopped “no clean pullback” from vetoing direction.** Strong-uptrend setups show **Buy** even if ML is cautious — but only *while the uptrend state holds*. There is deliberately **no “ETEL always Buy” assumption**: when a trend genuinely breaks (price loses EMA50, MACD rolls bearish, base drops below 60), Watch/Avoid is the correct output and gates like `verify_etel_fix.py` accept it. Keep the state-based invariant when changing anything in scoring, consensus, ML, or the planner.

@@ -414,10 +414,10 @@ Run after **any** scoring / consensus / ML change, before push:
 python scripts/test_scoring_fixes.py      # regime map, VWAP/VP, weights sum = 100
 python scripts/test_ml_v3.py              # conviction v3, direction classifiers
 python scripts/test_consensus_cases.py    # ETEL/EFIH/MBSC/ARCC expectations
-python scripts/verify_etel_fix.py         # live ETEL replay — must end Buy
+python scripts/verify_etel_fix.py         # live ETEL replay — state-aware
 ```
 
-**Invariant:** ETEL-class strong uptrends must end **Buy** via `strong_technicals`. If any test fails, do not push.
+**Invariant (state-based, no ticker-always-Buy assumption):** *while a name is in the strong-uptrend state* (golden+diamond+ADX≥30+MACD bullish+base Buy), consensus must end **Buy** via `strong_technicals` even if ML is cautious. Once the trend breaks (e.g. MACD bearish, base Watch/Avoid), consensus must follow the votes — a Watch/Avoid is correct output, not a failure. If any test fails, do not push.
 
 ---
 
