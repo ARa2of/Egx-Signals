@@ -2,7 +2,7 @@
   "meta": {
     "generated": "2026-10-23",
     "source": "EGX Signal Generator",
-    "version": "v2.3",
+    "version": "v2.4",
     "description": "Structured signal data for AI agent consumption"
   },
   "summary": {
@@ -162,13 +162,13 @@
         "entry_price": 45.0,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 41.603,
+        "stop_loss": 40.282,
         "tp1": 45.45,
         "tp2": 45.9,
         "tp3": 47.7,
-        "tp1_rr": 0.13,
-        "tp2_rr": 0.26,
-        "tp3_rr": 0.79
+        "tp1_rr": 0.1,
+        "tp2_rr": 0.19,
+        "tp3_rr": 0.57
       },
       "ml": {
         "signal": "Buy",
@@ -290,16 +290,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 20.172,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 19.934,
-        "tp1": 20.374,
-        "tp2": 20.575,
-        "tp3": 21.077,
-        "tp1_rr": 0.85,
-        "tp2_rr": 1.7,
-        "tp3_rr": 3.8
+        "entry_price": 20.82,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 18.565,
+        "tp1": 21.028,
+        "tp2": 21.236,
+        "tp3": 22.069,
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.18,
+        "tp3_rr": 0.55
       },
       "ml": {
         "signal": "Buy",
@@ -439,13 +439,13 @@
         "entry_price": 65.11,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 59.275,
+        "stop_loss": 57.005,
         "tp1": 65.761,
         "tp2": 66.412,
         "tp3": 69.017,
-        "tp1_rr": 0.11,
-        "tp2_rr": 0.22,
-        "tp3_rr": 0.67
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.16,
+        "tp3_rr": 0.48
       },
       "ml": {
         "signal": "Buy",
@@ -463,11 +463,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Quick Exit)",
+        "label": "2-6 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 6,
+        "days_target": 6,
         "personalized": true
       },
       "patterns": {
@@ -565,13 +565,13 @@
         "entry_price": 163.05,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 137.186,
+        "stop_loss": 127.128,
         "tp1": 164.681,
         "tp2": 166.311,
         "tp3": 172.833,
-        "tp1_rr": 0.06,
-        "tp2_rr": 0.13,
-        "tp3_rr": 0.38
+        "tp1_rr": 0.05,
+        "tp2_rr": 0.09,
+        "tp3_rr": 0.27
       },
       "ml": {
         "signal": "Avoid",
@@ -589,11 +589,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -711,13 +711,13 @@
         "entry_price": 84.52,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 74.606,
+        "stop_loss": 70.75,
         "tp1": 85.365,
         "tp2": 86.21,
         "tp3": 89.591,
-        "tp1_rr": 0.09,
-        "tp2_rr": 0.17,
-        "tp3_rr": 0.51
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.12,
+        "tp3_rr": 0.37
       },
       "ml": {
         "signal": "Buy",
@@ -735,11 +735,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Quick Exit)",
+        "label": "2-6 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 6,
+        "days_target": 6,
         "personalized": true
       },
       "patterns": {
@@ -845,15 +845,15 @@
       },
       "trade_plan": {
         "entry_price": 4.07,
-        "entry_action": "BUY NOW",
-        "entry_source": "Current Price",
-        "stop_loss": 4.018,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 3.12,
         "tp1": 4.111,
         "tp2": 4.151,
-        "tp3": 4.261,
-        "tp1_rr": 0.78,
-        "tp2_rr": 1.57,
-        "tp3_rr": 3.67
+        "tp3": 4.314,
+        "tp1_rr": 0.04,
+        "tp2_rr": 0.09,
+        "tp3_rr": 0.26
       },
       "ml": {
         "signal": "Buy",
@@ -993,13 +993,13 @@
         "entry_price": 0.248,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 0.22,
+        "stop_loss": 0.21,
         "tp1": 0.25,
         "tp2": 0.253,
         "tp3": 0.263,
-        "tp1_rr": 0.09,
-        "tp2_rr": 0.18,
-        "tp3_rr": 0.53
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.13,
+        "tp3_rr": 0.39
       },
       "ml": {
         "signal": "Buy",
@@ -1139,13 +1139,13 @@
         "entry_price": 0.409,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 0.358,
+        "stop_loss": 0.338,
         "tp1": 0.413,
         "tp2": 0.417,
         "tp3": 0.434,
-        "tp1_rr": 0.08,
-        "tp2_rr": 0.16,
-        "tp3_rr": 0.48
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.12,
+        "tp3_rr": 0.35
       },
       "ml": {
         "signal": "Buy",
@@ -1265,13 +1265,13 @@
         "entry_price": 31.36,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 28.017,
+        "stop_loss": 26.717,
         "tp1": 31.674,
         "tp2": 31.987,
         "tp3": 33.242,
-        "tp1_rr": 0.09,
-        "tp2_rr": 0.19,
-        "tp3_rr": 0.56
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.14,
+        "tp3_rr": 0.41
       },
       "ml": {
         "signal": "Buy",
@@ -1391,13 +1391,13 @@
         "entry_price": 0.584,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 0.496,
+        "stop_loss": 0.462,
         "tp1": 0.59,
         "tp2": 0.596,
         "tp3": 0.619,
-        "tp1_rr": 0.07,
-        "tp2_rr": 0.13,
-        "tp3_rr": 0.4
+        "tp1_rr": 0.05,
+        "tp2_rr": 0.1,
+        "tp3_rr": 0.29
       },
       "ml": {
         "signal": "Buy",
@@ -1415,11 +1415,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Quick Exit)",
+        "label": "2-6 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 6,
+        "days_target": 6,
         "personalized": true
       },
       "patterns": {
@@ -1511,13 +1511,13 @@
         "entry_price": 6.67,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 5.866,
+        "stop_loss": 5.554,
         "tp1": 6.737,
         "tp2": 6.803,
         "tp3": 7.07,
-        "tp1_rr": 0.08,
-        "tp2_rr": 0.17,
-        "tp3_rr": 0.5
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.12,
+        "tp3_rr": 0.36
       },
       "ml": {
         "signal": "Buy",
@@ -1642,13 +1642,13 @@
         "entry_price": 24.57,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 20.706,
+        "stop_loss": 19.204,
         "tp1": 24.816,
         "tp2": 25.061,
         "tp3": 26.044,
-        "tp1_rr": 0.06,
-        "tp2_rr": 0.13,
-        "tp3_rr": 0.38
+        "tp1_rr": 0.05,
+        "tp2_rr": 0.09,
+        "tp3_rr": 0.27
       },
       "ml": {
         "signal": "Buy",
@@ -1771,15 +1771,15 @@
       },
       "trade_plan": {
         "entry_price": 24.53,
-        "entry_action": "BUY NOW",
-        "entry_source": "Current Price",
-        "stop_loss": 24.279,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 20.61,
         "tp1": 24.775,
         "tp2": 25.021,
-        "tp3": 25.468,
-        "tp1_rr": 0.98,
-        "tp2_rr": 1.95,
-        "tp3_rr": 3.74
+        "tp3": 26.002,
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.13,
+        "tp3_rr": 0.38
       },
       "ml": {
         "signal": "Buy",
@@ -1894,13 +1894,13 @@
         "entry_price": 9.8,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 8.03,
+        "stop_loss": 7.341,
         "tp1": 9.898,
         "tp2": 9.996,
         "tp3": 10.388,
-        "tp1_rr": 0.06,
-        "tp2_rr": 0.11,
-        "tp3_rr": 0.33
+        "tp1_rr": 0.04,
+        "tp2_rr": 0.08,
+        "tp3_rr": 0.24
       },
       "ml": {
         "signal": "Buy",
@@ -2020,13 +2020,13 @@
         "entry_price": 12.4,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 11.504,
+        "stop_loss": 11.155,
         "tp1": 12.524,
         "tp2": 12.648,
         "tp3": 13.144,
-        "tp1_rr": 0.14,
-        "tp2_rr": 0.28,
-        "tp3_rr": 0.83
+        "tp1_rr": 0.1,
+        "tp2_rr": 0.2,
+        "tp3_rr": 0.6
       },
       "ml": {
         "signal": "Buy",
@@ -2140,13 +2140,13 @@
         "entry_price": 3.02,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 2.612,
+        "stop_loss": 2.453,
         "tp1": 3.05,
         "tp2": 3.08,
         "tp3": 3.201,
-        "tp1_rr": 0.07,
-        "tp2_rr": 0.15,
-        "tp3_rr": 0.44
+        "tp1_rr": 0.05,
+        "tp2_rr": 0.11,
+        "tp3_rr": 0.32
       },
       "ml": {
         "signal": "Buy",
@@ -2283,16 +2283,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 6.551,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 6.457,
-        "tp1": 6.617,
-        "tp2": 6.682,
-        "tp3": 6.844,
-        "tp1_rr": 0.7,
-        "tp2_rr": 1.39,
-        "tp3_rr": 3.12
+        "entry_price": 6.77,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 5.836,
+        "tp1": 6.838,
+        "tp2": 6.905,
+        "tp3": 7.176,
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.14,
+        "tp3_rr": 0.43
       },
       "ml": {
         "signal": "Buy",
@@ -2310,11 +2310,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -2432,13 +2432,13 @@
         "entry_price": 33.5,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 29.656,
+        "stop_loss": 28.161,
         "tp1": 33.835,
         "tp2": 34.17,
         "tp3": 35.51,
-        "tp1_rr": 0.09,
-        "tp2_rr": 0.17,
-        "tp3_rr": 0.52
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.13,
+        "tp3_rr": 0.38
       },
       "ml": {
         "signal": "Avoid",
@@ -2561,15 +2561,15 @@
       },
       "trade_plan": {
         "entry_price": 21.0,
-        "entry_action": "BUY NOW",
-        "entry_source": "Current Price",
-        "stop_loss": 20.733,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 17.624,
         "tp1": 21.21,
         "tp2": 21.42,
-        "tp3": 21.89,
-        "tp1_rr": 0.79,
-        "tp2_rr": 1.57,
-        "tp3_rr": 3.33
+        "tp3": 22.26,
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.12,
+        "tp3_rr": 0.37
       },
       "ml": {
         "signal": "Buy",
@@ -2704,13 +2704,13 @@
         "entry_price": 133.9,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 119.746,
+        "stop_loss": 114.242,
         "tp1": 135.239,
         "tp2": 136.578,
         "tp3": 141.934,
-        "tp1_rr": 0.09,
-        "tp2_rr": 0.19,
-        "tp3_rr": 0.57
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.14,
+        "tp3_rr": 0.41
       },
       "ml": {
         "signal": "Buy",
@@ -2830,13 +2830,13 @@
         "entry_price": 8.07,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 7.276,
+        "stop_loss": 6.967,
         "tp1": 8.151,
         "tp2": 8.231,
         "tp3": 8.554,
-        "tp1_rr": 0.1,
-        "tp2_rr": 0.2,
-        "tp3_rr": 0.61
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.15,
+        "tp3_rr": 0.44
       },
       "ml": {
         "signal": "Buy",
@@ -2971,13 +2971,13 @@
         "entry_price": 45.31,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 41.269,
+        "stop_loss": 39.697,
         "tp1": 45.763,
         "tp2": 46.216,
         "tp3": 48.029,
-        "tp1_rr": 0.11,
-        "tp2_rr": 0.22,
-        "tp3_rr": 0.67
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.16,
+        "tp3_rr": 0.48
       },
       "ml": {
         "signal": "Buy",
@@ -2988,7 +2988,7 @@
       },
       "intraday": {
         "score": 63.8,
-        "volume_skew": 0.525,
+        "volume_skew": 0.528,
         "momentum": 52.7,
         "vwap_score": 76.4,
         "ad_signal": "neutral",
@@ -3092,13 +3092,13 @@
         "entry_price": 18.2,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 16.826,
+        "stop_loss": 16.291,
         "tp1": 18.382,
         "tp2": 18.564,
         "tp3": 19.292,
-        "tp1_rr": 0.13,
-        "tp2_rr": 0.26,
-        "tp3_rr": 0.79
+        "tp1_rr": 0.1,
+        "tp2_rr": 0.19,
+        "tp3_rr": 0.57
       },
       "ml": {
         "signal": "Buy",
@@ -3116,11 +3116,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -3226,15 +3226,15 @@
       },
       "trade_plan": {
         "entry_price": 23.45,
-        "entry_action": "BUY NOW",
-        "entry_source": "Current Price",
-        "stop_loss": 23.228,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 21.283,
         "tp1": 23.684,
         "tp2": 23.919,
-        "tp3": 24.425,
-        "tp1_rr": 1.06,
-        "tp2_rr": 2.11,
-        "tp3_rr": 4.39
+        "tp3": 24.857,
+        "tp1_rr": 0.11,
+        "tp2_rr": 0.22,
+        "tp3_rr": 0.65
       },
       "ml": {
         "signal": "Buy",
@@ -3369,13 +3369,13 @@
         "entry_price": 301.28,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 274.675,
+        "stop_loss": 264.328,
         "tp1": 304.293,
         "tp2": 307.306,
         "tp3": 319.357,
-        "tp1_rr": 0.11,
-        "tp2_rr": 0.23,
-        "tp3_rr": 0.68
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.16,
+        "tp3_rr": 0.49
       },
       "ml": {
         "signal": "Watch",
@@ -3515,13 +3515,13 @@
         "entry_price": 106.94,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 96.506,
+        "stop_loss": 92.449,
         "tp1": 108.009,
         "tp2": 109.079,
         "tp3": 113.356,
-        "tp1_rr": 0.1,
-        "tp2_rr": 0.2,
-        "tp3_rr": 0.61
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.15,
+        "tp3_rr": 0.44
       },
       "ml": {
         "signal": "Watch",
@@ -3561,7 +3561,7 @@
       "run_date": "2026-10-23",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -6.7% since Buy (14.48, last 60d) — momentum filter downgrades Strong Buy to Watch",
-      "score": 63.1,
+      "score": 63.09,
       "score_breakdown": {
         "trend": 26.0,
         "macd": 0.0,
@@ -3571,7 +3571,7 @@
         "support": 0.0,
         "vwap": 3.2,
         "volume_profile": 7.2,
-        "intraday": 9.36
+        "intraday": 9.35
       },
       "price": {
         "current_egp": 13.51,
@@ -3643,16 +3643,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 13.467,
-        "entry_action": "BUY NOW",
-        "entry_source": "EMA 20",
-        "stop_loss": 13.25,
-        "tp1": 13.602,
-        "tp2": 13.736,
-        "tp3": 14.2,
-        "tp1_rr": 0.62,
-        "tp2_rr": 1.24,
-        "tp3_rr": 3.38
+        "entry_price": 13.51,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 11.949,
+        "tp1": 13.645,
+        "tp2": 13.78,
+        "tp3": 14.321,
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.17,
+        "tp3_rr": 0.52
       },
       "ml": {
         "signal": "Buy",
@@ -3662,10 +3662,10 @@
         "high_price": 14.914
       },
       "intraday": {
-        "score": 62.4,
-        "volume_skew": 0.404,
+        "score": 62.3,
+        "volume_skew": 0.395,
         "momentum": 58.3,
-        "vwap_score": 65.6,
+        "vwap_score": 65.5,
         "ad_signal": "neutral",
         "ad_score": 0.0
       },
@@ -3777,13 +3777,13 @@
         "entry_price": 49.41,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 44.402,
+        "stop_loss": 42.454,
         "tp1": 49.904,
         "tp2": 50.398,
         "tp3": 52.375,
-        "tp1_rr": 0.1,
-        "tp2_rr": 0.2,
-        "tp3_rr": 0.59
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.14,
+        "tp3_rr": 0.43
       },
       "ml": {
         "signal": "Buy",
@@ -3920,16 +3920,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 10.968,
-        "entry_action": "BUY NOW",
-        "entry_source": "VP POC",
-        "stop_loss": 10.823,
-        "tp1": 11.078,
-        "tp2": 11.187,
-        "tp3": 11.503,
-        "tp1_rr": 0.76,
-        "tp2_rr": 1.51,
-        "tp3_rr": 3.69
+        "entry_price": 11.0,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 8.726,
+        "tp1": 11.11,
+        "tp2": 11.22,
+        "tp3": 11.66,
+        "tp1_rr": 0.05,
+        "tp2_rr": 0.1,
+        "tp3_rr": 0.29
       },
       "ml": {
         "signal": "Avoid",
@@ -4066,16 +4066,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 1235.829,
-        "entry_action": "BUY NOW",
-        "entry_source": "Fib 38.2%",
-        "stop_loss": 1222.801,
-        "tp1": 1248.187,
-        "tp2": 1260.546,
-        "tp3": 1275.0,
-        "tp1_rr": 0.95,
-        "tp2_rr": 1.9,
-        "tp3_rr": 3.01
+        "entry_price": 1260.0,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 1059.208,
+        "tp1": 1272.6,
+        "tp2": 1285.2,
+        "tp3": 1335.6,
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.13,
+        "tp3_rr": 0.38
       },
       "ml": {
         "signal": "Buy",
@@ -4197,16 +4197,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 560.228,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "SMA 50",
-        "stop_loss": 545.798,
-        "tp1": 565.83,
-        "tp2": 571.433,
-        "tp3": 593.842,
-        "tp1_rr": 0.39,
-        "tp2_rr": 0.78,
-        "tp3_rr": 2.33
+        "entry_price": 590.26,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 528.102,
+        "tp1": 596.163,
+        "tp2": 602.065,
+        "tp3": 625.676,
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.19,
+        "tp3_rr": 0.57
       },
       "ml": {
         "signal": "Buy",
@@ -4217,9 +4217,9 @@
       },
       "intraday": {
         "score": 55.0,
-        "volume_skew": 0.132,
+        "volume_skew": 0.095,
         "momentum": 59.0,
-        "vwap_score": 51.0,
+        "vwap_score": 50.9,
         "ad_signal": "neutral",
         "ad_score": -0.2
       },
@@ -4324,15 +4324,15 @@
       },
       "trade_plan": {
         "entry_price": 10.07,
-        "entry_action": "BUY NOW",
-        "entry_source": "Current Price",
-        "stop_loss": 9.95,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 8.901,
         "tp1": 10.171,
         "tp2": 10.271,
-        "tp3": 10.562,
-        "tp1_rr": 0.84,
-        "tp2_rr": 1.68,
-        "tp3_rr": 4.1
+        "tp3": 10.674,
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.17,
+        "tp3_rr": 0.52
       },
       "ml": {
         "signal": "Buy",
@@ -4464,16 +4464,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 1.238,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "Support (Strong)",
-        "stop_loss": 1.198,
-        "tp1": 1.25,
-        "tp2": 1.263,
-        "tp3": 1.312,
-        "tp1_rr": 0.31,
-        "tp2_rr": 0.62,
-        "tp3_rr": 1.86
+        "entry_price": 1.29,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 1.037,
+        "tp1": 1.303,
+        "tp2": 1.316,
+        "tp3": 1.367,
+        "tp1_rr": 0.05,
+        "tp2_rr": 0.1,
+        "tp3_rr": 0.31
       },
       "ml": {
         "signal": "Avoid",
@@ -4595,16 +4595,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 4.954,
-        "entry_action": "BUY NOW",
-        "entry_source": "Fib 38.2%",
-        "stop_loss": 4.91,
-        "tp1": 5.004,
-        "tp2": 5.053,
-        "tp3": 5.097,
-        "tp1_rr": 1.13,
-        "tp2_rr": 2.25,
-        "tp3_rr": 3.25
+        "entry_price": 5.0,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 4.369,
+        "tp1": 5.05,
+        "tp2": 5.1,
+        "tp3": 5.3,
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.16,
+        "tp3_rr": 0.48
       },
       "ml": {
         "signal": "Avoid",
@@ -4719,13 +4719,13 @@
         "entry_price": 9.66,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 8.092,
+        "stop_loss": 7.483,
         "tp1": 9.757,
         "tp2": 9.853,
         "tp3": 10.24,
-        "tp1_rr": 0.06,
-        "tp2_rr": 0.12,
-        "tp3_rr": 0.37
+        "tp1_rr": 0.04,
+        "tp2_rr": 0.09,
+        "tp3_rr": 0.27
       },
       "ml": {
         "signal": "Avoid",
@@ -4743,11 +4743,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Trail Stop)",
+        "label": "2-10 days (Trail Stop)",
         "exit_strategy": "trail_stop",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 10,
+        "days_target": 9,
         "personalized": true
       },
       "patterns": {
@@ -4862,16 +4862,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 23.56,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "Support (Strong)",
-        "stop_loss": 22.865,
-        "tp1": 23.796,
-        "tp2": 24.031,
-        "tp3": 24.974,
-        "tp1_rr": 0.34,
-        "tp2_rr": 0.68,
-        "tp3_rr": 2.03
+        "entry_price": 25.15,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 22.355,
+        "tp1": 25.401,
+        "tp2": 25.653,
+        "tp3": 26.659,
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.18,
+        "tp3_rr": 0.54
       },
       "ml": {
         "signal": "Watch",
@@ -5001,13 +5001,13 @@
         "entry_price": 17.71,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 16.185,
+        "stop_loss": 15.592,
         "tp1": 17.887,
         "tp2": 18.064,
         "tp3": 18.773,
-        "tp1_rr": 0.12,
-        "tp2_rr": 0.23,
-        "tp3_rr": 0.7
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.17,
+        "tp3_rr": 0.5
       },
       "ml": {
         "signal": "Buy",
@@ -5137,13 +5137,13 @@
         "entry_price": 10.33,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 9.425,
+        "stop_loss": 9.073,
         "tp1": 10.433,
         "tp2": 10.537,
         "tp3": 10.95,
-        "tp1_rr": 0.11,
-        "tp2_rr": 0.23,
-        "tp3_rr": 0.68
+        "tp1_rr": 0.08,
+        "tp2_rr": 0.16,
+        "tp3_rr": 0.49
       },
       "ml": {
         "signal": "Buy",
@@ -5265,16 +5265,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 7.203,
-        "entry_action": "BUY NOW",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 6.994,
-        "tp1": 7.275,
-        "tp2": 7.347,
-        "tp3": 7.635,
-        "tp1_rr": 0.34,
-        "tp2_rr": 0.69,
-        "tp3_rr": 2.07
+        "entry_price": 7.31,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 6.472,
+        "tp1": 7.383,
+        "tp2": 7.456,
+        "tp3": 7.749,
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.17,
+        "tp3_rr": 0.52
       },
       "ml": {
         "signal": "Watch",
@@ -5414,13 +5414,13 @@
         "entry_price": 19.19,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 16.914,
+        "stop_loss": 16.029,
         "tp1": 19.382,
         "tp2": 19.574,
         "tp3": 20.341,
-        "tp1_rr": 0.08,
-        "tp2_rr": 0.17,
-        "tp3_rr": 0.51
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.12,
+        "tp3_rr": 0.36
       },
       "ml": {
         "signal": "Buy",
@@ -5537,16 +5537,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 19.486,
-        "entry_action": "BUY NOW",
-        "entry_source": "BB Lower Band",
-        "stop_loss": 19.245,
-        "tp1": 19.681,
-        "tp2": 19.876,
-        "tp3": 20.655,
-        "tp1_rr": 0.81,
-        "tp2_rr": 1.62,
-        "tp3_rr": 4.85
+        "entry_price": 19.76,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 18.216,
+        "tp1": 19.958,
+        "tp2": 20.155,
+        "tp3": 20.946,
+        "tp1_rr": 0.13,
+        "tp2_rr": 0.26,
+        "tp3_rr": 0.77
       },
       "ml": {
         "signal": "Buy",
@@ -5683,16 +5683,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 4.727,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "Fib 38.2%",
-        "stop_loss": 4.661,
-        "tp1": 4.774,
-        "tp2": 4.822,
-        "tp3": 5.031,
-        "tp1_rr": 0.72,
-        "tp2_rr": 1.43,
-        "tp3_rr": 4.61
+        "entry_price": 5.04,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 3.786,
+        "tp1": 5.09,
+        "tp2": 5.141,
+        "tp3": 5.342,
+        "tp1_rr": 0.04,
+        "tp2_rr": 0.08,
+        "tp3_rr": 0.24
       },
       "ml": {
         "signal": "Avoid",
@@ -5830,15 +5830,15 @@
       },
       "trade_plan": {
         "entry_price": 317.27,
-        "entry_action": "BUY NOW",
-        "entry_source": "Current Price",
-        "stop_loss": 312.666,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 246.009,
         "tp1": 320.443,
         "tp2": 323.615,
-        "tp3": 336.126,
-        "tp1_rr": 0.69,
-        "tp2_rr": 1.38,
-        "tp3_rr": 4.1
+        "tp3": 336.306,
+        "tp1_rr": 0.04,
+        "tp2_rr": 0.09,
+        "tp3_rr": 0.27
       },
       "ml": {
         "signal": "Buy",
@@ -5856,11 +5856,11 @@
         "ad_score": null
       },
       "holding": {
-        "label": "2-5 days (Quick Exit)",
+        "label": "2-6 days (Quick Exit)",
         "exit_strategy": "quick_exit",
         "days_min": 2,
-        "days_max": 5,
-        "days_target": 5,
+        "days_max": 6,
+        "days_target": 6,
         "personalized": true
       },
       "patterns": {
@@ -5970,16 +5970,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 9.89,
-        "entry_action": "BUY NOW",
-        "entry_source": "Support (Strong)",
-        "stop_loss": 9.638,
-        "tp1": 9.989,
-        "tp2": 10.088,
-        "tp3": 10.483,
-        "tp1_rr": 0.39,
-        "tp2_rr": 0.78,
-        "tp3_rr": 2.35
+        "entry_price": 10.0,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 8.315,
+        "tp1": 10.1,
+        "tp2": 10.2,
+        "tp3": 10.6,
+        "tp1_rr": 0.06,
+        "tp2_rr": 0.12,
+        "tp3_rr": 0.36
       },
       "ml": {
         "signal": "Watch",
@@ -6099,13 +6099,13 @@
         "entry_price": 7.17,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 6.46,
+        "stop_loss": 6.184,
         "tp1": 7.242,
         "tp2": 7.313,
         "tp3": 7.6,
-        "tp1_rr": 0.1,
-        "tp2_rr": 0.2,
-        "tp3_rr": 0.61
+        "tp1_rr": 0.07,
+        "tp2_rr": 0.15,
+        "tp3_rr": 0.44
       },
       "ml": {
         "signal": "Watch",
@@ -6237,16 +6237,16 @@
         ]
       },
       "trade_plan": {
-        "entry_price": 242.766,
-        "entry_action": "WAIT FOR PULLBACK",
-        "entry_source": "Fib 38.2%",
-        "stop_loss": 238.798,
-        "tp1": 245.194,
-        "tp2": 247.621,
-        "tp3": 257.449,
-        "tp1_rr": 0.61,
-        "tp2_rr": 1.22,
-        "tp3_rr": 3.7
+        "entry_price": 254.6,
+        "entry_action": "CHASE — NO CLEAN PULLBACK",
+        "entry_source": "Fallback (no clean setup)",
+        "stop_loss": 229.273,
+        "tp1": 257.146,
+        "tp2": 259.692,
+        "tp3": 269.876,
+        "tp1_rr": 0.1,
+        "tp2_rr": 0.2,
+        "tp3_rr": 0.6
       },
       "ml": {
         "signal": "Avoid",
@@ -6381,13 +6381,13 @@
         "entry_price": 22.16,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 20.305,
+        "stop_loss": 19.584,
         "tp1": 22.382,
         "tp2": 22.603,
         "tp3": 23.49,
-        "tp1_rr": 0.12,
-        "tp2_rr": 0.24,
-        "tp3_rr": 0.72
+        "tp1_rr": 0.09,
+        "tp2_rr": 0.17,
+        "tp3_rr": 0.52
       },
       "ml": {
         "signal": "Buy",
@@ -6427,7 +6427,7 @@
       "run_date": "2026-10-23",
       "recommendation": "Watch",
       "recommendation_basis": "No Buy votes, no Avoid — Watch",
-      "score": 50.78,
+      "score": 50.79,
       "score_breakdown": {
         "trend": 25.77,
         "macd": 0.0,
@@ -6437,7 +6437,7 @@
         "support": 0.0,
         "vwap": 3.2,
         "volume_profile": 5.4,
-        "intraday": 7.41
+        "intraday": 7.42
       },
       "price": {
         "current_egp": 840.0,
@@ -6475,13 +6475,13 @@
         "entry_price": 840.0,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 612.494,
+        "stop_loss": 524.02,
         "tp1": 848.4,
         "tp2": 856.8,
         "tp3": 890.4,
-        "tp1_rr": 0.04,
-        "tp2_rr": 0.07,
-        "tp3_rr": 0.22
+        "tp1_rr": 0.03,
+        "tp2_rr": 0.05,
+        "tp3_rr": 0.16
       },
       "ml": {
         "signal": "Watch",
@@ -6491,8 +6491,8 @@
         "high_price": null
       },
       "intraday": {
-        "score": 49.4,
-        "volume_skew": 0.218,
+        "score": 49.5,
+        "volume_skew": 0.225,
         "momentum": 53.0,
         "vwap_score": 30.9,
         "ad_signal": "neutral",
@@ -6621,13 +6621,13 @@
         "entry_price": 5.37,
         "entry_action": "CHASE — NO CLEAN PULLBACK",
         "entry_source": "Fallback (no clean setup)",
-        "stop_loss": 4.404,
+        "stop_loss": 4.029,
         "tp1": 5.424,
         "tp2": 5.477,
         "tp3": 5.692,
-        "tp1_rr": 0.06,
-        "tp2_rr": 0.11,
-        "tp3_rr": 0.33
+        "tp1_rr": 0.04,
+        "tp2_rr": 0.08,
+        "tp3_rr": 0.24
       },
       "ml": {
         "signal": "Buy",
