@@ -2721,7 +2721,7 @@
       },
       "intraday": {
         "score": 59.9,
-        "volume_skew": 0.742,
+        "volume_skew": 0.743,
         "momentum": 55.6,
         "vwap_score": 32.3,
         "ad_signal": "neutral",
@@ -2876,7 +2876,7 @@
       "run_date": "2026-10-23",
       "recommendation": "Buy",
       "recommendation_basis": "2/3 active agree Buy: Base, ML [EGX30 Bearish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
-      "score": 62.16,
+      "score": 62.17,
       "score_breakdown": {
         "trend": 23.02,
         "macd": 0.0,
@@ -2886,7 +2886,7 @@
         "support": 6.4,
         "vwap": 4.8,
         "volume_profile": 5.4,
-        "intraday": 9.57
+        "intraday": 9.59
       },
       "price": {
         "current_egp": 45.31,
@@ -2987,10 +2987,10 @@
         "high_price": 49.537
       },
       "intraday": {
-        "score": 63.8,
-        "volume_skew": 0.528,
+        "score": 63.9,
+        "volume_skew": 0.531,
         "momentum": 52.7,
-        "vwap_score": 76.4,
+        "vwap_score": 76.5,
         "ad_signal": "neutral",
         "ad_score": -0.2
       },
@@ -3561,7 +3561,7 @@
       "run_date": "2026-10-23",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -6.7% since Buy (14.48, last 60d) — momentum filter downgrades Strong Buy to Watch",
-      "score": 63.09,
+      "score": 63.1,
       "score_breakdown": {
         "trend": 26.0,
         "macd": 0.0,
@@ -3571,7 +3571,7 @@
         "support": 0.0,
         "vwap": 3.2,
         "volume_profile": 7.2,
-        "intraday": 9.35
+        "intraday": 9.36
       },
       "price": {
         "current_egp": 13.51,
@@ -3662,10 +3662,10 @@
         "high_price": 14.914
       },
       "intraday": {
-        "score": 62.3,
-        "volume_skew": 0.395,
+        "score": 62.4,
+        "volume_skew": 0.404,
         "momentum": 58.3,
-        "vwap_score": 65.5,
+        "vwap_score": 65.6,
         "ad_signal": "neutral",
         "ad_score": 0.0
       },
@@ -4217,9 +4217,9 @@
       },
       "intraday": {
         "score": 55.0,
-        "volume_skew": 0.095,
+        "volume_skew": 0.132,
         "momentum": 59.0,
-        "vwap_score": 50.9,
+        "vwap_score": 51.0,
         "ad_signal": "neutral",
         "ad_score": -0.2
       },
