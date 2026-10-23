@@ -135,6 +135,10 @@ SIGNAL_SCHEMA = pa.schema([
     ("min_price", pa.float64()),
     ("pnl_pct", pa.float64()),
     ("exit_price", pa.float64()),
+    # Outcome simulation model that produced the row:
+    # "legacy" (pre-2026-10-10 next-open fills) or "limit_entry" (first-touch).
+    # KPIs must exclude "legacy" — two models mixed in one series is noise.
+    ("sim_model", pa.string()),
 ])
 
 # ─────────────────────────────────────────────────────────────
@@ -518,6 +522,10 @@ def update_outcomes(horizon_days: int = 21, cost_bps: float = 10.0,
     for col in outcome_cols:
         if col in updated.columns:
             df.loc[updated.index, col] = updated[col]
+
+    # Tag rows produced by the current (limit-entry first-touch) model so
+    # reports can exclude legacy-model rows from KPIs.
+    df.loc[updated.index, "sim_model"] = "limit_entry"
 
     # Write back
     table = pa.Table.from_pandas(df, schema=SIGNAL_SCHEMA)

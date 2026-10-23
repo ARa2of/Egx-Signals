@@ -1249,6 +1249,34 @@ def _get_ta_timestamp(rows):
         return max(timestamps)
     return "N/A"
 
+def _episode_trades(signal_store, holding_days: int = 21):
+    """Tradeable KPI rows: Buy/Strong Buy only, one trade per ticker-episode.
+
+    - Watch/Avoid rows are never trades (they poison every KPI).
+    - Rows produced by the legacy next-open simulation (sim_model == "legacy")
+      are excluded; only limit-entry first-touch rows count.
+    - Daily re-signals of the same position (Buy again within holding_days of
+      the kept signal) are duplicates of one episode — first Buy wins.
+    """
+    import pandas as pd
+    if signal_store is None or signal_store.empty:
+        return signal_store
+    out = signal_store[signal_store["recommendation"].isin(["Buy", "Strong Buy"])].copy()
+    if "sim_model" in out.columns:
+        out = out[out["sim_model"] != "legacy"]
+    if out.empty:
+        return out
+    out = out.sort_values(["ticker", "run_date"])
+    keep_idx, last_run = [], {}
+    for idx, r in out.iterrows():
+        rd = r["run_date"]
+        rd = rd.date() if hasattr(rd, "date") else rd
+        prev = last_run.get(r["ticker"])
+        if prev is None or (rd - prev).days > holding_days:
+            keep_idx.append(idx)
+            last_run[r["ticker"]] = rd
+    return out.loc[keep_idx]
+
 # ─────────────────────────────────────────────────────────────
 # Weekly Performance Dashboard
 # ─────────────────────────────────────────────────────────────
@@ -1317,9 +1345,9 @@ def _build_dashboard_html(signal_store) -> str:
 
     # ── Buy Signal Performance (trade outcome tracking) ──
     from datetime import timedelta
-    buys = signal_store[signal_store["recommendation"].isin(["Buy", "Strong Buy"])].copy()
-    buy_perf_html = ""
     HOLDING_DAYS = 21  # Max holding period before time exit (backtest optimal)
+    buys = _episode_trades(signal_store, HOLDING_DAYS).copy()
+    buy_perf_html = ""
 
     if not buys.empty:
         from datetime import timedelta, date as _date
@@ -1777,8 +1805,22 @@ def _build_dashboard_html(signal_store) -> str:
 
             buy_perf_html = f"{buy_perf_summary}{buy_perf_table}{score_cal_table}{top_tickers_html}{monthly_perf_html}"
 
-    # Filter to signals with real outcomes
-    evaluated = signal_store[has_outcome].copy()
+    # Filter to signals with real outcomes. KPIs only count tradeable Buy /
+    # Strong Buy episodes under the current simulation model — Watch/Avoid
+    # rows and legacy-model rows are reference data, not trades.
+    ref_mask = (
+        has_outcome
+        & ~signal_store["recommendation"].isin(["Buy", "Strong Buy"])
+    )
+    n_ref = int(ref_mask.sum())
+    evaluated = _episode_trades(signal_store)
+    evaluated = evaluated[has_outcome.loc[evaluated.index]].copy()
+    ref_html = ""
+    if n_ref > 0:
+        ref_html = f"""
+    <div style="color:#8b8fa3;font-size:11px;padding:6px 0;">
+      Excluded from KPIs: {n_ref} Watch/Avoid rows (never traded) + legacy-model rows (pre-2026-10-10 simulation). Reference only.
+    </div>"""
 
     if evaluated.empty:
         if pending_html:
@@ -1934,6 +1976,7 @@ def _build_dashboard_html(signal_store) -> str:
   {stale_entries}
   {buy_perf_html}
   {summary_html}
+  {ref_html}
   {chart_html}
   <div class="dash-grid">
     <div>
