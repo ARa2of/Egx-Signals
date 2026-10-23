@@ -402,8 +402,6 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
             outcome = "expired"
             exit_i = len(trade_df) - 1
             exit_price = float(trade_df["Close"].iloc[-1])
-            max_p = float(trade_df["High"].max())
-            min_p = float(trade_df["Low"].min())
 
             # First-touch walk: SL and TPs are checked bar-by-bar in time
             # order. Whichever level is touched first determines the outcome.
@@ -428,11 +426,30 @@ def simulate_outcomes(trades: pd.DataFrame, horizon_days: int = 21,
                     exit_price = min(sl, float(stop_open)) if not pd.isna(stop_open) else sl
                     exit_i = i
                     break
+
+                # Knife-day rule (fill bar only): the limit filled on a down
+                # day that closed BELOW the limit and never touched the stop.
+                # That dip is broken — exit at the close instead of hoping.
+                if i == fill_i:
+                    fill_close = trade_df["Close"].iloc[i]
+                    if not pd.isna(fill_close) and float(fill_close) < entry:
+                        outcome = "knife_exit"
+                        exit_price = float(fill_close)
+                        exit_i = i
+                        break
+
                 if tp_hit_idx is not None:
                     outcome = f"tp{tp_hit_idx+1}_hit"
                     exit_price = tps[tp_hit_idx]
                     exit_i = i
                     break
+
+            # MFE/MAE over the HOLDING period only (bars up to the exit),
+            # not the full download window — post-exit moves are not the
+            # trade's excursion.
+            held = trade_df.iloc[:exit_i + 1]
+            max_p = float(held["High"].max())
+            min_p = float(held["Low"].min())
 
             # No touch at all: still open if the horizon hasn't elapsed yet.
             horizon_elapsed = (len(trade_df) >= horizon_days or

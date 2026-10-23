@@ -13,6 +13,7 @@ Cases:
   E) no touch within full horizon -> expired at horizon close
   F) limit never filled -> no_entry
   G) horizon not elapsed -> pending with mark-to-market fields
+  H) knife day: fill bar closes below limit without touching SL -> knife_exit at close
 """
 import sys
 import types
@@ -36,7 +37,9 @@ def frame(run_dt, rows):
          "Low": [r[2] for r in rows], "Close": [r[3] for r in rows]},
         index=pd.DatetimeIndex(idx))
 
-A_dt, B_dt, C_dt, D_dt, E_dt, F_dt, G_dt = [today - timedelta(days=10)] * 6 + [today - timedelta(days=3)]
+A_dt, B_dt, C_dt, D_dt, E_dt, F_dt, G_dt, H_dt = (
+    [today - timedelta(days=10)] * 6 + [today - timedelta(days=3), today - timedelta(days=10)]
+)
 
 FRAMES = {
     # A: day1 no fill (low 108 > 100); day2 low 99 fills at 100, high 101.5 -> TP1 (101)
@@ -47,12 +50,14 @@ FRAMES = {
     "TSTC.CA": frame(C_dt, [(90, 92, 88, 91)]),
     # D: bar1 fill no TP; bar2 high 103.5 -> TP2 (103)
     "TSTD.CA": frame(D_dt, [(100, 100.5, 98, 100), (101, 103.5, 100.5, 103)]),
-    # E: 5 bars, fill bar1, no touch ever
-    "TSTE.CA": frame(E_dt, [(99, 100.5, 97, 99)] * 5),
+    # E: 5 bars, fill bar1 (closes above the limit — not a knife day), no touch ever
+    "TSTE.CA": frame(E_dt, [(99, 100.5, 97, 100.2)] + [(99, 100.5, 97, 99)] * 4),
     # F: limit never filled (all lows above 100)
     "TSTF.CA": frame(F_dt, [(108, 110, 105, 109)] * 3),
     # G: 2 bars, fill, no touch, horizon (5d) not elapsed
     "TSTG.CA": frame(G_dt, [(99, 100.5, 98, 100), (99, 100, 98, 99.5)]),
+    # H: knife day — fills at 99.5, never touches SL 94, closes 96 < limit 100
+    "TSTH.CA": frame(H_dt, [(99.5, 100.2, 99, 96)]),
 }
 
 fake_yf = types.ModuleType("yfinance")
@@ -67,6 +72,7 @@ trades = pd.DataFrame([
     dict(ticker="TSTE", run_date=E_dt, entry_price=100.0, stop_loss=94.0, tp1=101.0, tp2=103.0, tp3=106.0),
     dict(ticker="TSTF", run_date=F_dt, entry_price=100.0, stop_loss=94.0, tp1=101.0, tp2=103.0, tp3=106.0),
     dict(ticker="TSTG", run_date=G_dt, entry_price=100.0, stop_loss=94.0, tp1=101.0, tp2=103.0, tp3=106.0),
+    dict(ticker="TSTH", run_date=H_dt, entry_price=100.0, stop_loss=94.0, tp1=101.0, tp2=103.0, tp3=106.0),
 ])
 
 out = simulate_outcomes(trades, horizon_days=H).set_index("ticker")
@@ -121,6 +127,15 @@ chk("G outcome pending", g["outcome"] == "pending", g["outcome"])
 chk("G entry fields recorded", g["entry_date"] is not None and abs(g["entry_price_actual"] - 99.0) < 1e-6,
     (g["entry_date"], g["entry_price_actual"]))
 chk("G exit_price = mark close 99.5", abs(g["exit_price"] - 99.5) < 1e-6, g["exit_price"])
+
+# H: knife day — closed below the limit, stop never touched
+h = out.loc["TSTH"]
+chk("H outcome knife_exit", h["outcome"] == "knife_exit", h["outcome"])
+chk("H exit = close 96", abs(h["exit_price"] - 96.0) < 1e-6, h["exit_price"])
+chk("H hold = 0 bars", h["hold_days"] == 0, h["hold_days"])
+# fill at min(open 99.5, limit 100) = 99.5; pnl = (96-99.5)/99.5 - costs
+chk("H actual entry = open 99.5", abs(h["entry_price_actual"] - 99.5) < 1e-6, h["entry_price_actual"])
+chk("H pnl ~ -3.67%", abs(h["pnl_pct"] + 3.67) < 0.02, h["pnl_pct"])
 
 ok = True
 for name, passed, detail in checks:

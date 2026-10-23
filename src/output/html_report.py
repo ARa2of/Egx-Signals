@@ -388,6 +388,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   .outcome-badge.tp2 {{ background: rgba(34,197,94,0.25); color: #22c55e; }}
   .outcome-badge.tp3 {{ background: rgba(34,197,94,0.35); color: #16a34a; }}
   .outcome-badge.sl {{ background: rgba(239,68,68,0.15); color: #ef4444; }}
+  .outcome-badge.knife {{ background: rgba(249,115,22,0.18); color: #f97316; }}
   .outcome-badge.expired {{ background: rgba(139,143,163,0.15); color: #8b8fa3; }}
   .outcome-badge.pending {{ background: rgba(234,179,8,0.15); color: #eab308; }}
   .dash-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
@@ -1386,7 +1387,8 @@ def _build_dashboard_html(signal_store) -> str:
             stored_outcome = sig.get("outcome")
             stored_outcome = stored_outcome if isinstance(stored_outcome, str) else ""
             _omap = {"tp1_hit": "tp1", "tp2_hit": "tp2", "tp3_hit": "tp3",
-                     "stop_loss": "stop_loss", "expired": "time_exit"}
+                     "stop_loss": "stop_loss", "expired": "time_exit",
+                     "knife_exit": "knife"}
             if stored_outcome == "no_entry":
                 # Limit entry never filled inside the horizon — not a trade.
                 perf_rows.append({
@@ -1558,6 +1560,9 @@ def _build_dashboard_html(signal_store) -> str:
                     cls = "green"
                 elif r["exit_reason"] == "stop_loss":
                     badge = '<span class="outcome-badge sl">SL</span>'
+                    cls = "red"
+                elif r["exit_reason"] == "knife":
+                    badge = '<span class="outcome-badge knife">KNIFE</span>'
                     cls = "red"
                 elif r["exit_reason"] == "time_exit":
                     badge = '<span class="outcome-badge expired">TIME</span>'

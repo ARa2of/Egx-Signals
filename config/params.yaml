@@ -1,7 +1,7 @@
 # EGX Signal Generator Parameters
 # Versioned config — update version when params change
-version: "v2.3"
-updated: "2026-10-07"
+version: "v2.4"
+updated: "2026-10-23"
 description: "Core scoring and trade plan parameters"
 
 # ─────────────────────────────────────────────────────────────
@@ -87,7 +87,9 @@ volume:
 # TRADE PLAN (ATR-based)
 # ─────────────────────────────────────────────────────────────
 trade:
-  stop_loss_atr: 1.8
+  stop_loss_atr: 2.5
+  min_stop_distance_pct: 4.0
+  min_tradeable_score: 60
   target_atr: 3.0
   max_entry_discount: 0.10
   max_entry_distance_pct: 0.08
@@ -95,7 +97,7 @@ trade:
   min_rr: 3.0
   atr_zone_half: 0.30
   max_wait_atr: 3.5
-  max_stop_atr: 3.0
+  max_stop_atr: 4.0
   proximity_penalty_per_atr: 6
   tp1_pct: 1.0
   tp2_pct: 2.0

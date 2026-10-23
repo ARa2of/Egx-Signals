@@ -826,6 +826,16 @@ def run_daily_analysis(input_file: str, output_dir: str = "output") -> List[Dict
             if consensus_rec in ("Buy", "Strong Buy") and idx_sent not in ("Unknown", None):
                 consensus_basis += f" [{idx_label_mkt} {idx_sent}]"
 
+            # ── Tradeable Score Floor (v2.4) ──
+            # Buys below this score historically won 19% (-0.62R). Keep the
+            # direction signal but as Watch — not tradeable.
+            _floor = params["trade"].get("min_tradeable_score", 0)
+            if _floor and consensus_rec in ("Buy", "Strong Buy") and score_val < _floor:
+                _old_rec = consensus_rec
+                consensus_rec = "Watch"
+                consensus_basis = (f"Score {score_val:.1f} < tradeable floor {_floor} "
+                                   f"— {_old_rec} shown as Watch")
+
             # ── RSI Overbought Hard Cap (v2.2: regime-mapped + ADX-aware) ──
             rsi_cfg = params.get("rsi", {})
             regime_key = regime.get("regime", "ranging")

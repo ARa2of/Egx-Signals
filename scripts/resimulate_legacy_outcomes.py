@@ -45,8 +45,10 @@ def main():
         df["sim_model"] = None
 
     legacy = df["sim_model"] == "legacy"
-    # Rows with a usable trade plan can be re-walked under the new model
-    reeval = legacy & df["entry_price"].notna() & df["stop_loss"].notna()
+    # --all: re-walk every row with a trade plan (used when the sim model
+    # itself is refined, e.g. the knife-day rule) so the store stays one model.
+    all_rows = "--all" in sys.argv
+    reeval = (df["entry_price"].notna() & df["stop_loss"].notna()) & (legacy | all_rows)
     n_skip = int((legacy & ~reeval).sum())
     todo = df[reeval].copy()
 

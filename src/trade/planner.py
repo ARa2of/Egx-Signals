@@ -17,6 +17,7 @@ enhanced_cfg = params["enhanced_entry"]
 # Constants
 # ─────────────────────────────────────────────────────────────
 ATR_STOP_MULTIPLIER = trade_cfg["stop_loss_atr"]
+MIN_STOP_DISTANCE_PCT = trade_cfg.get("min_stop_distance_pct", 4.0)
 ATR_ZONE_HALF = trade_cfg["atr_zone_half"]
 MAX_STOP_ATR = trade_cfg["max_stop_atr"]
 MAX_WAIT_ATR = trade_cfg["max_wait_atr"]
@@ -59,8 +60,15 @@ def _nearest_resistance_above(price: float, sr: Dict) -> Optional[float]:
     above = [r["price"] for r in sr.get("resistance", []) if r["price"] > price]
     return min(above) if above else None
 
+def _floored_stop_dist(anchor: float, atr: float) -> float:
+    """Minimum stop distance: at least stop_loss_atr × ATR, and at least
+    min_stop_distance_pct of price. Tighter stops die to single-session
+    noise — 39% of historical losers were stopped on the fill bar itself."""
+    return max(ATR_STOP_MULTIPLIER * atr, anchor * MIN_STOP_DISTANCE_PCT / 100.0)
+
 def _stop_below(candidate: float, atr: float, sr: Dict) -> float:
-    atr_stop = candidate - ATR_STOP_MULTIPLIER * atr
+    floor_dist = _floored_stop_dist(candidate, atr)
+    atr_stop = candidate - floor_dist
     max_stop = candidate - MAX_STOP_ATR * atr
 
     strong = [s for s in sr.get("support", [])
@@ -70,9 +78,12 @@ def _stop_below(candidate: float, atr: float, sr: Dict) -> float:
     if strong:
         best_sup = max(strong, key=lambda s: s["price"])["price"]
         sup_stop = best_sup * 0.992
-        return max(sup_stop, atr_stop)
+        stop = max(sup_stop, atr_stop)
+    else:
+        stop = atr_stop
 
-    return atr_stop
+    # Support stops tighter than the floor are noise magnets — enforce it.
+    return min(stop, candidate - floor_dist)
 
 # ─────────────────────────────────────────────────────────────
 # Candidate Scoring
@@ -305,7 +316,7 @@ def compute_entry_zone(indic: Dict, sr: Dict, fib: Dict, forecast: Dict,
             scored.append(result)
 
     if not scored:
-        atr_stop = last_price - ATR_STOP_MULTIPLIER * atr
+        atr_stop = last_price - _floored_stop_dist(last_price, atr)
         nearest_r = _nearest_resistance_above(last_price, sr)
         risk = last_price - atr_stop
         reward = (nearest_r - last_price) if nearest_r else atr
@@ -844,6 +855,12 @@ def build_trade_plan(df_tech: pd.DataFrame, sr: Dict, fib: Dict, forecast: Dict,
         stop["stop_price"] = round(adjusted_stop, 3)
         if "method" in stop:
             stop["method"] += f" ({stop_adjustment:.0%} intraday adj)"
+
+    # Guard: stop must sit below entry (gap fills can invert the levels)
+    if stop.get("stop_price", 0) >= entry["entry_ideal"]:
+        fallback_stop = entry["entry_ideal"] - _floored_stop_dist(entry["entry_ideal"], indic["atr"])
+        stop = compute_stop_loss(entry["entry_ideal"], fallback_stop, indic["atr"], sr)
+        stop["method"] = "ATR floor (guard: support stop above entry)"
 
     tps = compute_take_profits(entry["entry_ideal"], stop["stop_price"], forecast, sr, fib, last_price=last_price)
     pos = compute_position_size(capital, entry["entry_ideal"], stop["stop_price"], risk_pct)

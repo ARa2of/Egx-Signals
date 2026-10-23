@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 def consensus(base_rec, ml_conv, cs_signal, cs_conf, candle, entry_action,
               entry_source="", strong=None, adx=30, golden=True, diamond=True,
-              macd_bull=True, death=False, idx_sent=None):
+              macd_bull=True, death=False, idx_sent=None, score=70.0, floor=60):
     ml_rec = "Buy" if ml_conv >= 35 else ("Watch" if ml_conv >= 20 else "Avoid")
 
     # ChartScan sanitize (mirrors daily_run)
@@ -64,6 +64,11 @@ def consensus(base_rec, ml_conv, cs_signal, cs_conf, candle, entry_action,
         rec = "Watch"
         basis += "; index Bearish gate"
 
+    # Tradeable score floor (v2.4, mirrors daily_run)
+    if floor and score < floor and rec in ("Buy", "Strong Buy"):
+        rec = "Watch"
+        basis = f"score {score} < floor {floor}"
+
     # Entry override
     ea = entry_action.upper()
     src = entry_source.upper()
@@ -101,6 +106,9 @@ cases = [
     # BULLIDX: identical setup but Bullish index keeps the single-Buy upgrade -> Buy
     dict(label="BULLIDX", base_rec="Buy", ml_conv=30, cs_signal="Neutral", cs_conf=0.35,
          candle="neutral", entry_action="BUY NOW", adx=22, strong=False, idx_sent="Bullish"),
+    # LOWSC (v2.4): strong technicals but score below tradeable floor -> Watch
+    dict(label="LOWSC", base_rec="Buy", ml_conv=50, cs_signal="Buy", cs_conf=0.60,
+         candle="bullish", entry_action="BUY NOW", adx=40, strong=True, score=55),
 ]
 
 print(f"{'case':8} {'final':10} {'ml_rec':8} {'cs_rec':8} basis")
@@ -117,6 +125,8 @@ for c in cases:
     if c["label"] == "MBSC":
         ok = ok and rec == "Buy" and cs_rec != "Avoid"
         print(f"         MBSC chartscan after sanitize: {cs_raw}")
+    if c["label"] == "LOWSC":
+        ok = ok and rec == "Watch"
     if c["label"] == "BEARIDX":
         ok = ok and rec == "Watch"
         print(f"         BEARIDX gate: {basis}")
