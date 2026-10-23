@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
-"""Verify fixed scoring/consensus on ETEL-like uptrend names.
+"""Verify scoring/consensus consistency on live ETEL data.
 
-Replays the daily_run scoring path (yfinance bars + enrich + compute_base_score
-+ consensus) against live ETEL.CA data and prints the vote breakdown.
+State-aware — there is NO assumption that ETEL is always Buy:
+  - Strong-uptrend state (golden+diamond+ADX>=30+MACD bullish+base Buy):
+    the invariant applies — consensus must stay Buy even with ML Avoid.
+  - Any other state (e.g. MACD rolled over, base Watch/Avoid): the engine
+    must reflect the actual state and must NOT force a Buy.
+
+The synthetic strong-uptrend invariant itself is covered by
+scripts/test_consensus_cases.py (ETEL case).
 """
 import sys
 from pathlib import Path
@@ -231,7 +237,15 @@ if __name__ == "__main__":
     print(f"Buy/Strong Buy from sample: {buys or 'NONE'}")
     etel = next((r for r in results if r["ticker"] == "ETEL"), None)
     if etel:
-        ok = etel["consensus"] in ("Buy", "Strong Buy")
-        print(f"ETEL verification: {'PASS' if ok else 'FAIL'} -> {etel['consensus']}")
+        if etel["strong_technicals"]:
+            ok = etel["consensus"] in ("Buy", "Strong Buy")
+            note = "strong-uptrend state — invariant: stays Buy despite ML Avoid"
+        else:
+            # Not a strong uptrend today (e.g. MACD bearish, no golden/diamond).
+            # The engine must follow the votes, not force a Buy.
+            ok = etel["consensus"] != "Strong Buy" and not (
+                etel["consensus"] == "Buy" and etel["base_rec"] == "Avoid")
+            note = "non-uptrend state — no forced Buy"
+        print(f"ETEL verification: {'PASS' if ok else 'FAIL'} -> {etel['consensus']} ({note})")
         sys.exit(0 if ok else 1)
     sys.exit(2)
