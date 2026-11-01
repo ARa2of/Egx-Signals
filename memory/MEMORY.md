@@ -14,6 +14,7 @@ This file stores important information that should persist across sessions.
 - `src\trade\planner.py` — ATR entries/stops/targets, `compute_signal_score`, `compute_ml_conviction`
 - `src\signals\chartscan.py` — YOLOv8 chart-pattern votes; `src\output\html_report.py` / `agent_json.py` — outputs
 - `src\store\signal_store.py` — signal history store; trade-outcome updates (`update_outcomes`, `simulate_outcomes`)
+- Report charts are client-side **Plotly.js 2.27.0** (CDN, loaded in `html_report.py`) — per-ticker charts + Weekly Performance Trend; matplotlib is not used
 - Consensus ladder, ChartScan gates, verification and git runbooks: `skills\egx-signals\SKILL.md`
 
 ### v2.3 engine decisions (landed 2026-10-07/08, supersede v2.2)
