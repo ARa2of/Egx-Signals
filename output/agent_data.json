@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-11-12",
+    "generated": "2026-11-13",
     "source": "EGX Signal Generator",
     "version": "v2.5",
     "description": "Structured signal data for AI agent consumption"
@@ -8,9 +8,9 @@
   "summary": {
     "total_stocks": 49,
     "recommendations": {
-      "Strong Buy": 9,
-      "Watch": 26,
-      "Buy": 5,
+      "Strong Buy": 11,
+      "Watch": 25,
+      "Buy": 4,
       "Avoid": 9
     },
     "avg_score": 57.0,
@@ -22,6 +22,7 @@
       "SCEM",
       "ARAB",
       "ENGC",
+      "OCDI",
       "ETEL",
       "JUFO",
       "EGAL",
@@ -38,7 +39,6 @@
       "COPR",
       "GGCC",
       "MASR",
-      "OCDI",
       "ORHD",
       "PHDC",
       "RREI",
@@ -75,7 +75,7 @@
   "stocks": [
     {
       "ticker": "ADIB",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 70.6,
@@ -216,7 +216,7 @@
     },
     {
       "ticker": "SAUD",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -8.5% since Buy (24.58, last 60d) — momentum filter downgrades Strong Buy to Watch",
       "score": 62.04,
@@ -357,7 +357,7 @@
     },
     {
       "ticker": "ARCC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 61.95,
@@ -503,7 +503,7 @@
     },
     {
       "ticker": "MCQE",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 47.99,
@@ -649,7 +649,7 @@
     },
     {
       "ticker": "SCEM",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 67.54,
@@ -785,7 +785,7 @@
     },
     {
       "ticker": "AMER",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 48.28,
@@ -931,7 +931,7 @@
     },
     {
       "ticker": "ARAB",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 65.92,
@@ -1072,7 +1072,7 @@
     },
     {
       "ticker": "COPR",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 46.87,
@@ -1218,7 +1218,7 @@
     },
     {
       "ticker": "ENGC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 68.91,
@@ -1364,7 +1364,7 @@
     },
     {
       "ticker": "GGCC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 43.69,
@@ -1495,7 +1495,7 @@
     },
     {
       "ticker": "MASR",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -11.8% since Buy (7.86, last 60d) — momentum filter downgrades Strong Buy to Watch",
       "score": 61.52,
@@ -1631,7 +1631,7 @@
     },
     {
       "ticker": "OBRI",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 40.16,
@@ -1772,9 +1772,9 @@
     },
     {
       "ticker": "OCDI",
-      "run_date": "2026-11-12",
-      "recommendation": "Watch",
-      "recommendation_basis": "Price dropped -14.7% since Buy (30.50, last 60d) — momentum filter downgrades Strong Buy to Watch",
+      "run_date": "2026-11-13",
+      "recommendation": "Strong Buy",
+      "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 60.53,
       "score_breakdown": {
         "trend": 10.62,
@@ -1918,7 +1918,7 @@
     },
     {
       "ticker": "ORHD",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 40.66,
@@ -2059,7 +2059,7 @@
     },
     {
       "ticker": "PHDC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 49.34,
@@ -2205,7 +2205,7 @@
     },
     {
       "ticker": "RREI",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 37.57,
@@ -2331,7 +2331,7 @@
     },
     {
       "ticker": "ZMID",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 56.9,
@@ -2472,7 +2472,7 @@
     },
     {
       "ticker": "LCSW",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 67.78,
@@ -2592,7 +2592,7 @@
     },
     {
       "ticker": "EFIH",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 62.73,
@@ -2718,7 +2718,7 @@
     },
     {
       "ticker": "ETEL",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 74.42,
@@ -2736,7 +2736,7 @@
       "price": {
         "current_egp": 133.0,
         "current_usd": 2.5069,
-        "fair_value_egp": 474.0481,
+        "fair_value_egp": 519.5848,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -2864,7 +2864,7 @@
     },
     {
       "ticker": "RACC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 48.46,
@@ -3000,7 +3000,7 @@
     },
     {
       "ticker": "MFPC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 37.72,
@@ -3146,7 +3146,7 @@
     },
     {
       "ticker": "EFID",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Score 57.2 < tradeable floor 60 — Buy shown as Watch",
       "score": 57.22,
@@ -3272,7 +3272,7 @@
     },
     {
       "ticker": "JUFO",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 61.18,
@@ -3418,9 +3418,9 @@
     },
     {
       "ticker": "EGAL",
-      "run_date": "2026-11-12",
-      "recommendation": "Buy",
-      "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
+      "run_date": "2026-11-13",
+      "recommendation": "Strong Buy",
+      "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 63.52,
       "score_breakdown": {
         "trend": 16.67,
@@ -3530,11 +3530,11 @@
         "tp3_rr": 1.5
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 25.0,
-        "medium_price": 328.702,
-        "low_price": 301.544,
-        "high_price": 370.773
+        "signal": "Buy",
+        "confidence": 38.0,
+        "medium_price": 326.857,
+        "low_price": 306.49,
+        "high_price": 345.89
       },
       "intraday": {
         "score": 59.0,
@@ -3564,7 +3564,7 @@
     },
     {
       "ticker": "SWDY",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 66.93,
@@ -3678,9 +3678,9 @@
       "ml": {
         "signal": "Avoid",
         "confidence": 18.0,
-        "medium_price": 122.527,
-        "low_price": 114.832,
-        "high_price": 128.483
+        "medium_price": 121.792,
+        "low_price": 114.486,
+        "high_price": 129.189
       },
       "intraday": {
         "score": 55.4,
@@ -3710,7 +3710,7 @@
     },
     {
       "ticker": "AMOC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 49.59,
@@ -3856,7 +3856,7 @@
     },
     {
       "ticker": "EGAS",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 61.39,
@@ -4002,7 +4002,7 @@
     },
     {
       "ticker": "ZEOT",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 67.46,
@@ -4148,7 +4148,7 @@
     },
     {
       "ticker": "AXPH",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -12.3% since Buy (1691.79, last 60d) — momentum filter downgrades Strong Buy to Watch",
       "score": 63.83,
@@ -4294,7 +4294,7 @@
     },
     {
       "ticker": "CPCI",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Score 55.9 < tradeable floor 60 — Buy shown as Watch",
       "score": 55.92,
@@ -4430,7 +4430,7 @@
     },
     {
       "ticker": "ISPH",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 34.42,
@@ -4571,7 +4571,7 @@
     },
     {
       "ticker": "MCRO",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 71.97,
@@ -4717,7 +4717,7 @@
     },
     {
       "ticker": "RMDA",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Score 59.6 < tradeable floor 60 — Buy shown as Watch",
       "score": 59.64,
@@ -4735,7 +4735,7 @@
       "price": {
         "current_egp": 5.68,
         "current_usd": 0.1049,
-        "fair_value_egp": 3.7658,
+        "fair_value_egp": 3.7227,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
@@ -4863,7 +4863,7 @@
     },
     {
       "ticker": "POUL",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 61.42,
@@ -4994,7 +4994,7 @@
     },
     {
       "ticker": "ORWE",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 61.44,
@@ -5140,7 +5140,7 @@
     },
     {
       "ticker": "AMIA",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 57.61,
@@ -5286,7 +5286,7 @@
     },
     {
       "ticker": "ETRS",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 79.02,
@@ -5422,7 +5422,7 @@
     },
     {
       "ticker": "MTIE",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "No Buy votes, no Avoid — Watch",
       "score": 51.32,
@@ -5440,7 +5440,7 @@
       "price": {
         "current_egp": 7.21,
         "current_usd": 0.1393,
-        "fair_value_egp": 4.5911,
+        "fair_value_egp": 4.5154,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": false
       },
@@ -5563,7 +5563,7 @@
     },
     {
       "ticker": "TALM",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 68.82,
@@ -5709,7 +5709,7 @@
     },
     {
       "ticker": "OLFI",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 46.87,
@@ -5855,7 +5855,7 @@
     },
     {
       "ticker": "SIPC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -9.0% since Buy (6.20, last 60d) — momentum filter downgrades Strong Buy to Watch",
       "score": 68.17,
@@ -5996,7 +5996,7 @@
     },
     {
       "ticker": "MBSC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "Score 58.1 < tradeable floor 60 — Buy shown as Watch",
       "score": 58.06,
@@ -6014,7 +6014,7 @@
       "price": {
         "current_egp": 341.3,
         "current_usd": 6.3507,
-        "fair_value_egp": 805.6678,
+        "fair_value_egp": 803.2827,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -6142,7 +6142,7 @@
     },
     {
       "ticker": "ATQA",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 49.23,
@@ -6256,9 +6256,9 @@
       "ml": {
         "signal": "Avoid",
         "confidence": 0.0,
-        "medium_price": 9.955,
-        "low_price": 9.086,
-        "high_price": 10.958
+        "medium_price": 9.926,
+        "low_price": 8.89,
+        "high_price": 10.85
       },
       "intraday": {
         "score": null,
@@ -6288,7 +6288,7 @@
     },
     {
       "ticker": "ISMQ",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 39.93,
@@ -6401,10 +6401,10 @@
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 4.0,
-        "medium_price": 7.181,
-        "low_price": 6.799,
-        "high_price": 7.993
+        "confidence": 0.0,
+        "medium_price": 7.372,
+        "low_price": 6.794,
+        "high_price": 8.197
       },
       "intraday": {
         "score": null,
@@ -6434,7 +6434,7 @@
     },
     {
       "ticker": "ADCI",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX100 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 61.59,
@@ -6580,7 +6580,7 @@
     },
     {
       "ticker": "ICFC",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 65.83,
@@ -6700,7 +6700,7 @@
     },
     {
       "ticker": "ORAS",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 39.95,
@@ -6794,7 +6794,7 @@
     },
     {
       "ticker": "MBEG",
-      "run_date": "2026-11-12",
+      "run_date": "2026-11-13",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 48.9,
