@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-11-19",
+    "generated": "2026-11-20",
     "source": "EGX Signal Generator",
     "version": "v2.5",
     "description": "Structured signal data for AI agent consumption"
@@ -8,16 +8,17 @@
   "summary": {
     "total_stocks": 49,
     "recommendations": {
-      "Watch": 28,
-      "Buy": 2,
+      "Watch": 27,
+      "Buy": 4,
       "Avoid": 15,
-      "Strong Buy": 4
+      "Strong Buy": 3
     },
     "avg_score": 47.1,
     "min_score": 23.0,
     "max_score": 71.5,
     "buy_tickers": [
       "SCEM",
+      "ARAB",
       "EFIH",
       "ETEL",
       "ZEOT",
@@ -29,10 +30,7 @@
       "SAUD",
       "ARCC",
       "MCQE",
-      "ARAB",
       "ENGC",
-      "GGCC",
-      "MASR",
       "OCDI",
       "ORHD",
       "PHDC",
@@ -44,6 +42,7 @@
       "EGAL",
       "SWDY",
       "AMOC",
+      "EGAS",
       "AXPH",
       "CPCI",
       "ISPH",
@@ -52,15 +51,17 @@
       "OLFI",
       "SIPC",
       "MBSC",
+      "ICFC",
       "MBEG"
     ],
     "avoid_tickers": [
       "AMER",
       "COPR",
+      "GGCC",
+      "MASR",
       "OBRI",
       "ZMID",
       "RACC",
-      "EGAS",
       "MCRO",
       "ORWE",
       "AMIA",
@@ -68,14 +69,13 @@
       "ATQA",
       "ISMQ",
       "ADCI",
-      "ICFC",
       "ORAS"
     ]
   },
   "stocks": [
     {
       "ticker": "ADIB",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 45.59,
@@ -179,9 +179,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 100.0,
-        "medium_price": 49.676,
-        "low_price": 46.201,
-        "high_price": 51.756
+        "medium_price": 49.637,
+        "low_price": 45.577,
+        "high_price": 51.162
       },
       "intraday": {
         "score": null,
@@ -211,7 +211,7 @@
     },
     {
       "ticker": "SAUD",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "Score 59.0 < tradeable floor 60 — Buy shown as Watch",
       "score": 59.01,
@@ -319,10 +319,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 55.0,
-        "medium_price": 23.848,
-        "low_price": 22.472,
-        "high_price": 24.435
+        "confidence": 45.0,
+        "medium_price": 23.525,
+        "low_price": 22.53,
+        "high_price": 24.515
       },
       "intraday": {
         "score": 50.2,
@@ -352,7 +352,7 @@
     },
     {
       "ticker": "ARCC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "Score 50.8 < tradeable floor 60 — Buy shown as Watch",
       "score": 50.76,
@@ -370,7 +370,7 @@
       "price": {
         "current_egp": 67.5,
         "current_usd": 1.2749,
-        "fair_value_egp": 525.7904,
+        "fair_value_egp": 497.8422,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -465,10 +465,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 71.0,
-        "medium_price": 69.352,
-        "low_price": 65.182,
-        "high_price": 73.175
+        "confidence": 70.0,
+        "medium_price": 69.918,
+        "low_price": 64.757,
+        "high_price": 72.575
       },
       "intraday": {
         "score": 38.8,
@@ -498,7 +498,7 @@
     },
     {
       "ticker": "MCQE",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 43.0,
@@ -516,7 +516,7 @@
       "price": {
         "current_egp": 178.0,
         "current_usd": 3.2895,
-        "fair_value_egp": 1751.8056,
+        "fair_value_egp": 1776.5675,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -612,9 +612,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 56.0,
-        "medium_price": 183.422,
-        "low_price": 165.125,
-        "high_price": 206.663
+        "medium_price": 184.534,
+        "low_price": 165.795,
+        "high_price": 206.269
       },
       "intraday": {
         "score": null,
@@ -644,7 +644,7 @@
     },
     {
       "ticker": "SCEM",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 62.85,
@@ -752,10 +752,10 @@
       },
       "ml": {
         "signal": "Watch",
-        "confidence": 25.0,
-        "medium_price": 92.997,
-        "low_price": 90.106,
-        "high_price": 101.29
+        "confidence": 22.0,
+        "medium_price": 93.372,
+        "low_price": 91.091,
+        "high_price": 102.087
       },
       "intraday": {
         "score": 55.0,
@@ -785,9 +785,9 @@
     },
     {
       "ticker": "AMER",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Watch",
+      "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 35.95,
       "score_breakdown": {
         "trend": 10.92,
@@ -882,11 +882,11 @@
         "tp3_rr": 0.79
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 20.0,
-        "medium_price": 4.009,
-        "low_price": 3.729,
-        "high_price": 4.45
+        "signal": "Avoid",
+        "confidence": 12.0,
+        "medium_price": 3.973,
+        "low_price": 3.661,
+        "high_price": 4.43
       },
       "intraday": {
         "score": null,
@@ -916,9 +916,9 @@
     },
     {
       "ticker": "ARAB",
-      "run_date": "2026-11-19",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (Base), others disagree",
+      "run_date": "2026-11-20",
+      "recommendation": "Buy",
+      "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 62.98,
       "score_breakdown": {
         "trend": 23.17,
@@ -1023,11 +1023,11 @@
         "tp3_rr": 1.17
       },
       "ml": {
-        "signal": "Avoid",
-        "confidence": 2.0,
-        "medium_price": 0.253,
+        "signal": "Watch",
+        "confidence": 33.0,
+        "medium_price": 0.259,
         "low_price": 0.23,
-        "high_price": 0.29
+        "high_price": 0.285
       },
       "intraday": {
         "score": 46.7,
@@ -1057,7 +1057,7 @@
     },
     {
       "ticker": "COPR",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 23.0,
@@ -1160,10 +1160,10 @@
       },
       "ml": {
         "signal": "Watch",
-        "confidence": 34.0,
-        "medium_price": 0.389,
-        "low_price": 0.347,
-        "high_price": 0.421
+        "confidence": 30.0,
+        "medium_price": 0.393,
+        "low_price": 0.338,
+        "high_price": 0.426
       },
       "intraday": {
         "score": null,
@@ -1193,7 +1193,7 @@
     },
     {
       "ticker": "ENGC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "Score 55.8 < tradeable floor 60 — Buy shown as Watch",
       "score": 55.75,
@@ -1306,10 +1306,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 79.0,
-        "medium_price": 41.949,
-        "low_price": 37.081,
-        "high_price": 44.092
+        "confidence": 90.0,
+        "medium_price": 41.95,
+        "low_price": 37.806,
+        "high_price": 44.252
       },
       "intraday": {
         "score": 44.6,
@@ -1339,9 +1339,9 @@
     },
     {
       "ticker": "GGCC",
-      "run_date": "2026-11-19",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (ML), others disagree",
+      "run_date": "2026-11-20",
+      "recommendation": "Avoid",
+      "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 38.96,
       "score_breakdown": {
         "trend": 3.9,
@@ -1436,11 +1436,11 @@
         "tp3_rr": 1.04
       },
       "ml": {
-        "signal": "Buy",
-        "confidence": 61.0,
-        "medium_price": 0.57,
-        "low_price": 0.498,
-        "high_price": 0.613
+        "signal": "Watch",
+        "confidence": 34.0,
+        "medium_price": 0.564,
+        "low_price": 0.51,
+        "high_price": 0.607
       },
       "intraday": {
         "score": null,
@@ -1470,9 +1470,9 @@
     },
     {
       "ticker": "MASR",
-      "run_date": "2026-11-19",
-      "recommendation": "Watch",
-      "recommendation_basis": "1 Buy (ML), others disagree",
+      "run_date": "2026-11-20",
+      "recommendation": "Avoid",
+      "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 36.37,
       "score_breakdown": {
         "trend": 3.9,
@@ -1488,7 +1488,7 @@
       "price": {
         "current_egp": 6.51,
         "current_usd": 0.1222,
-        "fair_value_egp": 19.7809,
+        "fair_value_egp": 20.029,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -1562,11 +1562,11 @@
         "tp3_rr": 1.33
       },
       "ml": {
-        "signal": "Buy",
-        "confidence": 38.0,
-        "medium_price": 6.673,
-        "low_price": 5.93,
-        "high_price": 7.03
+        "signal": "Watch",
+        "confidence": 34.0,
+        "medium_price": 6.581,
+        "low_price": 5.917,
+        "high_price": 7.006
       },
       "intraday": {
         "score": null,
@@ -1596,7 +1596,7 @@
     },
     {
       "ticker": "OBRI",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 32.77,
@@ -1699,10 +1699,10 @@
       },
       "ml": {
         "signal": "Watch",
-        "confidence": 23.0,
-        "medium_price": 22.68,
-        "low_price": 20.816,
-        "high_price": 25.666
+        "confidence": 24.0,
+        "medium_price": 22.611,
+        "low_price": 21.214,
+        "high_price": 25.795
       },
       "intraday": {
         "score": null,
@@ -1732,7 +1732,7 @@
     },
     {
       "ticker": "OCDI",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "Score 52.8 < tradeable floor 60 — Buy shown as Watch",
       "score": 52.78,
@@ -1845,10 +1845,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 67.0,
-        "medium_price": 25.34,
-        "low_price": 24.359,
-        "high_price": 27.039
+        "confidence": 49.0,
+        "medium_price": 25.103,
+        "low_price": 24.528,
+        "high_price": 27.198
       },
       "intraday": {
         "score": 52.7,
@@ -1878,7 +1878,7 @@
     },
     {
       "ticker": "ORHD",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 37.96,
@@ -1896,7 +1896,7 @@
       "price": {
         "current_egp": 10.33,
         "current_usd": 0.192,
-        "fair_value_egp": 17.3454,
+        "fair_value_egp": 11.9472,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -1987,9 +1987,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 91.0,
-        "medium_price": 11.499,
-        "low_price": 10.236,
-        "high_price": 12.854
+        "medium_price": 11.348,
+        "low_price": 10.247,
+        "high_price": 12.573
       },
       "intraday": {
         "score": null,
@@ -2019,7 +2019,7 @@
     },
     {
       "ticker": "PHDC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 35.63,
@@ -2122,10 +2122,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 79.0,
-        "medium_price": 12.094,
-        "low_price": 11.08,
-        "high_price": 12.762
+        "confidence": 88.0,
+        "medium_price": 12.04,
+        "low_price": 11.184,
+        "high_price": 12.732
       },
       "intraday": {
         "score": null,
@@ -2155,7 +2155,7 @@
     },
     {
       "ticker": "RREI",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 34.84,
@@ -2243,10 +2243,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 39.0,
-        "medium_price": 2.717,
-        "low_price": 2.362,
-        "high_price": 2.972
+        "confidence": 54.0,
+        "medium_price": 2.777,
+        "low_price": 2.32,
+        "high_price": 2.991
       },
       "intraday": {
         "score": null,
@@ -2276,7 +2276,7 @@
     },
     {
       "ticker": "ZMID",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 34.08,
@@ -2294,7 +2294,7 @@
       "price": {
         "current_egp": 6.69,
         "current_usd": 0.125,
-        "fair_value_egp": 6.7699,
+        "fair_value_egp": 6.8448,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -2379,10 +2379,10 @@
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 18.0,
-        "medium_price": 6.706,
-        "low_price": 6.134,
-        "high_price": 7.115
+        "confidence": 100.0,
+        "medium_price": 6.775,
+        "low_price": 5.937,
+        "high_price": 7.122
       },
       "intraday": {
         "score": null,
@@ -2412,7 +2412,7 @@
     },
     {
       "ticker": "LCSW",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 61.89,
@@ -2430,7 +2430,7 @@
       "price": {
         "current_egp": 39.79,
         "current_usd": 0.7327,
-        "fair_value_egp": 39.5932,
+        "fair_value_egp": 39.9052,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -2505,10 +2505,10 @@
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 0.0,
-        "medium_price": 38.621,
-        "low_price": 35.995,
-        "high_price": 45.436
+        "confidence": 14.0,
+        "medium_price": 39.489,
+        "low_price": 36.446,
+        "high_price": 47.006
       },
       "intraday": {
         "score": 50.9,
@@ -2538,7 +2538,7 @@
     },
     {
       "ticker": "EFIH",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Buy",
       "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 63.12,
@@ -2625,10 +2625,10 @@
       },
       "ml": {
         "signal": "Watch",
-        "confidence": 33.0,
-        "medium_price": 26.032,
-        "low_price": 23.958,
-        "high_price": 26.848
+        "confidence": 29.0,
+        "medium_price": 25.831,
+        "low_price": 23.967,
+        "high_price": 26.895
       },
       "intraday": {
         "score": 51.6,
@@ -2658,7 +2658,7 @@
     },
     {
       "ticker": "ETEL",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX30 Bullish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 67.83,
@@ -2767,9 +2767,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 62.0,
-        "medium_price": 139.449,
-        "low_price": 134.898,
-        "high_price": 145.537
+        "medium_price": 139.806,
+        "low_price": 135.336,
+        "high_price": 145.325
       },
       "intraday": {
         "score": 64.3,
@@ -2799,7 +2799,7 @@
     },
     {
       "ticker": "RACC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 37.34,
@@ -2897,10 +2897,10 @@
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 0.0,
-        "medium_price": 7.748,
-        "low_price": 7.082,
-        "high_price": 8.586
+        "confidence": 4.0,
+        "medium_price": 7.687,
+        "low_price": 7.027,
+        "high_price": 8.651
       },
       "intraday": {
         "score": null,
@@ -2930,7 +2930,7 @@
     },
     {
       "ticker": "MFPC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 26.6,
@@ -2948,7 +2948,7 @@
       "price": {
         "current_egp": 38.22,
         "current_usd": 0.7109,
-        "fair_value_egp": 49.0454,
+        "fair_value_egp": 48.6187,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -3033,10 +3033,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 53.0,
-        "medium_price": 38.924,
-        "low_price": 35.983,
-        "high_price": 42.842
+        "confidence": 48.0,
+        "medium_price": 39.05,
+        "low_price": 35.581,
+        "high_price": 44.514
       },
       "intraday": {
         "score": null,
@@ -3066,7 +3066,7 @@
     },
     {
       "ticker": "EFID",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 66.68,
@@ -3154,9 +3154,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 100.0,
-        "medium_price": 22.15,
-        "low_price": 20.504,
-        "high_price": 22.447
+        "medium_price": 22.173,
+        "low_price": 20.698,
+        "high_price": 22.643
       },
       "intraday": {
         "score": 55.0,
@@ -3186,7 +3186,7 @@
     },
     {
       "ticker": "JUFO",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 40.46,
@@ -3294,10 +3294,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 69.0,
-        "medium_price": 23.368,
-        "low_price": 23.062,
-        "high_price": 24.156
+        "confidence": 84.0,
+        "medium_price": 23.446,
+        "low_price": 23.021,
+        "high_price": 24.328
       },
       "intraday": {
         "score": null,
@@ -3327,7 +3327,7 @@
     },
     {
       "ticker": "EGAL",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 44.54,
@@ -3473,7 +3473,7 @@
     },
     {
       "ticker": "SWDY",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "Score 59.9 < tradeable floor 60 — Buy shown as Watch",
       "score": 59.89,
@@ -3619,7 +3619,7 @@
     },
     {
       "ticker": "AMOC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 49.29,
@@ -3732,10 +3732,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 76.0,
-        "medium_price": 13.662,
-        "low_price": 12.49,
-        "high_price": 14.194
+        "confidence": 62.0,
+        "medium_price": 13.54,
+        "low_price": 12.402,
+        "high_price": 14.119
       },
       "intraday": {
         "score": null,
@@ -3765,9 +3765,9 @@
     },
     {
       "ticker": "EGAS",
-      "run_date": "2026-11-19",
-      "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Watch",
+      "run_date": "2026-11-20",
+      "recommendation": "Watch",
+      "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 46.29,
       "score_breakdown": {
         "trend": 9.37,
@@ -3877,11 +3877,11 @@
         "tp3_rr": 0.88
       },
       "ml": {
-        "signal": "Watch",
-        "confidence": 22.0,
-        "medium_price": 50.795,
-        "low_price": 47.466,
-        "high_price": 51.693
+        "signal": "Buy",
+        "confidence": 50.0,
+        "medium_price": 50.945,
+        "low_price": 48.122,
+        "high_price": 51.667
       },
       "intraday": {
         "score": null,
@@ -3911,7 +3911,7 @@
     },
     {
       "ticker": "ZEOT",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 69.64,
@@ -4024,10 +4024,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 45.0,
-        "medium_price": 13.23,
-        "low_price": 11.988,
-        "high_price": 14.089
+        "confidence": 69.0,
+        "medium_price": 13.631,
+        "low_price": 12.033,
+        "high_price": 14.325
       },
       "intraday": {
         "score": 75.1,
@@ -4057,7 +4057,7 @@
     },
     {
       "ticker": "AXPH",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "Price dropped -12.9% since Buy (1691.79, last 60d) — momentum filter downgrades Strong Buy to Watch",
       "score": 60.58,
@@ -4170,10 +4170,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 97.0,
-        "medium_price": 1663.729,
-        "low_price": 1477.865,
-        "high_price": 1789.001
+        "confidence": 91.0,
+        "medium_price": 1668.568,
+        "low_price": 1487.582,
+        "high_price": 1780.266
       },
       "intraday": {
         "score": 55.8,
@@ -4203,7 +4203,7 @@
     },
     {
       "ticker": "CPCI",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 45.81,
@@ -4306,10 +4306,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 82.0,
-        "medium_price": 593.553,
-        "low_price": 561.449,
-        "high_price": 626.322
+        "confidence": 85.0,
+        "medium_price": 597.328,
+        "low_price": 559.914,
+        "high_price": 629.247
       },
       "intraday": {
         "score": null,
@@ -4339,7 +4339,7 @@
     },
     {
       "ticker": "ISPH",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 34.53,
@@ -4448,9 +4448,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 91.0,
-        "medium_price": 11.44,
-        "low_price": 10.208,
-        "high_price": 12.111
+        "medium_price": 11.461,
+        "low_price": 10.212,
+        "high_price": 11.985
       },
       "intraday": {
         "score": null,
@@ -4480,7 +4480,7 @@
     },
     {
       "ticker": "MCRO",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 52.23,
@@ -4593,10 +4593,10 @@
       },
       "ml": {
         "signal": "Avoid",
-        "confidence": 12.0,
-        "medium_price": 1.293,
-        "low_price": 1.197,
-        "high_price": 1.381
+        "confidence": 10.0,
+        "medium_price": 1.314,
+        "low_price": 1.218,
+        "high_price": 1.396
       },
       "intraday": {
         "score": 57.5,
@@ -4626,7 +4626,7 @@
     },
     {
       "ticker": "RMDA",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 36.94,
@@ -4735,9 +4735,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 100.0,
-        "medium_price": 5.417,
-        "low_price": 5.177,
-        "high_price": 5.563
+        "medium_price": 5.449,
+        "low_price": 5.174,
+        "high_price": 5.617
       },
       "intraday": {
         "score": null,
@@ -4767,7 +4767,7 @@
     },
     {
       "ticker": "POUL",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 27.61,
@@ -4855,10 +4855,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 96.0,
-        "medium_price": 8.355,
-        "low_price": 7.25,
-        "high_price": 9.16
+        "confidence": 85.0,
+        "medium_price": 8.044,
+        "low_price": 6.956,
+        "high_price": 9.228
       },
       "intraday": {
         "score": null,
@@ -4888,7 +4888,7 @@
     },
     {
       "ticker": "ORWE",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 47.02,
@@ -4906,7 +4906,7 @@
       "price": {
         "current_egp": 25.09,
         "current_usd": 0.4671,
-        "fair_value_egp": 34.5875,
+        "fair_value_egp": 35.0246,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -5034,7 +5034,7 @@
     },
     {
       "ticker": "AMIA",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 44.3,
@@ -5148,9 +5148,9 @@
       "ml": {
         "signal": "Avoid",
         "confidence": 0.0,
-        "medium_price": 16.471,
-        "low_price": 15.488,
-        "high_price": 18.279
+        "medium_price": 16.283,
+        "low_price": 15.675,
+        "high_price": 18.133
       },
       "intraday": {
         "score": null,
@@ -5180,9 +5180,9 @@
     },
     {
       "ticker": "ETRS",
-      "run_date": "2026-11-19",
-      "recommendation": "Strong Buy",
-      "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
+      "run_date": "2026-11-20",
+      "recommendation": "Buy",
+      "recommendation_basis": "1 Buy (Base), no Avoid among active voters — upgraded to Buy [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 71.55,
       "score_breakdown": {
         "trend": 23.96,
@@ -5272,11 +5272,11 @@
         "tp3_rr": 1.5
       },
       "ml": {
-        "signal": "Buy",
-        "confidence": 47.0,
-        "medium_price": 11.374,
-        "low_price": 10.759,
-        "high_price": 11.903
+        "signal": "Watch",
+        "confidence": 30.0,
+        "medium_price": 11.227,
+        "low_price": 10.787,
+        "high_price": 11.972
       },
       "intraday": {
         "score": 41.8,
@@ -5306,7 +5306,7 @@
     },
     {
       "ticker": "MTIE",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 26.6,
@@ -5442,7 +5442,7 @@
     },
     {
       "ticker": "TALM",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Neutral]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 61.31,
@@ -5556,9 +5556,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 94.0,
-        "medium_price": 21.196,
-        "low_price": 19.911,
-        "high_price": 21.639
+        "medium_price": 20.985,
+        "low_price": 19.971,
+        "high_price": 21.812
       },
       "intraday": {
         "score": 25.9,
@@ -5588,7 +5588,7 @@
     },
     {
       "ticker": "OLFI",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 39.6,
@@ -5701,10 +5701,10 @@
       },
       "ml": {
         "signal": "Buy",
-        "confidence": 76.0,
-        "medium_price": 20.459,
-        "low_price": 19.918,
-        "high_price": 21.324
+        "confidence": 80.0,
+        "medium_price": 20.6,
+        "low_price": 19.933,
+        "high_price": 21.424
       },
       "intraday": {
         "score": null,
@@ -5734,7 +5734,7 @@
     },
     {
       "ticker": "SIPC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "No Buy votes, no Avoid — Watch",
       "score": 53.62,
@@ -5848,9 +5848,9 @@
       "ml": {
         "signal": "Watch",
         "confidence": 22.0,
-        "medium_price": 4.954,
-        "low_price": 4.715,
-        "high_price": 5.244
+        "medium_price": 4.976,
+        "low_price": 4.742,
+        "high_price": 5.284
       },
       "intraday": {
         "score": 45.0,
@@ -5880,7 +5880,7 @@
     },
     {
       "ticker": "MBSC",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "Score 58.6 < tradeable floor 60 — Buy shown as Watch",
       "score": 58.58,
@@ -5898,7 +5898,7 @@
       "price": {
         "current_egp": 350.0,
         "current_usd": 6.5748,
-        "fair_value_egp": 842.5802,
+        "fair_value_egp": 846.2351,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -5989,9 +5989,9 @@
       "ml": {
         "signal": "Buy",
         "confidence": 98.0,
-        "medium_price": 380.3,
-        "low_price": 342.119,
-        "high_price": 388.049
+        "medium_price": 383.433,
+        "low_price": 340.711,
+        "high_price": 387.934
       },
       "intraday": {
         "score": 35.8,
@@ -6021,7 +6021,7 @@
     },
     {
       "ticker": "ATQA",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 42.19,
@@ -6167,7 +6167,7 @@
     },
     {
       "ticker": "ISMQ",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 32.05,
@@ -6303,9 +6303,9 @@
     },
     {
       "ticker": "ADCI",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
-      "recommendation_basis": "Base=Avoid, ML=Avoid",
+      "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 49.59,
       "score_breakdown": {
         "trend": 12.09,
@@ -6415,11 +6415,11 @@
         "tp3_rr": 1.47
       },
       "ml": {
-        "signal": "Avoid",
-        "confidence": 12.0,
-        "medium_price": 264.299,
-        "low_price": 239.344,
-        "high_price": 282.015
+        "signal": "Watch",
+        "confidence": 33.0,
+        "medium_price": 269.848,
+        "low_price": 242.786,
+        "high_price": 281.915
       },
       "intraday": {
         "score": null,
@@ -6449,9 +6449,9 @@
     },
     {
       "ticker": "ICFC",
-      "run_date": "2026-11-19",
-      "recommendation": "Avoid",
-      "recommendation_basis": "Base=Watch, ML=Avoid",
+      "run_date": "2026-11-20",
+      "recommendation": "Watch",
+      "recommendation_basis": "No Buy votes, no Avoid — Watch",
       "score": 57.94,
       "score_breakdown": {
         "trend": 26.0,
@@ -6551,11 +6551,11 @@
         "tp3_rr": 0.68
       },
       "ml": {
-        "signal": "Avoid",
-        "confidence": 3.0,
-        "medium_price": 24.598,
-        "low_price": 22.051,
-        "high_price": 28.135
+        "signal": "Watch",
+        "confidence": 33.0,
+        "medium_price": 25.441,
+        "low_price": 22.493,
+        "high_price": 27.979
       },
       "intraday": {
         "score": 31.6,
@@ -6585,7 +6585,7 @@
     },
     {
       "ticker": "ORAS",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 48.47,
@@ -6603,7 +6603,7 @@
       "price": {
         "current_egp": 806.12,
         "current_usd": 1.3233,
-        "fair_value_egp": 109.429,
+        "fair_value_egp": 109.4514,
         "fair_value_method": "Blended (Graham+PE)",
         "undervalued": true
       },
@@ -6679,7 +6679,7 @@
     },
     {
       "ticker": "MBEG",
-      "run_date": "2026-11-19",
+      "run_date": "2026-11-20",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 43.06,
