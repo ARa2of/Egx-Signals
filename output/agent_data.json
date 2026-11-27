@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-11-26",
+    "generated": "2026-11-27",
     "source": "EGX Signal Generator",
     "version": "v2.5",
     "description": "Structured signal data for AI agent consumption"
@@ -74,7 +74,7 @@
   "stocks": [
     {
       "ticker": "ADIB",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 37.57,
@@ -205,7 +205,7 @@
     },
     {
       "ticker": "SAUD",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 42.37,
@@ -346,7 +346,7 @@
     },
     {
       "ticker": "ARCC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 36.69,
@@ -492,7 +492,7 @@
     },
     {
       "ticker": "MCQE",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 35.05,
@@ -638,7 +638,7 @@
     },
     {
       "ticker": "SCEM",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 57.53,
@@ -779,7 +779,7 @@
     },
     {
       "ticker": "AMER",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 29.4,
@@ -905,7 +905,7 @@
     },
     {
       "ticker": "ARAB",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "EGX70 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (ML), no Avoid among active voters — upgraded to Buy",
       "score": 55.1,
@@ -1051,7 +1051,7 @@
     },
     {
       "ticker": "COPR",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 54.01,
@@ -1197,7 +1197,7 @@
     },
     {
       "ticker": "ENGC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 30.9,
@@ -1343,7 +1343,7 @@
     },
     {
       "ticker": "GGCC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 30.39,
@@ -1464,7 +1464,7 @@
     },
     {
       "ticker": "MASR",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 30.9,
@@ -1600,7 +1600,7 @@
     },
     {
       "ticker": "OBRI",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 26.2,
@@ -1736,7 +1736,7 @@
     },
     {
       "ticker": "OCDI",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 33.19,
@@ -1882,7 +1882,7 @@
     },
     {
       "ticker": "ORHD",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 39.87,
@@ -2023,7 +2023,7 @@
     },
     {
       "ticker": "PHDC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 35.01,
@@ -2159,7 +2159,7 @@
     },
     {
       "ticker": "RREI",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 32.77,
@@ -2280,7 +2280,7 @@
     },
     {
       "ticker": "ZMID",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 30.17,
@@ -2406,7 +2406,7 @@
     },
     {
       "ticker": "LCSW",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bearish]",
       "score": 70.55,
@@ -2526,7 +2526,7 @@
     },
     {
       "ticker": "EFIH",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "EGX30 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (Base), no Avoid among active voters — upgraded to Buy",
       "score": 60.79,
@@ -2657,7 +2657,7 @@
     },
     {
       "ticker": "ETEL",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 66.53,
@@ -2798,7 +2798,7 @@
     },
     {
       "ticker": "RACC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 34.14,
@@ -2934,7 +2934,7 @@
     },
     {
       "ticker": "MFPC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 23.0,
@@ -3065,7 +3065,7 @@
     },
     {
       "ticker": "EFID",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 61.45,
@@ -3191,7 +3191,7 @@
     },
     {
       "ticker": "JUFO",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 27.84,
@@ -3322,7 +3322,7 @@
     },
     {
       "ticker": "EGAL",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 27.3,
@@ -3468,7 +3468,7 @@
     },
     {
       "ticker": "SWDY",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "EGX70 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (ML), no Avoid among active voters — upgraded to Buy",
       "score": 55.12,
@@ -3614,7 +3614,7 @@
     },
     {
       "ticker": "AMOC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 33.07,
@@ -3760,7 +3760,7 @@
     },
     {
       "ticker": "EGAS",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 28.31,
@@ -3901,7 +3901,7 @@
     },
     {
       "ticker": "ZEOT",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Strong Buy",
       "recommendation_basis": "All 2 active methods agree Buy: Base, ML [EGX70 Bearish]; entry: CHASE — NO CLEAN PULLBACK (Fallback (no clean setup)) — chase/wait risk, direction kept",
       "score": 71.75,
@@ -4047,7 +4047,7 @@
     },
     {
       "ticker": "AXPH",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 39.68,
@@ -4193,7 +4193,7 @@
     },
     {
       "ticker": "CPCI",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 38.77,
@@ -4339,7 +4339,7 @@
     },
     {
       "ticker": "ISPH",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 39.83,
@@ -4475,7 +4475,7 @@
     },
     {
       "ticker": "MCRO",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 30.9,
@@ -4611,7 +4611,7 @@
     },
     {
       "ticker": "RMDA",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 38.88,
@@ -4747,7 +4747,7 @@
     },
     {
       "ticker": "POUL",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 22.53,
@@ -4852,7 +4852,7 @@
     },
     {
       "ticker": "ORWE",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 31.6,
@@ -4988,7 +4988,7 @@
     },
     {
       "ticker": "AMIA",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 30.57,
@@ -5134,7 +5134,7 @@
     },
     {
       "ticker": "ETRS",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Watch, ML=Avoid",
       "score": 58.97,
@@ -5265,7 +5265,7 @@
     },
     {
       "ticker": "MTIE",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 40.68,
@@ -5406,7 +5406,7 @@
     },
     {
       "ticker": "TALM",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "EGX70 Bearish - single-Buy upgrade withheld (market-context gate): 1 Buy (ML), no Avoid among active voters — upgraded to Buy",
       "score": 54.53,
@@ -5552,7 +5552,7 @@
     },
     {
       "ticker": "OLFI",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 38.94,
@@ -5698,7 +5698,7 @@
     },
     {
       "ticker": "SIPC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 34.02,
@@ -5844,7 +5844,7 @@
     },
     {
       "ticker": "MBSC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 42.35,
@@ -5990,7 +5990,7 @@
     },
     {
       "ticker": "ATQA",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 34.77,
@@ -6126,7 +6126,7 @@
     },
     {
       "ticker": "ISMQ",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 22.81,
@@ -6257,7 +6257,7 @@
     },
     {
       "ticker": "ADCI",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Avoid",
       "score": 29.25,
@@ -6388,7 +6388,7 @@
     },
     {
       "ticker": "ICFC",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (Base), others disagree",
       "score": 67.75,
@@ -6514,7 +6514,7 @@
     },
     {
       "ticker": "ORAS",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Avoid",
       "recommendation_basis": "Base=Avoid, ML=Watch",
       "score": 40.76,
@@ -6608,7 +6608,7 @@
     },
     {
       "ticker": "MBEG",
-      "run_date": "2026-11-26",
+      "run_date": "2026-11-27",
       "recommendation": "Watch",
       "recommendation_basis": "1 Buy (ML), others disagree",
       "score": 36.24,
